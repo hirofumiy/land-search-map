@@ -19,7 +19,13 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.6948, 35.9656] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.6393,
+          35.933
+        ]
+      },
       "properties": {
         "name": "鹿嶋変電所",
         "company": "東京電力パワーグリッド",
@@ -37,7 +43,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.5813, 35.8902] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.5626,
+          35.9487
+        ]
+      },
       "properties": {
         "name": "潮来変電所",
         "company": "東京電力パワーグリッド",
@@ -55,7 +67,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.6334, 36.3475] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.5493,
+          36.4699
+        ]
+      },
       "properties": {
         "name": "東海変電所",
         "company": "東京電力パワーグリッド",
@@ -73,7 +91,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.5262, 36.5936] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.6608,
+          36.6484
+        ]
+      },
       "properties": {
         "name": "日立変電所",
         "company": "東京電力パワーグリッド",
@@ -91,7 +115,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.8267, 35.7346] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.8267,
+          35.7346
+        ]
+      },
       "properties": {
         "name": "銚子変電所",
         "company": "東京電力パワーグリッド",
@@ -109,7 +139,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.4078, 35.4175] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.2961,
+          35.4302
+        ]
+      },
       "properties": {
         "name": "茂原変電所",
         "company": "東京電力パワーグリッド",
@@ -127,7 +163,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.3856, 35.5532] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.3603,
+          35.5503
+        ]
+      },
       "properties": {
         "name": "東金変電所",
         "company": "東京電力パワーグリッド",
@@ -145,7 +187,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.5104, 35.6254] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.2998,
+          35.6376
+        ]
+      },
       "properties": {
         "name": "匝瑳変電所",
         "company": "東京電力パワーグリッド",
@@ -163,7 +211,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [139.5126, 36.3922] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.5248,
+          36.256
+        ]
+      },
       "properties": {
         "name": "館林変電所",
         "company": "東京電力パワーグリッド",
@@ -181,7 +235,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [139.0624, 36.7856] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.1267,
+          36.6231
+        ]
+      },
       "properties": {
         "name": "沼田変電所",
         "company": "東京電力パワーグリッド",
@@ -199,7 +259,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [139.9682, 36.9234] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.0836,
+          36.998
+        ]
+      },
       "properties": {
         "name": "那須変電所",
         "company": "東京電力パワーグリッド",
@@ -217,7 +283,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [139.6981, 36.7197] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.6427,
+          36.8
+        ]
+      },
       "properties": {
         "name": "日光変電所",
         "company": "東京電力パワーグリッド",
@@ -235,7 +307,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [139.0853, 35.9917] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.009,
+          35.9958
+        ]
+      },
       "properties": {
         "name": "秩父変電所",
         "company": "東京電力パワーグリッド",
@@ -253,7 +331,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [139.2345, 35.5934] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.2586,
+          35.6248
+        ]
+      },
       "properties": {
         "name": "相模湖変電所",
         "company": "東京電力パワーグリッド",
@@ -271,7 +355,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [139.1512, 35.6278] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.2305,
+          35.5924
+        ]
+      },
       "properties": {
         "name": "津久井変電所",
         "company": "東京電力パワーグリッド",
@@ -289,7 +379,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [137.7967, 34.7685] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.0259,
+          34.7762
+        ]
+      },
       "properties": {
         "name": "掛川変電所",
         "company": "中部電力パワーグリッド",
@@ -307,7 +403,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [137.7148, 34.8512] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.7148,
+          34.8512
+        ]
+      },
       "properties": {
         "name": "浜松北変電所",
         "company": "中部電力パワーグリッド",
@@ -325,7 +427,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [136.6244, 34.9643] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.6244,
+          34.9643
+        ]
+      },
       "properties": {
         "name": "四日市変電所",
         "company": "中部電力パワーグリッド",
@@ -343,7 +451,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [136.1723, 34.3512] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.1993,
+          34.0726
+        ]
+      },
       "properties": {
         "name": "尾鷲変電所",
         "company": "中部電力パワーグリッド",
@@ -361,7 +475,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [136.5078, 34.4923] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.5078,
+          34.4923
+        ]
+      },
       "properties": {
         "name": "松阪変電所",
         "company": "中部電力パワーグリッド",
@@ -379,7 +499,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [137.2134, 35.4234] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.2134,
+          35.4234
+        ]
+      },
       "properties": {
         "name": "恵那変電所",
         "company": "中部電力パワーグリッド",
@@ -397,7 +523,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [136.7612, 35.5756] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.7612,
+          35.5756
+        ]
+      },
       "properties": {
         "name": "関変電所",
         "company": "中部電力パワーグリッド",
@@ -415,7 +547,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [136.9634, 35.8456] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.2687,
+          36.1624
+        ]
+      },
       "properties": {
         "name": "高山変電所",
         "company": "中部電力パワーグリッド",
@@ -433,7 +571,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [138.1812, 36.2312] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.1812,
+          36.2312
+        ]
+      },
       "properties": {
         "name": "上田変電所",
         "company": "中部電力パワーグリッド",
@@ -451,7 +595,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [137.9712, 35.8534] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.9712,
+          35.8534
+        ]
+      },
       "properties": {
         "name": "伊那変電所",
         "company": "中部電力パワーグリッド",
@@ -469,7 +619,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [137.0456, 35.0712] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.1175,
+          35.143
+        ]
+      },
       "properties": {
         "name": "豊田北変電所",
         "company": "中部電力パワーグリッド",
@@ -487,7 +643,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [137.2635, 34.6418] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          137.1874,
+          34.6587
+        ]
+      },
       "properties": {
         "name": "渥美変電所",
         "company": "中部電力パワーグリッド",
@@ -505,7 +667,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [134.8512, 35.4012] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.8194,
+          35.5514
+        ]
+      },
       "properties": {
         "name": "豊岡変電所",
         "company": "関西電力送配電",
@@ -523,7 +691,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [134.7923, 35.3145] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.7923,
+          35.3145
+        ]
+      },
       "properties": {
         "name": "養父変電所",
         "company": "関西電力送配電",
@@ -541,7 +715,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [135.0678, 35.1812] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.0678,
+          35.1812
+        ]
+      },
       "properties": {
         "name": "丹波変電所",
         "company": "関西電力送配電",
@@ -559,7 +739,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [135.0234, 35.0523] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.2147,
+          35.0713
+        ]
+      },
       "properties": {
         "name": "篠山変電所",
         "company": "関西電力送配電",
@@ -577,7 +763,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [135.1834, 35.4723] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.1177,
+          35.2918
+        ]
+      },
       "properties": {
         "name": "福知山変電所",
         "company": "関西電力送配電",
@@ -595,7 +787,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [135.3312, 35.4812] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.2448,
+          35.3004
+        ]
+      },
       "properties": {
         "name": "綾部変電所",
         "company": "関西電力送配電",
@@ -613,7 +811,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [135.3723, 35.5523] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.3723,
+          35.5523
+        ]
+      },
       "properties": {
         "name": "舞鶴変電所",
         "company": "関西電力送配電",
@@ -631,7 +835,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [135.1512, 34.2312] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.1544,
+          33.8604
+        ]
+      },
       "properties": {
         "name": "御坊変電所",
         "company": "関西電力送配電",
@@ -649,7 +859,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [135.7812, 33.7234] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.9913,
+          33.7158
+        ]
+      },
       "properties": {
         "name": "新宮変電所",
         "company": "関西電力送配電",
@@ -667,7 +883,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [135.3312, 34.0823] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.403,
+          33.7282
+        ]
+      },
       "properties": {
         "name": "田辺変電所",
         "company": "関西電力送配電",
@@ -685,7 +907,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [136.2734, 35.1234] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.1425,
+          35.0069
+        ]
+      },
       "properties": {
         "name": "甲賀変電所",
         "company": "関西電力送配電",
@@ -703,7 +931,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [136.1523, 35.3712] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          136.2738,
+          35.3769
+        ]
+      },
       "properties": {
         "name": "長浜変電所",
         "company": "関西電力送配電",
@@ -721,7 +955,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.9434, 33.8945] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.9275,
+          33.8406
+        ]
+      },
       "properties": {
         "name": "曽根変電所",
         "company": "九州電力送配電",
@@ -739,7 +979,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.8423, 33.8512] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.439,
+          33.556
+        ]
+      },
       "properties": {
         "name": "若久変電所",
         "company": "九州電力送配電",
@@ -757,7 +1003,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.8812, 33.8234] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.8684,
+          33.8874
+        ]
+      },
       "properties": {
         "name": "大門変電所",
         "company": "九州電力送配電",
@@ -775,7 +1027,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.7523, 33.9012] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.7401,
+          33.9256
+        ]
+      },
       "properties": {
         "name": "若松変電所",
         "company": "九州電力送配電",
@@ -793,7 +1051,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.7812, 33.9345] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.8005,
+          33.9218
+        ]
+      },
       "properties": {
         "name": "安瀬変電所",
         "company": "九州電力送配電",
@@ -811,7 +1075,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [131.0412, 33.6612] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.0412,
+          33.6612
+        ]
+      },
       "properties": {
         "name": "築城変電所",
         "company": "九州電力送配電",
@@ -829,7 +1099,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [131.1234, 33.5812] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.1234,
+          33.5812
+        ]
+      },
       "properties": {
         "name": "岸井変電所",
         "company": "九州電力送配電",
@@ -847,7 +1123,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [131.3523, 33.5234] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.3523,
+          33.5234
+        ]
+      },
       "properties": {
         "name": "加来変電所",
         "company": "九州電力送配電",
@@ -865,7 +1147,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.5234, 33.4345] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.5333,
+          33.4145
+        ]
+      },
       "properties": {
         "name": "基山変電所",
         "company": "九州電力送配電",
@@ -883,7 +1171,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.5612, 33.3523] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.5612,
+          33.3523
+        ]
+      },
       "properties": {
         "name": "神辺変電所",
         "company": "九州電力送配電",
@@ -901,7 +1195,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.5123, 33.3212] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.5123,
+          33.3212
+        ]
+      },
       "properties": {
         "name": "原古賀変電所",
         "company": "九州電力送配電",
@@ -919,7 +1219,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [131.5723, 33.1823] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.6808,
+          33.2152
+        ]
+      },
       "properties": {
         "name": "金の手変電所",
         "company": "九州電力送配電",
@@ -937,7 +1243,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [131.6234, 33.2412] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.4857,
+          33.1916
+        ]
+      },
       "properties": {
         "name": "篠原変電所",
         "company": "九州電力送配電",
@@ -955,7 +1267,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.6912, 32.7612] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.7649,
+          32.668
+        ]
+      },
       "properties": {
         "name": "南熊本変電所",
         "company": "九州電力送配電",
@@ -973,7 +1291,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.7523, 32.8423] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.7877,
+          32.7804
+        ]
+      },
       "properties": {
         "name": "広崎変電所",
         "company": "九州電力送配電",
@@ -991,7 +1315,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.7234, 32.8112] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.7234,
+          32.8112
+        ]
+      },
       "properties": {
         "name": "飛田変電所",
         "company": "九州電力送配電",
@@ -1009,7 +1339,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.4523, 32.5812] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.8307,
+          32.9149
+        ]
+      },
       "properties": {
         "name": "川辺変電所",
         "company": "九州電力送配電",
@@ -1027,7 +1363,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.8234, 32.8712] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.8234,
+          32.8712
+        ]
+      },
       "properties": {
         "name": "菊陽変電所",
         "company": "九州電力送配電",
@@ -1045,7 +1387,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [131.6612, 32.5812] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.6612,
+          32.5812
+        ]
+      },
       "properties": {
         "name": "延岡変電所",
         "company": "九州電力送配電",
@@ -1063,7 +1411,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [131.5012, 32.1234] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.5012,
+          32.1234
+        ]
+      },
       "properties": {
         "name": "高鍋変電所",
         "company": "九州電力送配電",
@@ -1081,7 +1435,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [131.4234, 31.9312] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.4234,
+          31.9312
+        ]
+      },
       "properties": {
         "name": "大淀第二変電所",
         "company": "九州電力送配電",
@@ -1099,7 +1459,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [131.4612, 32.0123] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.4265,
+          32.0512
+        ]
+      },
       "properties": {
         "name": "佐土原変電所",
         "company": "九州電力送配電",
@@ -1117,7 +1483,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [134.2312, 35.5012] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          134.1891,
+          35.4986
+        ]
+      },
       "properties": {
         "name": "鳥取変電所",
         "company": "中国電力ネットワーク",
@@ -1135,7 +1507,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [133.8234, 35.4412] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.8234,
+          35.4412
+        ]
+      },
       "properties": {
         "name": "倉吉変電所",
         "company": "中国電力ネットワーク",
@@ -1153,7 +1531,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [133.3312, 35.4712] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.3374,
+          35.4182
+        ]
+      },
       "properties": {
         "name": "米子変電所",
         "company": "中国電力ネットワーク",
@@ -1171,7 +1555,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [133.0512, 35.4723] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.0512,
+          35.4723
+        ]
+      },
       "properties": {
         "name": "松江変電所",
         "company": "中国電力ネットワーク",
@@ -1189,7 +1579,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [132.5612, 35.0534] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.0936,
+          34.9016
+        ]
+      },
       "properties": {
         "name": "浜田変電所",
         "company": "中国電力ネットワーク",
@@ -1207,7 +1603,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [131.8012, 35.0712] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.842,
+          34.674
+        ]
+      },
       "properties": {
         "name": "益田変電所",
         "company": "中国電力ネットワーク",
@@ -1225,7 +1627,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [133.8123, 35.0534] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.8123,
+          35.0534
+        ]
+      },
       "properties": {
         "name": "津山変電所",
         "company": "中国電力ネットワーク",
@@ -1243,7 +1651,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [133.3412, 34.9823] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.3412,
+          34.9823
+        ]
+      },
       "properties": {
         "name": "新見変電所",
         "company": "中国電力ネットワーク",
@@ -1261,7 +1675,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [132.8412, 34.8012] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          132.8412,
+          34.8012
+        ]
+      },
       "properties": {
         "name": "三次変電所",
         "company": "中国電力ネットワーク",
@@ -1279,7 +1699,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [131.4712, 34.1812] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.402,
+          34.408
+        ]
+      },
       "properties": {
         "name": "萩変電所",
         "company": "中国電力ネットワーク",
@@ -1297,7 +1723,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.8823, 38.2612] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.8823,
+          38.2612
+        ]
+      },
       "properties": {
         "name": "名取変電所",
         "company": "東北電力ネットワーク",
@@ -1315,7 +1747,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [141.0612, 38.4312] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.0612,
+          38.4312
+        ]
+      },
       "properties": {
         "name": "石巻変電所",
         "company": "東北電力ネットワーク",
@@ -1333,7 +1771,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.3234, 38.2512] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.2802,
+          38.2569
+        ]
+      },
       "properties": {
         "name": "山形変電所",
         "company": "東北電力ネットワーク",
@@ -1351,7 +1795,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [139.8512, 38.7723] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.8484,
+          38.8949
+        ]
+      },
       "properties": {
         "name": "酒田変電所",
         "company": "東北電力ネットワーク",
@@ -1369,7 +1819,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.4612, 37.7512] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.4612,
+          37.7512
+        ]
+      },
       "properties": {
         "name": "福島変電所",
         "company": "東北電力ネットワーク",
@@ -1387,7 +1843,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.0123, 37.4012] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.9288,
+          37.4948
+        ]
+      },
       "properties": {
         "name": "会津若松変電所",
         "company": "東北電力ネットワーク",
@@ -1405,7 +1867,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [141.1312, 39.7012] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.1312,
+          39.7012
+        ]
+      },
       "properties": {
         "name": "盛岡南変電所",
         "company": "東北電力ネットワーク",
@@ -1423,7 +1891,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [141.9534, 39.2612] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          141.9534,
+          39.2612
+        ]
+      },
       "properties": {
         "name": "釜石変電所",
         "company": "東北電力ネットワーク",
@@ -1441,7 +1915,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.1012, 39.7234] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.0858,
+          39.8125
+        ]
+      },
       "properties": {
         "name": "秋田変電所",
         "company": "東北電力ネットワーク",
@@ -1459,7 +1939,13 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.7312, 40.8212] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.713,
+          40.7763
+        ]
+      },
       "properties": {
         "name": "青森変電所",
         "company": "東北電力ネットワーク",
