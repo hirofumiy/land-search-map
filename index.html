@@ -6,9 +6,13 @@
 <title>蓄電所用地探索マップ</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<!-- PMTiles + protomaps-leaflet for 登記所備付地図（公図）表示 -->
+<!-- PMTiles + Pbf + VectorTile for 登記所備付地図（公図）表示 -->
 <script src="https://unpkg.com/pmtiles@3.2.0/dist/pmtiles.js"></script>
-<script src="https://unpkg.com/protomaps-leaflet@4.0.1/dist/protomaps-leaflet.js"></script>
+<script src="https://unpkg.com/pbf@3.2.1/dist/pbf.js"></script>
+<script type="module">
+import {VectorTile} from 'https://esm.sh/@mapbox/vector-tile@1.3.1';
+window.VectorTile = VectorTile;
+</script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow: hidden; }
@@ -351,13 +355,21 @@ let measureMarkersArr = [];
 // ===== Map Init =====
 const map = L.map('map', { zoomControl: true }).setView([35.6, 137.0], 6);
 
-const tileStd = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
+// Google Maps タイル
+const tileGoogle = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+  attribution: 'Map data &copy; Google', maxZoom: 21
+});
+const tileGoogleSat = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+  attribution: 'Imagery &copy; Google', maxZoom: 21
+});
+const tileGoogleHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+  attribution: 'Map data &copy; Google', maxZoom: 21
+});
+// 地理院タイル（バックアップ）
+const tileGsi = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
   attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院</a>', maxNativeZoom: 18, maxZoom: 21
 });
-const tilePhoto = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg', {
-  attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院</a>', maxNativeZoom: 18, maxZoom: 21
-});
-tileStd.addTo(map);
+tileGoogle.addTo(map);
 
 // Hazard layers
 const hazardLayers = {
@@ -372,41 +384,120 @@ const hazardActive = { flood: false, sediment: false, landslide: false, jisuberi
 // ===== 登記所備付地図（公図）レイヤー =====
 let cadastralLayer = null;
 let cadastralActive = false;
+const cadastralPMTiles = new pmtiles.PMTiles('https://data.source.coop/smartmaps/amx-2024-04/MojMap_amx_2024.pmtiles');
 
 function createCadastralLayer() {
-  if (typeof protomapsL === 'undefined') {
-    console.warn('protomaps-leaflet not loaded');
+  if (typeof Pbf === 'undefined' || typeof VectorTile === 'undefined') {
+    console.warn('Pbf or VectorTile not loaded yet');
     return null;
   }
-  return protomapsL.leafletLayer({
-    url: 'https://data.source.coop/smartmaps/amx-2024-04/MojMap_amx_2024.pmtiles',
-    paint_rules: [
-      {
-        dataLayer: 'fude',
-        symbolizer: new protomapsL.PolygonSymbolizer({
-          fill: 'rgba(255,165,0,0.12)',
-          stroke: 'rgba(200,80,0,0.7)',
-          width: 1.2
-        }),
-        minzoom: 14,
-        maxzoom: 20
-      }
-    ],
-    label_rules: [
-      {
-        dataLayer: 'fude',
-        symbolizer: new protomapsL.CenteredTextSymbolizer({
-          labelProps: ['地番'],
-          fill: '#b33',
-          stroke: '#fff',
-          width: 3,
-          font: '700 13px "Hiragino Sans", "Meiryo", sans-serif'
-        }),
-        minzoom: 15,
-        maxzoom: 20
-      }
-    ],
-    maxDataZoom: 16,
+  // 公図用のカスタムペインを作成（タイルレイヤーより上に表示）
+  if (!map.getPane('cadastralPane')) {
+    map.createPane('cadastralPane');
+    map.getPane('cadastralPane').style.zIndex = 450;
+    map.getPane('cadastralPane').style.pointerEvents = 'none';
+  }
+
+  const CadastralGridLayer = L.GridLayer.extend({
+    createTile: function(coords, done) {
+      const tile = document.createElement('canvas');
+      const size = this.getTileSize();
+      tile.width = size.x;
+      tile.height = size.y;
+      const ctx = tile.getContext('2d');
+
+      if (coords.z < 14) { done(null, tile); return tile; }
+
+      // PMTiles maxDataZoom=16: 高ズームではz16タイルを拡大表示
+      const fetchZ = Math.min(coords.z, 16);
+      const scale = Math.pow(2, coords.z - fetchZ);
+      const tileX = Math.floor(coords.x / scale);
+      const tileY = Math.floor(coords.y / scale);
+      const offsetX = (coords.x / scale - tileX);
+      const offsetY = (coords.y / scale - tileY);
+
+      cadastralPMTiles.getZxy(fetchZ, tileX, tileY).then(function(result) {
+        if (!result || !result.data) { done(null, tile); return; }
+
+        var vt = new VectorTile(new Pbf(new Uint8Array(result.data)));
+        var fudeLayer = vt.layers['fude'];
+        if (!fudeLayer) { done(null, tile); return; }
+
+        var extent = 4096;
+        var tileSize = size.x;
+        var scaleFactor = (tileSize / extent) * scale;
+        var ox = offsetX * tileSize;
+        var oy = offsetY * tileSize;
+
+        // 筆界線（ポリゴン）描画
+        ctx.fillStyle = 'rgba(255,140,0,0.12)';
+        ctx.strokeStyle = 'rgba(200,50,0,0.8)';
+        ctx.lineWidth = 1.2;
+
+        for (var i = 0; i < fudeLayer.length; i++) {
+          var feat = fudeLayer.feature(i);
+          if (feat.type !== 3) continue;
+          var geom = feat.loadGeometry();
+          for (var r = 0; r < geom.length; r++) {
+            var ring = geom[r];
+            if (ring.length < 3) continue;
+            ctx.beginPath();
+            ctx.moveTo(ring[0].x * scaleFactor - ox, ring[0].y * scaleFactor - oy);
+            for (var p = 1; p < ring.length; p++) {
+              ctx.lineTo(ring[p].x * scaleFactor - ox, ring[p].y * scaleFactor - oy);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+          }
+        }
+
+        // 地番ラベル描画（z15+）
+        if (coords.z >= 15) {
+          ctx.font = '700 11px "Hiragino Sans", "Meiryo", sans-serif';
+          ctx.fillStyle = '#a22';
+          ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+          ctx.lineWidth = 3;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          for (var i = 0; i < fudeLayer.length; i++) {
+            var feat = fudeLayer.feature(i);
+            var label = feat.properties['地番'];
+            if (!label) continue;
+            var geom = feat.loadGeometry();
+            var cx = 0, cy = 0, n = 0;
+            for (var r = 0; r < geom.length; r++) {
+              for (var p = 0; p < geom[r].length; p++) {
+                cx += geom[r][p].x; cy += geom[r][p].y; n++;
+              }
+            }
+            if (n === 0) continue;
+            cx = (cx / n) * scaleFactor - ox;
+            cy = (cy / n) * scaleFactor - oy;
+            if (cx >= -20 && cx <= tileSize + 20 && cy >= -20 && cy <= tileSize + 20) {
+              ctx.strokeText(label, cx, cy);
+              ctx.fillText(label, cx, cy);
+            }
+          }
+        }
+
+        done(null, tile);
+      }).catch(function(err) {
+        console.error('Cadastral tile error:', err);
+        done(null, tile);
+      });
+
+      return tile;
+    }
+  });
+
+  return new CadastralGridLayer({
+    pane: 'cadastralPane',
+    tileSize: 256,
+    minZoom: 14,
+    maxZoom: 21,
+    opacity: 1,
     attribution: '<a href="https://github.com/amx-project">AMX</a> | 法務省登記所備付地図'
   });
 }
@@ -420,6 +511,16 @@ document.getElementById('cadastral-cb').addEventListener('change', function() {
       cadastralLayer.addTo(map);
       cadastralActive = true;
       toggle.classList.add('active');
+    } else {
+      // VectorTile未ロード時のリトライ
+      setTimeout(() => {
+        cadastralLayer = createCadastralLayer();
+        if (cadastralLayer) {
+          cadastralLayer.addTo(map);
+          cadastralActive = true;
+          toggle.classList.add('active');
+        }
+      }, 1000);
     }
   } else {
     if (cadastralLayer) map.removeLayer(cadastralLayer);
@@ -429,7 +530,7 @@ document.getElementById('cadastral-cb').addEventListener('change', function() {
 });
 
 L.control.layers(
-  { '標準地図': tileStd, '航空写真': tilePhoto },
+  { 'Google マップ': tileGoogle, 'Google 航空写真': tileGoogleSat, 'Google ハイブリッド': tileGoogleHybrid, '地理院地図': tileGsi },
   {},
   { position: 'topright', collapsed: true }
 ).addTo(map);
