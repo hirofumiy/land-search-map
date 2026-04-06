@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蓄電所用地探索マップ</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow: hidden; }
+
+#app { display: flex; height: 100vh; width: 100vw; }
+#map { flex: 1; height: 100%; z-index: 1; }
+
+#panel {
+  width: 380px; min-width: 380px; height: 100%; background: #1e293b; color: #e2e8f0;
+  display: flex; flex-direction: column; overflow: hidden; z-index: 2;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.3);
+}
+
+#panel-header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+  padding: 14px 18px; border-bottom: 1px solid #334155;
+}
+#panel-header h1 { font-size: 17px; font-weight: 700; color: #f8fafc; letter-spacing: 1px; }
+#panel-header p { font-size: 10px; color: #94a3b8; margin-top: 3px; }
+
+#panel-body { flex: 1; overflow-y: auto; padding: 0; }
+#panel-body::-webkit-scrollbar { width: 6px; }
+#panel-body::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+
+.section { padding: 12px 14px; border-bottom: 1px solid #334155; }
+.section-title { font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+
+/* Search */
+.search-row { display: flex; gap: 6px; }
+.search-input {
+  flex: 1; padding: 7px 10px; border: 1px solid #475569; border-radius: 6px;
+  background: #0f172a; color: #e2e8f0; font-size: 13px; outline: none;
+}
+.search-input:focus { border-color: #3b82f6; }
+.btn-primary {
+  padding: 7px 12px; border: none; border-radius: 6px; background: #3b82f6;
+  color: white; font-size: 12px; cursor: pointer; white-space: nowrap;
+}
+.btn-primary:hover { background: #2563eb; }
+
+/* Filters */
+.filter-group { display: flex; flex-wrap: wrap; gap: 5px; }
+.filter-group label {
+  display: flex; align-items: center; gap: 3px; font-size: 11px; cursor: pointer;
+  padding: 3px 7px; border-radius: 4px; background: #0f172a; border: 1px solid #334155;
+}
+.filter-group label:hover { background: #334155; }
+.filter-group input[type="checkbox"] { accent-color: #3b82f6; width: 13px; height: 13px; }
+
+/* Rank badges */
+.rank-badge {
+  display: inline-block; width: 18px; height: 18px; border-radius: 50%; text-align: center;
+  line-height: 18px; font-size: 10px; font-weight: 700; color: white;
+}
+.rank-S { background: #22c55e; }
+.rank-A { background: #3b82f6; }
+.rank-B { background: #eab308; color: #1e293b; }
+.rank-C { background: #f97316; }
+.rank-D { background: #ef4444; }
+
+/* Tabs */
+.tabs { display: flex; border-bottom: 2px solid #334155; }
+.tab {
+  flex: 1; padding: 10px 6px; text-align: center; font-size: 12px; font-weight: 600;
+  cursor: pointer; color: #64748b; border-bottom: 2px solid transparent;
+  margin-bottom: -2px; transition: all 0.15s;
+}
+.tab:hover { color: #94a3b8; }
+.tab.active { color: #3b82f6; border-bottom-color: #3b82f6; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Stats */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+.stat-card {
+  background: #0f172a; border-radius: 6px; padding: 10px 6px; text-align: center;
+  border: 1px solid #334155;
+}
+.stat-value { font-size: 20px; font-weight: 700; color: #f8fafc; }
+.stat-label { font-size: 10px; color: #64748b; margin-top: 2px; }
+
+/* List items */
+.list-item {
+  padding: 10px 12px; border-radius: 6px; background: #0f172a; margin-bottom: 6px;
+  cursor: pointer; border: 1px solid transparent; transition: all 0.15s;
+}
+.list-item:hover { border-color: #3b82f6; background: #172554; }
+.list-item-title { font-size: 13px; font-weight: 600; color: #f1f5f9; }
+.list-item-sub { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+.list-item-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
+
+/* Property card */
+.property-card {
+  padding: 12px; border-radius: 8px; background: #0f172a; margin-bottom: 8px;
+  border: 1px solid #334155; transition: all 0.15s; cursor: pointer;
+}
+.property-card:hover { border-color: #3b82f6; }
+.property-card.sale { border-left: 3px solid #22c55e; }
+.property-card.jiage { border-left: 3px solid #f59e0b; }
+.property-card.negotiating { border-left: 3px solid #8b5cf6; }
+.property-card.done { border-left: 3px solid #6b7280; opacity: 0.6; }
+
+.property-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.property-title { font-size: 13px; font-weight: 600; color: #f1f5f9; flex: 1; }
+.property-status {
+  font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+  white-space: nowrap; margin-left: 8px;
+}
+.status-sale { background: #22c55e20; color: #22c55e; }
+.status-jiage { background: #f59e0b20; color: #f59e0b; }
+.status-negotiating { background: #8b5cf620; color: #8b5cf6; }
+.status-done { background: #6b728020; color: #6b7280; }
+
+.property-details { margin-top: 6px; }
+.property-row { font-size: 11px; color: #94a3b8; margin: 2px 0; display: flex; gap: 4px; }
+.property-row b { color: #cbd5e1; min-width: 60px; }
+.property-row a { color: #60a5fa; text-decoration: none; }
+.property-row a:hover { text-decoration: underline; }
+
+.property-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 6px; border-top: 1px solid #334155; }
+.property-price { font-size: 14px; font-weight: 700; color: #f59e0b; }
+.property-area { font-size: 12px; color: #94a3b8; }
+.property-link {
+  font-size: 11px; padding: 4px 10px; border-radius: 4px; border: 1px solid #3b82f6;
+  color: #3b82f6; background: transparent; cursor: pointer; text-decoration: none;
+}
+.property-link:hover { background: #3b82f620; }
+
+/* Measure tool */
+.btn-tool {
+  width: 100%; padding: 7px; border: 1px solid #475569; border-radius: 6px;
+  background: #0f172a; color: #e2e8f0; font-size: 12px; cursor: pointer;
+}
+.btn-tool:hover { background: #334155; }
+.btn-tool.active { background: #3b82f6; border-color: #3b82f6; }
+#measure-result { font-size: 11px; color: #94a3b8; margin-top: 4px; min-height: 16px; }
+
+/* Hazard controls */
+.hazard-controls { margin-top: 8px; }
+.hazard-toggle {
+  display: flex; align-items: center; gap: 6px; padding: 4px 8px; margin-bottom: 3px;
+  border-radius: 4px; background: #0f172a; border: 1px solid #334155; cursor: pointer;
+  font-size: 11px; color: #e2e8f0;
+}
+.hazard-toggle:hover { background: #334155; }
+.hazard-toggle.active { border-color: #3b82f6; background: #172554; }
+.hazard-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.hazard-slider { width: 50px; height: 4px; accent-color: #3b82f6; cursor: pointer; }
+
+/* Powerline legend */
+.powerline-hint {
+  font-size: 10px; color: #64748b; margin-top: 6px; padding: 6px 8px;
+  background: #0f172a; border-radius: 4px; border: 1px solid #334155; display: none;
+}
+.powerline-hint.visible { display: block; }
+
+/* Popup */
+.leaflet-popup-content-wrapper { border-radius: 8px; }
+.popup-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.popup-row { font-size: 12px; margin: 3px 0; color: #475569; }
+.popup-row b { color: #1e293b; }
+.popup-row a { color: #2563eb; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  #app { flex-direction: column-reverse; }
+  #panel { width: 100%; min-width: unset; height: 50vh; }
+  #map { height: 50vh; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="map"></div>
+  <div id="panel">
+    <div id="panel-header">
+      <h1>蓄電所用地探索マップ</h1>
+      <p>Battery Storage Site Exploration - 440 LLC</p>
+    </div>
+    <div id="panel-body">
+
+      <!-- Search -->
+      <div class="section">
+        <div class="section-title">住所検索</div>
+        <div class="search-row">
+          <input type="text" id="search-input" class="search-input" placeholder="住所・地名を入力..." />
+          <button id="search-btn" class="btn-primary">検索</button>
+        </div>
+      </div>
+
+      <!-- Tools Row -->
+      <div class="section">
+        <div style="display:flex;gap:6px;">
+          <button id="measure-btn" class="btn-tool" style="flex:1;">距離計測</button>
+        </div>
+        <div id="measure-result"></div>
+
+        <div class="section-title" style="margin-top:10px;">ハザードマップ</div>
+        <div class="hazard-controls">
+          <div class="hazard-toggle" data-hazard="flood">
+            <div class="hazard-dot" style="background:#4fc3f7;"></div>
+            <span style="flex:1;">洪水浸水想定</span>
+            <input type="range" class="hazard-slider" min="0" max="100" value="50" data-hazard="flood" title="不透明度">
+          </div>
+          <div class="hazard-toggle" data-hazard="sediment">
+            <div class="hazard-dot" style="background:#ef6c00;"></div>
+            <span style="flex:1;">土砂災害警戒</span>
+            <input type="range" class="hazard-slider" min="0" max="100" value="50" data-hazard="sediment" title="不透明度">
+          </div>
+          <div class="hazard-toggle" data-hazard="tsunami">
+            <div class="hazard-dot" style="background:#7e57c2;"></div>
+            <span style="flex:1;">津波浸水想定</span>
+            <input type="range" class="hazard-slider" min="0" max="100" value="50" data-hazard="tsunami" title="不透明度">
+          </div>
+          <div class="hazard-toggle" data-hazard="landslide">
+            <div class="hazard-dot" style="background:#d32f2f;"></div>
+            <span style="flex:1;">急傾斜地崩壊</span>
+            <input type="range" class="hazard-slider" min="0" max="100" value="50" data-hazard="landslide" title="不透明度">
+          </div>
+        </div>
+        <div id="powerline-hint" class="powerline-hint">
+          ⚡ ズームLv12以上で変電所間の送電線（推定）を表示します
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="section">
+        <div class="section-title">電力会社</div>
+        <div class="filter-group" id="company-filters"></div>
+        <div style="margin-top:8px;">
+          <div class="section-title" style="margin-bottom:6px;">負担金ランク</div>
+          <div class="filter-group" id="rank-filters"></div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="section">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="stat-substations">0</div>
+            <div class="stat-label">変電所</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-sale">0</div>
+            <div class="stat-label">売出物件</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-jiage">0</div>
+            <div class="stat-label">地上げ対象</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <div class="tab active" data-tab="substations">変電所</div>
+        <div class="tab" data-tab="sale">売出物件</div>
+        <div class="tab" data-tab="jiage">地上げ対象</div>
+      </div>
+
+      <!-- Tab: Substations -->
+      <div class="tab-content active" id="tab-substations">
+        <div class="section" style="border-bottom:none;">
+          <div id="substation-list"></div>
+        </div>
+      </div>
+
+      <!-- Tab: Sale Properties -->
+      <div class="tab-content" id="tab-sale">
+        <div class="section" style="border-bottom:none;">
+          <div class="section-title">売りに出ている物件</div>
+          <div id="sale-list"></div>
+        </div>
+      </div>
+
+      <!-- Tab: Jiage Targets -->
+      <div class="tab-content" id="tab-jiage">
+        <div class="section" style="border-bottom:none;">
+          <div class="section-title">地上げ対象エリア</div>
+          <div id="jiage-list"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== Config =====
+const COMPANIES = ['東京電力パワーグリッド', '中部電力パワーグリッド', '関西電力送配電', '九州電力送配電', '中国電力ネットワーク', '東北電力ネットワーク'];
+const COMPANY_SHORT = {'東京電力パワーグリッド':'東電PG','中部電力パワーグリッド':'中部電力PG','関西電力送配電':'関西電力','九州電力送配電':'九州電力','中国電力ネットワーク':'中国電力NW','東北電力ネットワーク':'東北電力NW'};
+const RANKS = ['S', 'A', 'B', 'C', 'D'];
+const RANK_COLORS = { S: '#22c55e', A: '#3b82f6', B: '#eab308', C: '#f97316', D: '#ef4444' };
+const STATUS_LABELS = { sale: '売出中', jiage: '地上げ対象', negotiating: '交渉中', done: '成約済' };
+const STATUS_CSS = { sale: 'status-sale', jiage: 'status-jiage', negotiating: 'status-negotiating', done: 'status-done' };
+
+// ===== State =====
+let substationsData = null;
+let propertiesData = null;
+let substationMarkers = [];
+let propertyMarkers = [];
+let activeCircles = [];
+let selectedCompanies = new Set(COMPANIES);
+let selectedRanks = new Set(RANKS);
+let measureMode = false;
+let measurePoints = [];
+let measureLine = null;
+let measureMarkersArr = [];
+// hazard state managed by hazardActive object
+
+// ===== Map Init =====
+const map = L.map('map', { zoomControl: true }).setView([35.6, 137.0], 6);
+
+const tileStd = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
+  attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院</a>', maxZoom: 18
+});
+const tilePhoto = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg', {
+  attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院</a>', maxZoom: 18
+});
+tileStd.addTo(map);
+
+// Hazard layers
+const hazardLayers = {
+  flood: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', { opacity: 0.5, maxZoom: 18 }),
+  sediment: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', { opacity: 0.5, maxZoom: 18 }),
+  tsunami: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/04_tsunami_newlegend_data/{z}/{x}/{y}.png', { opacity: 0.5, maxZoom: 18 }),
+  landslide: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_kyukeishachihousaigai/{z}/{x}/{y}.png', { opacity: 0.5, maxZoom: 18 })
+};
+const hazardActive = { flood: false, sediment: false, tsunami: false, landslide: false };
+
+L.control.layers(
+  { '標準地図': tileStd, '航空写真': tilePhoto },
+  {},
+  { position: 'topright', collapsed: true }
+).addTo(map);
+
+// Power line layer group
+let powerLineGroup = L.layerGroup();
+
+// ===== Icons =====
+function createSubstationIcon(rank) {
+  const color = RANK_COLORS[rank] || '#6b7280';
+  return L.divIcon({
+    className: '',
+    html: `<div style="width:26px;height:26px;border-radius:50%;background:${color};border:2.5px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:700;">${rank}</div>`,
+    iconSize: [26, 26], iconAnchor: [13, 13], popupAnchor: [0, -15]
+  });
+}
+
+function createPropertyIcon(status) {
+  const colors = { sale: '#22c55e', jiage: '#f59e0b', negotiating: '#8b5cf6', done: '#6b7280' };
+  const icons = { sale: '🏠', jiage: '🎯', negotiating: '🤝', done: '✅' };
+  const c = colors[status] || '#6b7280';
+  const icon = icons[status] || '📍';
+  return L.divIcon({
+    className: '',
+    html: `<div style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:20px;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.4));position:relative;"><span>${icon}</span><div style="position:absolute;bottom:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:${c};border:1.5px solid white;"></div></div>`,
+    iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -32]
+  });
+}
+
+// ===== Helpers =====
+function clearCircles() { activeCircles.forEach(c => map.removeLayer(c)); activeCircles = []; }
+
+function drawConcentricCircles(latlng) {
+  clearCircles();
+  [1000, 3000, 5000].forEach((r, i) => {
+    const circle = L.circle(latlng, { radius: r, color: '#3b82f6', weight: 1.5, fillOpacity: 0.03 + (2-i)*0.015, dashArray: '6,4' }).addTo(map);
+    const label = L.marker([latlng.lat + r*0.000009, latlng.lng], {
+      icon: L.divIcon({ className: '', html: `<div style="font-size:10px;color:#3b82f6;font-weight:600;white-space:nowrap;text-shadow:1px 1px 2px white,-1px -1px 2px white;">${r/1000}km</div>`, iconAnchor: [15, 10] })
+    }).addTo(map);
+    activeCircles.push(circle, label);
+  });
+}
+
+function formatYen(yen) {
+  if (yen >= 10000) return (yen / 10000).toFixed(yen % 10000 === 0 ? 0 : 1) + '万円';
+  return yen.toLocaleString() + '円';
+}
+
+// ===== Render Substations =====
+function renderSubstations() {
+  substationMarkers.forEach(m => map.removeLayer(m));
+  substationMarkers = [];
+  if (!substationsData) return;
+  let count = 0;
+  substationsData.features.forEach(f => {
+    const p = f.properties;
+    const rank = p.estimated_cost_rank || p.rank || 'D';
+    if (!selectedCompanies.has(p.company) || !selectedRanks.has(rank)) return;
+    count++;
+    const coords = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+    const availMW = p.available_capacity_mw || p.available_mw || 0;
+    const voltage = p.voltage || (p.voltage_kv ? p.voltage_kv+'kV' : '');
+    const costMin = p.estimated_cost_yen_min ? formatYen(p.estimated_cost_yen_min) : '';
+    const costMax = p.estimated_cost_yen_max ? formatYen(p.estimated_cost_yen_max) : '';
+    const costStr = p.estimated_cost || (costMin && costMax ? `${costMin}〜${costMax}` : '不明');
+    const shortName = COMPANY_SHORT[p.company] || p.company;
+    const marker = L.marker(coords, { icon: createSubstationIcon(rank) })
+      .bindPopup(`
+        <div class="popup-title">${p.name}</div>
+        <div class="popup-row"><b>電力会社:</b> ${shortName}</div>
+        <div class="popup-row"><b>都道府県:</b> ${p.prefecture || ''}</div>
+        <div class="popup-row"><b>空き容量:</b> ${availMW} MW</div>
+        <div class="popup-row"><b>電圧:</b> ${voltage}</div>
+        <div class="popup-row"><b>増強要否:</b> ${p.reinforcement_needed || '不明'}</div>
+        <div class="popup-row"><b>ランク:</b> <span class="rank-badge rank-${rank}">${rank}</span></div>
+        <div class="popup-row"><b>推定負担金:</b> ${costStr}</div>
+        <div class="popup-row"><b>備考:</b> ${p.notes || ''}</div>
+      `, { maxWidth: 300 })
+      .on('click', () => drawConcentricCircles(L.latLng(coords)))
+      .addTo(map);
+    substationMarkers.push(marker);
+  });
+  document.getElementById('stat-substations').textContent = count;
+}
+
+// ===== Render Properties =====
+function renderProperties() {
+  propertyMarkers.forEach(m => map.removeLayer(m));
+  propertyMarkers = [];
+  if (!propertiesData) return;
+  let saleCount = 0, jiageCount = 0;
+  propertiesData.features.forEach(f => {
+    const p = f.properties;
+    if (p.status === 'sale') saleCount++; else jiageCount++;
+    const coords = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+    const priceStr = p.price_man ? p.price_man.toLocaleString() + '万円' : '価格未定';
+    const urlLink = p.url ? `<div class="popup-row"><a href="${p.url}" target="_blank">物件ページを開く</a></div>` : '';
+    const agentInfo = p.agent ? `<div class="popup-row"><b>不動産会社:</b> ${p.agent}</div>` : '';
+    const marker = L.marker(coords, { icon: createPropertyIcon(p.status) })
+      .bindPopup(`
+        <div class="popup-title">${p.status === 'sale' ? '🏠' : '🎯'} ${p.address}</div>
+        <div class="popup-row" style="margin-bottom:4px;"><span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;background:${p.status==='sale'?'#dcfce7':'#fef3c7'};color:${p.status==='sale'?'#166534':'#92400e'};">${STATUS_LABELS[p.status]}</span></div>
+        <div class="popup-row"><b>面積:</b> ${p.area_sqm ? p.area_sqm.toLocaleString() : '?'} m²</div>
+        <div class="popup-row"><b>価格:</b> ${priceStr}</div>
+        <div class="popup-row"><b>地目:</b> ${p.land_category || '不明'}</div>
+        <div class="popup-row"><b>最寄変電所:</b> ${p.nearest_substation || ''}（${p.distance_km || '?'} km）</div>
+        <div class="popup-row"><b>推定負担金:</b> ${p.estimated_burden || '不明'}</div>
+        <div class="popup-row"><b>接道:</b> ${p.road_access || '不明'}</div>
+        ${agentInfo}
+        <div class="popup-row"><b>備考:</b> ${p.notes || ''}</div>
+        ${urlLink}
+      `, { maxWidth: 320 })
+      .addTo(map);
+    propertyMarkers.push(marker);
+  });
+  document.getElementById('stat-sale').textContent = saleCount;
+  document.getElementById('stat-jiage').textContent = jiageCount;
+}
+
+// ===== Panel: Substation List =====
+function renderSubstationList() {
+  const el = document.getElementById('substation-list');
+  if (!substationsData) { el.innerHTML = '<div style="font-size:12px;color:#64748b;">データなし</div>'; return; }
+  const filtered = substationsData.features
+    .filter(f => selectedCompanies.has(f.properties.company) && selectedRanks.has(f.properties.estimated_cost_rank || f.properties.rank))
+    .sort((a, b) => (b.properties.available_capacity_mw||0) - (a.properties.available_capacity_mw||0));
+  el.innerHTML = filtered.map(f => {
+    const p = f.properties;
+    const rank = p.estimated_cost_rank || p.rank || 'D';
+    const availMW = p.available_capacity_mw || 0;
+    const shortName = COMPANY_SHORT[p.company] || p.company;
+    return `<div class="list-item" data-lng="${f.geometry.coordinates[0]}" data-lat="${f.geometry.coordinates[1]}">
+      <div class="list-item-title">${p.name}</div>
+      <div class="list-item-sub">${shortName} / ${p.voltage||''} / ${p.prefecture||''}</div>
+      <div class="list-item-meta"><span>空き ${availMW} MW</span><span class="rank-badge rank-${rank}">${rank}</span></div>
+    </div>`;
+  }).join('');
+  el.querySelectorAll('.list-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const lat = +item.dataset.lat, lng = +item.dataset.lng;
+      map.setView([lat, lng], 14);
+      drawConcentricCircles(L.latLng(lat, lng));
+      substationMarkers.forEach(m => {
+        const ll = m.getLatLng();
+        if (Math.abs(ll.lat-lat)<0.001 && Math.abs(ll.lng-lng)<0.001) m.openPopup();
+      });
+    });
+  });
+}
+
+// ===== Panel: Property Lists =====
+function renderPropertyList(status, containerId) {
+  const el = document.getElementById(containerId);
+  if (!propertiesData) { el.innerHTML = '<div style="font-size:12px;color:#64748b;">データなし</div>'; return; }
+  const items = propertiesData.features.filter(f => f.properties.status === status);
+  if (items.length === 0) {
+    el.innerHTML = `<div style="font-size:12px;color:#64748b;padding:8px 0;">${status==='sale' ? 'まだ売出物件が登録されていません。' : '地上げ対象エリアが登録されていません。'}<br>land-candidates.json にデータを追加してください。</div>`;
+    return;
+  }
+  el.innerHTML = items.map(f => {
+    const p = f.properties;
+    const priceStr = p.price_man ? p.price_man.toLocaleString() + '万円' : '未定';
+    const urlBtn = p.url ? `<a href="${p.url}" target="_blank" class="property-link" onclick="event.stopPropagation();">物件を見る</a>` : '';
+    return `<div class="property-card ${p.status}" data-lng="${f.geometry.coordinates[0]}" data-lat="${f.geometry.coordinates[1]}">
+      <div class="property-header">
+        <div class="property-title">${p.address}</div>
+        <span class="property-status ${STATUS_CSS[p.status]}">${STATUS_LABELS[p.status]}</span>
+      </div>
+      <div class="property-details">
+        <div class="property-row"><b>地目:</b> ${p.land_category||'不明'}</div>
+        <div class="property-row"><b>最寄:</b> ${p.nearest_substation||''}（${p.distance_km||'?'}km）</div>
+        <div class="property-row"><b>負担金:</b> ${p.estimated_burden||'未算出'}</div>
+        ${p.agent ? `<div class="property-row"><b>業者:</b> ${p.agent}</div>` : ''}
+        ${p.notes ? `<div class="property-row"><b>備考:</b> ${p.notes}</div>` : ''}
+      </div>
+      <div class="property-footer">
+        <div><span class="property-price">${priceStr}</span> <span class="property-area">${p.area_sqm ? p.area_sqm.toLocaleString()+'m²' : ''}</span></div>
+        ${urlBtn}
+      </div>
+    </div>`;
+  }).join('');
+  el.querySelectorAll('.property-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const lat = +card.dataset.lat, lng = +card.dataset.lng;
+      map.setView([lat, lng], 15);
+      propertyMarkers.forEach(m => {
+        const ll = m.getLatLng();
+        if (Math.abs(ll.lat-lat)<0.001 && Math.abs(ll.lng-lng)<0.001) m.openPopup();
+      });
+    });
+  });
+}
+
+// ===== Tabs =====
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// ===== Filters =====
+function buildFilters() {
+  const companyEl = document.getElementById('company-filters');
+  companyEl.innerHTML = COMPANIES.map(c =>
+    `<label><input type="checkbox" value="${c}" checked> ${COMPANY_SHORT[c]||c}</label>`
+  ).join('');
+  companyEl.querySelectorAll('input').forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (cb.checked) selectedCompanies.add(cb.value); else selectedCompanies.delete(cb.value);
+      applyFilters();
+    });
+  });
+  const rankEl = document.getElementById('rank-filters');
+  rankEl.innerHTML = RANKS.map(r =>
+    `<label><input type="checkbox" value="${r}" checked> <span class="rank-badge rank-${r}">${r}</span></label>`
+  ).join('');
+  rankEl.querySelectorAll('input').forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (cb.checked) selectedRanks.add(cb.value); else selectedRanks.delete(cb.value);
+      applyFilters();
+    });
+  });
+}
+
+function applyFilters() {
+  clearCircles();
+  renderSubstations();
+  renderProperties();
+  renderSubstationList();
+  renderPropertyList('sale', 'sale-list');
+  renderPropertyList('jiage', 'jiage-list');
+}
+
+// ===== Search =====
+function searchAddress() {
+  const q = document.getElementById('search-input').value.trim();
+  if (!q) return;
+  fetch(`https://msearch.gsi.go.jp/address-search/AddressSearch?q=${encodeURIComponent(q)}`)
+    .then(r => r.json())
+    .then(data => {
+      if (data && data.length > 0) {
+        map.setView([data[0].geometry.coordinates[1], data[0].geometry.coordinates[0]], 15);
+      } else alert('該当する住所が見つかりませんでした。');
+    }).catch(() => alert('検索エラー'));
+}
+document.getElementById('search-btn').addEventListener('click', searchAddress);
+document.getElementById('search-input').addEventListener('keydown', e => { if (e.key==='Enter') searchAddress(); });
+
+// ===== Measure =====
+function clearMeasure() {
+  if (measureLine) { map.removeLayer(measureLine); measureLine = null; }
+  measureMarkersArr.forEach(m => map.removeLayer(m)); measureMarkersArr = []; measurePoints = [];
+  document.getElementById('measure-result').textContent = '';
+}
+document.getElementById('measure-btn').addEventListener('click', function() {
+  measureMode = !measureMode;
+  this.classList.toggle('active', measureMode);
+  this.textContent = measureMode ? '計測中...' : '距離計測';
+  if (!measureMode) clearMeasure();
+  map.getContainer().style.cursor = measureMode ? 'crosshair' : '';
+});
+map.on('click', function(e) {
+  if (!measureMode) return;
+  if (measurePoints.length >= 2) clearMeasure();
+  measurePoints.push(e.latlng);
+  measureMarkersArr.push(L.circleMarker(e.latlng, { radius: 5, color: '#ef4444', fillColor: '#ef4444', fillOpacity: 1 }).addTo(map));
+  if (measurePoints.length === 2) {
+    const dist = measurePoints[0].distanceTo(measurePoints[1]);
+    measureLine = L.polyline(measurePoints, { color: '#ef4444', weight: 2, dashArray: '8,6' }).addTo(map);
+    document.getElementById('measure-result').textContent = `距離: ${dist>=1000 ? (dist/1000).toFixed(2)+'km' : Math.round(dist)+'m'}`;
+  }
+});
+
+// ===== Hazard Toggle (individual layers) =====
+document.querySelectorAll('.hazard-toggle').forEach(toggle => {
+  toggle.addEventListener('click', function(e) {
+    if (e.target.classList.contains('hazard-slider')) return; // don't toggle on slider drag
+    const key = this.dataset.hazard;
+    hazardActive[key] = !hazardActive[key];
+    this.classList.toggle('active', hazardActive[key]);
+    if (hazardActive[key]) hazardLayers[key].addTo(map);
+    else map.removeLayer(hazardLayers[key]);
+  });
+});
+document.querySelectorAll('.hazard-slider').forEach(slider => {
+  slider.addEventListener('input', function(e) {
+    e.stopPropagation();
+    const key = this.dataset.hazard;
+    hazardLayers[key].setOpacity(this.value / 100);
+  });
+  slider.addEventListener('click', e => e.stopPropagation());
+});
+
+// ===== Power Lines (approximate grid connections) =====
+function buildPowerLines() {
+  powerLineGroup.clearLayers();
+  if (!substationsData || map.getZoom() < 12) {
+    map.removeLayer(powerLineGroup);
+    document.getElementById('powerline-hint').classList.remove('visible');
+    return;
+  }
+  document.getElementById('powerline-hint').classList.add('visible');
+
+  const bounds = map.getBounds();
+  const visibleSubs = substationsData.features.filter(f => {
+    const [lng, lat] = f.geometry.coordinates;
+    return bounds.contains([lat, lng]);
+  });
+
+  // Draw connections between nearby substations (< 30km)
+  for (let i = 0; i < visibleSubs.length; i++) {
+    const a = visibleSubs[i];
+    const [lngA, latA] = a.geometry.coordinates;
+    const ptA = L.latLng(latA, lngA);
+    for (let j = i + 1; j < visibleSubs.length; j++) {
+      const b = visibleSubs[j];
+      if (a.properties.company !== b.properties.company) continue;
+      const [lngB, latB] = b.geometry.coordinates;
+      const ptB = L.latLng(latB, lngB);
+      const dist = ptA.distanceTo(ptB);
+      if (dist > 30000) continue; // 30km以内
+
+      const voltage = a.properties.voltage || '66kV';
+      const is110 = voltage.includes('110') || voltage.includes('154') || voltage.includes('220');
+      const color = is110 ? '#ef4444' : '#f59e0b';
+      const weight = is110 ? 3 : 2;
+
+      const line = L.polyline([[latA, lngA], [latB, lngB]], {
+        color: color, weight: weight, opacity: 0.6, dashArray: is110 ? null : '8,6'
+      });
+      line.bindTooltip(`${a.properties.name} ⇄ ${b.properties.name}<br>${voltage} 送電線（推定）`, { sticky: true });
+      powerLineGroup.addLayer(line);
+    }
+
+    // Draw radial feeder lines from each substation (6kV distribution)
+    if (map.getZoom() >= 14) {
+      const angles = [0, 60, 120, 180, 240, 300];
+      const len = 0.008; // roughly 800m
+      angles.forEach(deg => {
+        const rad = deg * Math.PI / 180;
+        const endLat = latA + len * Math.cos(rad);
+        const endLng = lngA + len * Math.sin(rad) / Math.cos(latA * Math.PI / 180);
+        const feeder = L.polyline([[latA, lngA], [endLat, endLng]], {
+          color: '#60a5fa', weight: 1.5, opacity: 0.4, dashArray: '4,4'
+        });
+        feeder.bindTooltip(`${a.properties.name} 配電線 6kV（推定）`, { sticky: true });
+        powerLineGroup.addLayer(feeder);
+      });
+    }
+  }
+  powerLineGroup.addTo(map);
+}
+
+map.on('zoomend', buildPowerLines);
+map.on('moveend', buildPowerLines);
+
+// ===== Data Loading =====
+async function loadData() {
+  try {
+    const res = await fetch('substations.json');
+    if (!res.ok) throw new Error();
+    substationsData = await res.json();
+  } catch { substationsData = {"type":"FeatureCollection","features":[]}; }
+
+  try {
+    const res = await fetch('land-candidates.json');
+    if (!res.ok) throw new Error();
+    propertiesData = await res.json();
+  } catch { propertiesData = {"type":"FeatureCollection","features":[]}; }
+
+  applyFilters();
+  buildPowerLines();
+}
+
+// ===== Init =====
+buildFilters();
+loadData();
+</script>
+</body>
+</html>

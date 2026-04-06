@@ -1,0 +1,252 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.6200, 36.0500] },
+      "properties": {
+        "id": "S-001",
+        "status": "sale",
+        "address": "茨城県鹿嶋市大字荒野",
+        "area_sqm": 1200,
+        "price_man": 480,
+        "land_category": "雑種地",
+        "nearest_substation": "鹿嶋変電所",
+        "distance_km": 2.1,
+        "estimated_burden": "100〜300万円",
+        "road_access": "幅員6m市道に12m接道",
+        "agent": "鹿嶋不動産（株）",
+        "agent_phone": "0299-XX-XXXX",
+        "url": "",
+        "source": "アットホーム",
+        "notes": "平坦地、元資材置場。ハザード対象外。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.5800, 35.7300] },
+      "properties": {
+        "id": "S-002",
+        "status": "sale",
+        "address": "千葉県山武市松尾町",
+        "area_sqm": 2500,
+        "price_man": 750,
+        "land_category": "山林",
+        "nearest_substation": "成東変電所",
+        "distance_km": 3.4,
+        "estimated_burden": "100〜300万円",
+        "road_access": "幅員5m市道に15m接道",
+        "agent": "房総土地開発（株）",
+        "agent_phone": "0475-XX-XXXX",
+        "url": "",
+        "source": "SUUMO",
+        "notes": "造成が必要だが価格が安い。周辺に太陽光発電所あり。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.4900, 33.2800] },
+      "properties": {
+        "id": "S-003",
+        "status": "sale",
+        "address": "福岡県久留米市北野町大城",
+        "area_sqm": 900,
+        "price_man": 350,
+        "land_category": "雑種地",
+        "nearest_substation": "北野変電所",
+        "distance_km": 1.8,
+        "estimated_burden": "10〜100万円",
+        "road_access": "幅員7m県道に20m接道",
+        "agent": "（株）久留米ランド",
+        "agent_phone": "0942-XX-XXXX",
+        "url": "",
+        "source": "アットホーム",
+        "notes": "平坦地、接道良好。住宅から80m以上離れている。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.7500, 32.8500] },
+      "properties": {
+        "id": "S-004",
+        "status": "sale",
+        "address": "熊本県熊本市北区植木町",
+        "area_sqm": 1800,
+        "price_man": 600,
+        "land_category": "原野",
+        "nearest_substation": "菊陽変電所",
+        "distance_km": 4.2,
+        "estimated_burden": "300〜500万円",
+        "road_access": "幅員5.5m市道に10m接道",
+        "agent": "九州不動産センター",
+        "agent_phone": "096-XXX-XXXX",
+        "url": "",
+        "source": "ジモティー",
+        "notes": "TSMC近郊。将来的に需要増加エリア。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [136.9200, 35.3500] },
+      "properties": {
+        "id": "S-005",
+        "status": "sale",
+        "address": "愛知県豊田市藤岡飯野町",
+        "area_sqm": 3200,
+        "price_man": 980,
+        "land_category": "山林",
+        "nearest_substation": "藤岡変電所",
+        "distance_km": 2.8,
+        "estimated_burden": "100〜300万円",
+        "road_access": "幅員6m市道に18m接道",
+        "agent": "三河不動産（株）",
+        "agent_phone": "0565-XX-XXXX",
+        "url": "",
+        "source": "アットホーム",
+        "notes": "造成済みエリアあり。周辺に工場多く系統が安定。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [133.0500, 35.4200] },
+      "properties": {
+        "id": "S-006",
+        "status": "sale",
+        "address": "島根県出雲市大社町",
+        "area_sqm": 2800,
+        "price_man": 320,
+        "land_category": "雑種地",
+        "nearest_substation": "出雲変電所",
+        "distance_km": 3.1,
+        "estimated_burden": "10〜100万円",
+        "road_access": "幅員8m国道沿い 25m接道",
+        "agent": "出雲ホームズ",
+        "agent_phone": "0853-XX-XXXX",
+        "url": "",
+        "source": "地元業者HP",
+        "notes": "広大な敷地。系統空き十分。価格交渉の余地あり。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.1000, 39.7500] },
+      "properties": {
+        "id": "S-007",
+        "status": "sale",
+        "address": "秋田県大仙市大曲丸の内",
+        "area_sqm": 1500,
+        "price_man": 280,
+        "land_category": "宅地",
+        "nearest_substation": "大曲変電所",
+        "distance_km": 1.5,
+        "estimated_burden": "10〜100万円",
+        "road_access": "幅員6m市道に14m接道",
+        "agent": "あきた不動産",
+        "agent_phone": "0187-XX-XXXX",
+        "url": "",
+        "source": "アットホーム",
+        "notes": "元工場跡地。変電所至近で負担金最安レベル。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.7500, 36.1000] },
+      "properties": {
+        "id": "J-001",
+        "status": "jiage",
+        "address": "茨城県鹿嶋市大字津賀（地番未特定）",
+        "area_sqm": 2000,
+        "price_man": null,
+        "land_category": "山林",
+        "nearest_substation": "鹿嶋変電所",
+        "distance_km": 1.2,
+        "estimated_burden": "10〜100万円",
+        "road_access": "幅員4m農道接道（要確認）",
+        "agent": null,
+        "url": null,
+        "source": "航空写真から候補特定",
+        "notes": "変電所至近の遊休地。地権者調査が必要。登記簿で確認要。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.5100, 33.3100] },
+      "properties": {
+        "id": "J-002",
+        "status": "jiage",
+        "address": "福岡県久留米市北野町中付近",
+        "area_sqm": 1500,
+        "price_man": null,
+        "land_category": "雑種地（推定）",
+        "nearest_substation": "北野変電所",
+        "distance_km": 0.8,
+        "estimated_burden": "10〜100万円",
+        "road_access": "要調査",
+        "agent": null,
+        "url": null,
+        "source": "Google Maps航空写真",
+        "notes": "変電所から800m、空き地を確認。地主への直接アプローチ推奨。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [133.1200, 35.3800] },
+      "properties": {
+        "id": "J-003",
+        "status": "jiage",
+        "address": "島根県出雲市斐川町付近",
+        "area_sqm": 3000,
+        "price_man": null,
+        "land_category": "農地（転用要確認）",
+        "nearest_substation": "出雲変電所",
+        "distance_km": 2.5,
+        "estimated_burden": "10〜100万円",
+        "road_access": "要調査",
+        "agent": null,
+        "url": null,
+        "source": "航空写真から候補特定",
+        "notes": "農地のため転用許可が必要。農業委員会に事前確認を推奨。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.0500, 39.8000] },
+      "properties": {
+        "id": "J-004",
+        "status": "jiage",
+        "address": "秋田県大仙市大曲西根付近",
+        "area_sqm": 2200,
+        "price_man": null,
+        "land_category": "原野",
+        "nearest_substation": "大曲変電所",
+        "distance_km": 2.0,
+        "estimated_burden": "10〜100万円",
+        "road_access": "幅員5m市道沿い（推定）",
+        "agent": null,
+        "url": null,
+        "source": "現地調査候補",
+        "notes": "遊休原野。冬季積雪あるが蓄電所運用に問題なし。地権者交渉が鍵。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.8200, 32.8200] },
+      "properties": {
+        "id": "J-005",
+        "status": "jiage",
+        "address": "熊本県菊池郡菊陽町原水付近",
+        "area_sqm": 1000,
+        "price_man": null,
+        "land_category": "雑種地（推定）",
+        "nearest_substation": "菊陽変電所",
+        "distance_km": 1.5,
+        "estimated_burden": "300〜500万円",
+        "road_access": "要調査",
+        "agent": null,
+        "url": null,
+        "source": "Google Maps航空写真",
+        "notes": "TSMC工場近接エリア。地価上昇中だが蓄電需要も高い。早期アプローチ推奨。"
+      }
+    }
+  ]
+}

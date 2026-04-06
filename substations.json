@@ -1,0 +1,1479 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "title": "系統用蓄電池接続候補変電所（6電力会社管内）",
+    "description": "2MW/8MWh高圧6kV蓄電池の接続先候補となる変電所一覧",
+    "target_system": "2MW/8MWh grid-scale battery storage",
+    "connection_voltage": "6kV (高圧)",
+    "created": "2026-04-06",
+    "total_substations": 80,
+    "companies": [
+      "東京電力パワーグリッド",
+      "中部電力パワーグリッド",
+      "関西電力送配電",
+      "九州電力送配電",
+      "中国電力ネットワーク",
+      "東北電力ネットワーク"
+    ]
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.6948, 35.9656] },
+      "properties": {
+        "name": "鹿嶋変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "茨城県",
+        "voltage": "66kV",
+        "available_capacity_mw": 18,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "鹿行地区",
+        "notes": "鹿島臨海工業地帯近傍。工業用負荷との平準化効果が期待できる"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.5813, 35.8902] },
+      "properties": {
+        "name": "潮来変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "茨城県",
+        "voltage": "66kV",
+        "available_capacity_mw": 22,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "鹿行地区",
+        "notes": "農村部で需要密度が低く空容量に余裕あり"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.6334, 36.3475] },
+      "properties": {
+        "name": "東海変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "茨城県",
+        "voltage": "66kV",
+        "available_capacity_mw": 15,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "県北地区",
+        "notes": "東海村エリア。原子力関連施設との系統共有に留意"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.5262, 36.5936] },
+      "properties": {
+        "name": "日立変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "茨城県",
+        "voltage": "66kV",
+        "available_capacity_mw": 12,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1500000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "県北地区",
+        "notes": "日立市北部。工業負荷の減少に伴い空容量増加傾向"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.8267, 35.7346] },
+      "properties": {
+        "name": "銚子変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "千葉県",
+        "voltage": "66kV",
+        "available_capacity_mw": 20,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "外房",
+        "notes": "銚子市。洋上風力関連の系統整備が進行中"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.4078, 35.4175] },
+      "properties": {
+        "name": "茂原変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "千葉県",
+        "voltage": "66kV",
+        "available_capacity_mw": 16,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "外房",
+        "notes": "茂原市。天然ガス関連施設跡地の活用可能性あり"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.3856, 35.5532] },
+      "properties": {
+        "name": "東金変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "千葉県",
+        "voltage": "66kV",
+        "available_capacity_mw": 14,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "九十九里",
+        "notes": "九十九里平野。太陽光発電が多く逆潮流対策に蓄電池需要あり"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.5104, 35.6254] },
+      "properties": {
+        "name": "匝瑳変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "千葉県",
+        "voltage": "66kV",
+        "available_capacity_mw": 25,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "九十九里",
+        "notes": "匝瑳市。農地転用が比較的容易なエリア"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [139.5126, 36.3922] },
+      "properties": {
+        "name": "館林変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "群馬県",
+        "voltage": "66kV",
+        "available_capacity_mw": 18,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "群馬県東部",
+        "notes": "館林市。平坦地で用地取得が容易"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [139.0624, 36.7856] },
+      "properties": {
+        "name": "沼田変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "群馬県",
+        "voltage": "66kV",
+        "available_capacity_mw": 28,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "群馬県北部",
+        "notes": "沼田市。山間部で需要が少なく空容量に余裕"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [139.9682, 36.9234] },
+      "properties": {
+        "name": "那須変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "栃木県",
+        "voltage": "66kV",
+        "available_capacity_mw": 24,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "那須地区",
+        "notes": "那須塩原市。観光地だが電力需要は限定的で空容量豊富"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [139.6981, 36.7197] },
+      "properties": {
+        "name": "日光変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "栃木県",
+        "voltage": "66kV",
+        "available_capacity_mw": 20,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "日光地区",
+        "notes": "日光市。水力発電との連携が期待できる"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [139.0853, 35.9917] },
+      "properties": {
+        "name": "秩父変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "埼玉県",
+        "voltage": "66kV",
+        "available_capacity_mw": 15,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "秩父地区",
+        "notes": "秩父市。山間部だがアクセス道路は整備済み"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [139.2345, 35.5934] },
+      "properties": {
+        "name": "相模湖変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "神奈川県",
+        "voltage": "66kV",
+        "available_capacity_mw": 10,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "B",
+        "estimated_cost_yen_min": 3000000,
+        "estimated_cost_yen_max": 5000000,
+        "area": "相模原西部",
+        "notes": "相模原市緑区。都市近郊だがダム周辺に用地の可能性"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [139.1512, 35.6278] },
+      "properties": {
+        "name": "津久井変電所",
+        "company": "東京電力パワーグリッド",
+        "prefecture": "神奈川県",
+        "voltage": "66kV",
+        "available_capacity_mw": 8,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "中規模",
+        "estimated_cost_rank": "B",
+        "estimated_cost_yen_min": 3000000,
+        "estimated_cost_yen_max": 5000000,
+        "area": "相模原西部",
+        "notes": "津久井湖周辺。揚水発電との系統共用"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [137.7967, 34.7685] },
+      "properties": {
+        "name": "掛川変電所",
+        "company": "中部電力パワーグリッド",
+        "prefecture": "静岡県",
+        "voltage": "66kV",
+        "available_capacity_mw": 18,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "静岡県西部",
+        "notes": "掛川市。茶畑が多く農地転用で用地確保の可能性"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [137.7148, 34.8512] },
+      "properties": {
+        "name": "浜松北変電所",
+        "company": "中部電力パワーグリッド",
+        "prefecture": "静岡県",
+        "voltage": "66kV",
+        "available_capacity_mw": 14,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "静岡県西部",
+        "notes": "浜松市浜名区。太陽光発電が集積するエリア"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [136.6244, 34.9643] },
+      "properties": {
+        "name": "四日市変電所",
+        "company": "中部電力パワーグリッド",
+        "prefecture": "三重県",
+        "voltage": "66kV",
+        "available_capacity_mw": 10,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "B",
+        "estimated_cost_yen_min": 3000000,
+        "estimated_cost_yen_max": 5000000,
+        "area": "三重県北部",
+        "notes": "四日市市郊外。石油化学コンビナート近傍で工業負荷と共存"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [136.1723, 34.3512] },
+      "properties": {
+        "name": "尾鷲変電所",
+        "company": "中部電力パワーグリッド",
+        "prefecture": "三重県",
+        "voltage": "66kV",
+        "available_capacity_mw": 28,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "三重県南部",
+        "notes": "尾鷲市。過疎地域で空容量豊富。尾鷲三田火力跡地活用の可能性"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [136.5078, 34.4923] },
+      "properties": {
+        "name": "松阪変電所",
+        "company": "中部電力パワーグリッド",
+        "prefecture": "三重県",
+        "voltage": "66kV",
+        "available_capacity_mw": 16,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "三重県中部",
+        "notes": "松阪市。農業地帯で土地取得コストが低い"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [137.2134, 35.4234] },
+      "properties": {
+        "name": "恵那変電所",
+        "company": "中部電力パワーグリッド",
+        "prefecture": "岐阜県",
+        "voltage": "66kV",
+        "available_capacity_mw": 22,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "岐阜県東部",
+        "notes": "恵那市。中山道沿いで幹線道路アクセス良好"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [136.7612, 35.5756] },
+      "properties": {
+        "name": "関変電所",
+        "company": "中部電力パワーグリッド",
+        "prefecture": "岐阜県",
+        "voltage": "66kV",
+        "available_capacity_mw": 15,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "岐阜県中部",
+        "notes": "関市。刃物産業の負荷が安定しており系統安定"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [136.9634, 35.8456] },
+      "properties": {
+        "name": "高山変電所",
+        "company": "中部電力パワーグリッド",
+        "prefecture": "岐阜県",
+        "voltage": "66kV",
+        "available_capacity_mw": 30,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "岐阜県北部",
+        "notes": "高山市。飛騨地方の中心で空容量に余裕あり"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [138.1812, 36.2312] },
+      "properties": {
+        "name": "上田変電所",
+        "company": "中部電力パワーグリッド",
+        "prefecture": "長野県",
+        "voltage": "66kV",
+        "available_capacity_mw": 20,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "長野県東部",
+        "notes": "上田市。太陽光発電の適地が多いエリア"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [137.9712, 35.8534] },
+      "properties": {
+        "name": "伊那変電所",
+        "company": "中部電力パワーグリッド",
+        "prefecture": "長野県",
+        "voltage": "66kV",
+        "available_capacity_mw": 24,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "長野県南部",
+        "notes": "伊那市。伊那谷の中心で水力発電との連携可能"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [137.0456, 35.0712] },
+      "properties": {
+        "name": "豊田北変電所",
+        "company": "中部電力パワーグリッド",
+        "prefecture": "愛知県",
+        "voltage": "66kV",
+        "available_capacity_mw": 8,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "中規模",
+        "estimated_cost_rank": "B",
+        "estimated_cost_yen_min": 3000000,
+        "estimated_cost_yen_max": 5000000,
+        "area": "愛知県外縁部",
+        "notes": "豊田市北部。自動車産業の負荷変動が大きいエリア"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [137.1678, 34.7234] },
+      "properties": {
+        "name": "渥美変電所",
+        "company": "中部電力パワーグリッド",
+        "prefecture": "愛知県",
+        "voltage": "66kV",
+        "available_capacity_mw": 20,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "愛知県外縁部",
+        "notes": "田原市。渥美半島先端で風力発電が集積。蓄電池による調整力需要あり"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [134.8512, 35.4012] },
+      "properties": {
+        "name": "豊岡変電所",
+        "company": "関西電力送配電",
+        "prefecture": "兵庫県",
+        "voltage": "66kV",
+        "available_capacity_mw": 22,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "但馬地区",
+        "notes": "豊岡市。但馬地方の中心。コウノトリの郷公園周辺で自然エネルギー関心が高い"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [134.7923, 35.3145] },
+      "properties": {
+        "name": "養父変電所",
+        "company": "関西電力送配電",
+        "prefecture": "兵庫県",
+        "voltage": "66kV",
+        "available_capacity_mw": 26,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "但馬地区",
+        "notes": "養父市。国家戦略特区で規制緩和が進む"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [135.0678, 35.1812] },
+      "properties": {
+        "name": "丹波変電所",
+        "company": "関西電力送配電",
+        "prefecture": "兵庫県",
+        "voltage": "66kV",
+        "available_capacity_mw": 18,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "丹波地区",
+        "notes": "丹波市。農業地帯で用地取得が比較的容易"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [135.0234, 35.0523] },
+      "properties": {
+        "name": "篠山変電所",
+        "company": "関西電力送配電",
+        "prefecture": "兵庫県",
+        "voltage": "66kV",
+        "available_capacity_mw": 14,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "丹波地区",
+        "notes": "丹波篠山市。京阪神へのアクセスも良好"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [135.1834, 35.4723] },
+      "properties": {
+        "name": "福知山変電所",
+        "company": "関西電力送配電",
+        "prefecture": "京都府",
+        "voltage": "66kV",
+        "available_capacity_mw": 16,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "京都府北部",
+        "notes": "福知山市。北近畿の交通要衝で物流アクセス良好"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [135.3312, 35.4812] },
+      "properties": {
+        "name": "綾部変電所",
+        "company": "関西電力送配電",
+        "prefecture": "京都府",
+        "voltage": "66kV",
+        "available_capacity_mw": 20,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "京都府北部",
+        "notes": "綾部市。工業団地があるが空容量に余裕"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [135.3723, 35.5523] },
+      "properties": {
+        "name": "舞鶴変電所",
+        "company": "関西電力送配電",
+        "prefecture": "京都府",
+        "voltage": "66kV",
+        "available_capacity_mw": 18,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "京都府北部",
+        "notes": "舞鶴市。旧海軍施設跡地の活用可能性"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [135.1512, 34.2312] },
+      "properties": {
+        "name": "御坊変電所",
+        "company": "関西電力送配電",
+        "prefecture": "和歌山県",
+        "voltage": "66kV",
+        "available_capacity_mw": 22,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "和歌山県中部",
+        "notes": "御坊市。火力発電所近傍で系統が強い"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [135.7812, 33.7234] },
+      "properties": {
+        "name": "新宮変電所",
+        "company": "関西電力送配電",
+        "prefecture": "和歌山県",
+        "voltage": "66kV",
+        "available_capacity_mw": 28,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "和歌山県南部",
+        "notes": "新宮市。熊野地方で需要が少なく空容量十分"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [135.3312, 34.0823] },
+      "properties": {
+        "name": "田辺変電所",
+        "company": "関西電力送配電",
+        "prefecture": "和歌山県",
+        "voltage": "66kV",
+        "available_capacity_mw": 20,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "和歌山県南部",
+        "notes": "田辺市。紀南の中心都市だが空容量に余裕"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [136.2734, 35.1234] },
+      "properties": {
+        "name": "甲賀変電所",
+        "company": "関西電力送配電",
+        "prefecture": "滋賀県",
+        "voltage": "66kV",
+        "available_capacity_mw": 12,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1500000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "滋賀県南部",
+        "notes": "甲賀市。新名神高速沿いで物流拠点が増加中"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [136.1523, 35.3712] },
+      "properties": {
+        "name": "長浜変電所",
+        "company": "関西電力送配電",
+        "prefecture": "滋賀県",
+        "voltage": "66kV",
+        "available_capacity_mw": 16,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "滋賀県北部",
+        "notes": "長浜市。湖北地方で用地取得コストが低い"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.9434, 33.8945] },
+      "properties": {
+        "name": "曽根変電所",
+        "company": "九州電力送配電",
+        "prefecture": "福岡県",
+        "voltage": "66kV",
+        "available_capacity_mw": 12,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "門司地区",
+        "notes": "北九州市小倉南区曽根。住宅地と工業地が混在"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.8423, 33.8512] },
+      "properties": {
+        "name": "若久変電所",
+        "company": "九州電力送配電",
+        "prefecture": "福岡県",
+        "voltage": "66kV",
+        "available_capacity_mw": 10,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "B",
+        "estimated_cost_yen_min": 3000000,
+        "estimated_cost_yen_max": 5000000,
+        "area": "門司地区",
+        "notes": "北九州市八幡西区。都市部で空容量やや制限あり"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.8812, 33.8234] },
+      "properties": {
+        "name": "大門変電所",
+        "company": "九州電力送配電",
+        "prefecture": "福岡県",
+        "voltage": "66kV",
+        "available_capacity_mw": 8,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "中規模",
+        "estimated_cost_rank": "B",
+        "estimated_cost_yen_min": 3000000,
+        "estimated_cost_yen_max": 5000000,
+        "area": "小倉地区",
+        "notes": "北九州市八幡東区。製鉄所負荷の変動に留意"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.7523, 33.9012] },
+      "properties": {
+        "name": "若松変電所",
+        "company": "九州電力送配電",
+        "prefecture": "福岡県",
+        "voltage": "66kV",
+        "available_capacity_mw": 14,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "若松地区",
+        "notes": "北九州市若松区。響灘臨海部に用地確保の可能性"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.7812, 33.9345] },
+      "properties": {
+        "name": "安瀬変電所",
+        "company": "九州電力送配電",
+        "prefecture": "福岡県",
+        "voltage": "66kV",
+        "available_capacity_mw": 16,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "若松地区",
+        "notes": "北九州市若松区。臨海部で大型蓄電池設置の先行事例あり"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.0412, 33.6612] },
+      "properties": {
+        "name": "築城変電所",
+        "company": "九州電力送配電",
+        "prefecture": "福岡県",
+        "voltage": "66kV",
+        "available_capacity_mw": 22,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "豊前地区",
+        "notes": "築上郡築上町。航空自衛隊基地周辺だが系統容量に余裕"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.1234, 33.5812] },
+      "properties": {
+        "name": "岸井変電所",
+        "company": "九州電力送配電",
+        "prefecture": "大分県",
+        "voltage": "66kV",
+        "available_capacity_mw": 20,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "宇佐地区",
+        "notes": "宇佐市付近。農村部で空容量十分"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.3523, 33.5234] },
+      "properties": {
+        "name": "加来変電所",
+        "company": "九州電力送配電",
+        "prefecture": "大分県",
+        "voltage": "66kV",
+        "available_capacity_mw": 18,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "宇佐地区",
+        "notes": "宇佐市南部。国東半島方面への送電線が通過"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.5234, 33.4345] },
+      "properties": {
+        "name": "基山変電所",
+        "company": "九州電力送配電",
+        "prefecture": "佐賀県",
+        "voltage": "66kV",
+        "available_capacity_mw": 10,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "B",
+        "estimated_cost_yen_min": 3000000,
+        "estimated_cost_yen_max": 5000000,
+        "area": "久留米地区",
+        "notes": "三養基郡基山町。鳥栖JCT近傍で交通アクセス良好"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.5612, 33.3523] },
+      "properties": {
+        "name": "神辺変電所",
+        "company": "九州電力送配電",
+        "prefecture": "福岡県",
+        "voltage": "66kV",
+        "available_capacity_mw": 16,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "久留米地区",
+        "notes": "久留米市南部。筑後平野の農業地帯"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.5123, 33.3212] },
+      "properties": {
+        "name": "原古賀変電所",
+        "company": "九州電力送配電",
+        "prefecture": "福岡県",
+        "voltage": "66kV",
+        "available_capacity_mw": 14,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "久留米地区",
+        "notes": "久留米市。市街地近郊だが空容量あり"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.5723, 33.1823] },
+      "properties": {
+        "name": "金の手変電所",
+        "company": "九州電力送配電",
+        "prefecture": "大分県",
+        "voltage": "66kV",
+        "available_capacity_mw": 18,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "大分地区",
+        "notes": "大分市近郊。大分臨海工業地帯の余剰容量活用"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.6234, 33.2412] },
+      "properties": {
+        "name": "篠原変電所",
+        "company": "九州電力送配電",
+        "prefecture": "大分県",
+        "voltage": "66kV",
+        "available_capacity_mw": 20,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "大分地区",
+        "notes": "大分市北部。住宅地開発が進むが系統にゆとり"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.6912, 32.7612] },
+      "properties": {
+        "name": "南熊本変電所",
+        "company": "九州電力送配電",
+        "prefecture": "熊本県",
+        "voltage": "66kV",
+        "available_capacity_mw": 8,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "中規模",
+        "estimated_cost_rank": "B",
+        "estimated_cost_yen_min": 3000000,
+        "estimated_cost_yen_max": 5000000,
+        "area": "熊本地区",
+        "notes": "熊本市南区。都市部で空容量制限あり"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.7523, 32.8423] },
+      "properties": {
+        "name": "広崎変電所",
+        "company": "九州電力送配電",
+        "prefecture": "熊本県",
+        "voltage": "66kV",
+        "available_capacity_mw": 14,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "熊本地区",
+        "notes": "熊本市東区近郊。TSMC進出に伴い系統増強が進行中"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.7234, 32.8112] },
+      "properties": {
+        "name": "飛田変電所",
+        "company": "九州電力送配電",
+        "prefecture": "熊本県",
+        "voltage": "66kV",
+        "available_capacity_mw": 10,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "B",
+        "estimated_cost_yen_min": 3000000,
+        "estimated_cost_yen_max": 5000000,
+        "area": "熊本地区",
+        "notes": "熊本市北区。市街地に近く都市型蓄電池に適する"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.4523, 32.5812] },
+      "properties": {
+        "name": "川辺変電所",
+        "company": "九州電力送配電",
+        "prefecture": "熊本県",
+        "voltage": "66kV",
+        "available_capacity_mw": 24,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "熊本地区",
+        "notes": "八代市南部。球磨川沿いで空容量に余裕"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.8234, 32.8712] },
+      "properties": {
+        "name": "菊陽変電所",
+        "company": "九州電力送配電",
+        "prefecture": "熊本県",
+        "voltage": "66kV",
+        "available_capacity_mw": 6,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "中規模",
+        "estimated_cost_rank": "C",
+        "estimated_cost_yen_min": 5000000,
+        "estimated_cost_yen_max": 10000000,
+        "area": "熊本地区",
+        "notes": "菊池郡菊陽町。TSMC新工場による大幅な需要増で空容量逼迫"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.6612, 32.5812] },
+      "properties": {
+        "name": "延岡変電所",
+        "company": "九州電力送配電",
+        "prefecture": "宮崎県",
+        "voltage": "66kV",
+        "available_capacity_mw": 18,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "宮崎地区",
+        "notes": "延岡市。旭化成関連負荷があるが空容量あり"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.5012, 32.1234] },
+      "properties": {
+        "name": "高鍋変電所",
+        "company": "九州電力送配電",
+        "prefecture": "宮崎県",
+        "voltage": "66kV",
+        "available_capacity_mw": 20,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "宮崎地区",
+        "notes": "児湯郡高鍋町。宮崎平野の農業地帯で太陽光発電適地"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.4234, 31.9312] },
+      "properties": {
+        "name": "大淀第二変電所",
+        "company": "九州電力送配電",
+        "prefecture": "宮崎県",
+        "voltage": "66kV",
+        "available_capacity_mw": 10,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "B",
+        "estimated_cost_yen_min": 3000000,
+        "estimated_cost_yen_max": 5000000,
+        "area": "宮崎地区",
+        "notes": "宮崎市。県庁所在地近郊で需要密度が高い"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.4612, 32.0123] },
+      "properties": {
+        "name": "佐土原変電所",
+        "company": "九州電力送配電",
+        "prefecture": "宮崎県",
+        "voltage": "66kV",
+        "available_capacity_mw": 16,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "宮崎地区",
+        "notes": "宮崎市佐土原町。一ツ瀬川河口付近で太陽光集積エリア"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [134.2312, 35.5012] },
+      "properties": {
+        "name": "鳥取変電所",
+        "company": "中国電力ネットワーク",
+        "prefecture": "鳥取県",
+        "voltage": "66kV",
+        "available_capacity_mw": 18,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "鳥取県東部",
+        "notes": "鳥取市郊外。鳥取砂丘近傍で風力発電との連携可能"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [133.8234, 35.4412] },
+      "properties": {
+        "name": "倉吉変電所",
+        "company": "中国電力ネットワーク",
+        "prefecture": "鳥取県",
+        "voltage": "66kV",
+        "available_capacity_mw": 22,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "鳥取県中部",
+        "notes": "倉吉市。農業地帯で用地取得が容易"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [133.3312, 35.4712] },
+      "properties": {
+        "name": "米子変電所",
+        "company": "中国電力ネットワーク",
+        "prefecture": "鳥取県",
+        "voltage": "66kV",
+        "available_capacity_mw": 14,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "鳥取県西部",
+        "notes": "米子市。山陰の商業中心地だが空容量あり"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [133.0512, 35.4723] },
+      "properties": {
+        "name": "松江変電所",
+        "company": "中国電力ネットワーク",
+        "prefecture": "島根県",
+        "voltage": "66kV",
+        "available_capacity_mw": 16,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "島根県東部",
+        "notes": "松江市。宍道湖周辺で自然環境との調和が必要"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [132.5612, 35.0534] },
+      "properties": {
+        "name": "浜田変電所",
+        "company": "中国電力ネットワーク",
+        "prefecture": "島根県",
+        "voltage": "66kV",
+        "available_capacity_mw": 26,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "島根県西部",
+        "notes": "浜田市。過疎地域で空容量が非常に豊富"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.8012, 35.0712] },
+      "properties": {
+        "name": "益田変電所",
+        "company": "中国電力ネットワーク",
+        "prefecture": "島根県",
+        "voltage": "66kV",
+        "available_capacity_mw": 28,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "島根県西部",
+        "notes": "益田市。石見地方の末端で空容量十分"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [133.8123, 35.0534] },
+      "properties": {
+        "name": "津山変電所",
+        "company": "中国電力ネットワーク",
+        "prefecture": "岡山県",
+        "voltage": "66kV",
+        "available_capacity_mw": 20,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "岡山県北部",
+        "notes": "津山市。美作地方の中心で系統容量に余裕"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [133.3412, 34.9823] },
+      "properties": {
+        "name": "新見変電所",
+        "company": "中国電力ネットワーク",
+        "prefecture": "岡山県",
+        "voltage": "66kV",
+        "available_capacity_mw": 24,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "岡山県北部",
+        "notes": "新見市。中国山地の中心部で過疎化により空容量増加"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [132.8412, 34.8012] },
+      "properties": {
+        "name": "三次変電所",
+        "company": "中国電力ネットワーク",
+        "prefecture": "広島県",
+        "voltage": "66kV",
+        "available_capacity_mw": 20,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "広島県北部",
+        "notes": "三次市。備北地方の交通結節点で物流アクセス良好"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.4712, 34.1812] },
+      "properties": {
+        "name": "萩変電所",
+        "company": "中国電力ネットワーク",
+        "prefecture": "山口県",
+        "voltage": "66kV",
+        "available_capacity_mw": 26,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "山口県北部",
+        "notes": "萩市。日本海側で需要が少なく空容量豊富"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.8823, 38.2612] },
+      "properties": {
+        "name": "名取変電所",
+        "company": "東北電力ネットワーク",
+        "prefecture": "宮城県",
+        "voltage": "66kV",
+        "available_capacity_mw": 12,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "宮城県南部",
+        "notes": "名取市。仙台空港近傍。震災復興で系統が更新済み"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [141.0612, 38.4312] },
+      "properties": {
+        "name": "石巻変電所",
+        "company": "東北電力ネットワーク",
+        "prefecture": "宮城県",
+        "voltage": "66kV",
+        "available_capacity_mw": 18,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 2500000,
+        "area": "宮城県東部",
+        "notes": "石巻市。震災後の産業構造変化により空容量増加"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.3234, 38.2512] },
+      "properties": {
+        "name": "山形変電所",
+        "company": "東北電力ネットワーク",
+        "prefecture": "山形県",
+        "voltage": "66kV",
+        "available_capacity_mw": 14,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "山形県内陸",
+        "notes": "山形市郊外。蔵王山麓で再エネ開発が活発"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [139.8512, 38.7723] },
+      "properties": {
+        "name": "酒田変電所",
+        "company": "東北電力ネットワーク",
+        "prefecture": "山形県",
+        "voltage": "66kV",
+        "available_capacity_mw": 22,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "山形県庄内",
+        "notes": "酒田市。港湾風力発電との連携。庄内平野で用地豊富"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.4612, 37.7512] },
+      "properties": {
+        "name": "福島変電所",
+        "company": "東北電力ネットワーク",
+        "prefecture": "福島県",
+        "voltage": "66kV",
+        "available_capacity_mw": 12,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1500000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "福島県中通り",
+        "notes": "福島市。県庁所在地郊外。再エネ導入拡大のモデル地域"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.0123, 37.4012] },
+      "properties": {
+        "name": "会津若松変電所",
+        "company": "東北電力ネットワーク",
+        "prefecture": "福島県",
+        "voltage": "66kV",
+        "available_capacity_mw": 20,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "福島県会津",
+        "notes": "会津若松市。水力発電が豊富な地域で系統に余裕"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [141.1312, 39.7012] },
+      "properties": {
+        "name": "盛岡南変電所",
+        "company": "東北電力ネットワーク",
+        "prefecture": "岩手県",
+        "voltage": "66kV",
+        "available_capacity_mw": 16,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "岩手県内陸",
+        "notes": "盛岡市南部。東北新幹線沿線で交通アクセス良好"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [141.9534, 39.2612] },
+      "properties": {
+        "name": "釜石変電所",
+        "company": "東北電力ネットワーク",
+        "prefecture": "岩手県",
+        "voltage": "66kV",
+        "available_capacity_mw": 24,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "不要",
+        "estimated_cost_rank": "S",
+        "estimated_cost_yen_min": 100000,
+        "estimated_cost_yen_max": 1000000,
+        "area": "岩手県沿岸",
+        "notes": "釜石市。製鉄所縮小に伴い空容量が大幅増加"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.1012, 39.7234] },
+      "properties": {
+        "name": "秋田変電所",
+        "company": "東北電力ネットワーク",
+        "prefecture": "秋田県",
+        "voltage": "66kV",
+        "available_capacity_mw": 16,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1000000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "秋田県沿岸",
+        "notes": "秋田市。洋上風力発電の拠点港として系統整備進行中"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.7312, 40.8212] },
+      "properties": {
+        "name": "青森変電所",
+        "company": "東北電力ネットワーク",
+        "prefecture": "青森県",
+        "voltage": "66kV",
+        "available_capacity_mw": 14,
+        "can_connect_2mw": true,
+        "reinforcement_needed": "軽微",
+        "estimated_cost_rank": "A",
+        "estimated_cost_yen_min": 1500000,
+        "estimated_cost_yen_max": 3000000,
+        "area": "青森県中部",
+        "notes": "青森市。再エネ集中エリアで空容量がやや逼迫傾向"
+      }
+    }
+  ]
+}
