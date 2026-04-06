@@ -209,7 +209,7 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
           <div class="hazard-toggle" data-hazard="flood">
             <div class="hazard-dot" style="background:#4fc3f7;"></div>
             <span style="flex:1;">洪水浸水想定</span>
-            <input type="range" class="hazard-slider" min="0" max="100" value="50" data-hazard="flood" title="不透明度">
+            <input type="range" class="hazard-slider" min="0" max="100" value="80" data-hazard="flood" title="不透明度">
           </div>
           <div class="hazard-toggle" data-hazard="sediment">
             <div class="hazard-dot" style="background:#ef6c00;"></div>
@@ -229,7 +229,7 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
           <div class="hazard-toggle" data-hazard="tsunami">
             <div class="hazard-dot" style="background:#7e57c2;"></div>
             <span style="flex:1;">津波浸水想定</span>
-            <input type="range" class="hazard-slider" min="0" max="100" value="50" data-hazard="tsunami" title="不透明度">
+            <input type="range" class="hazard-slider" min="0" max="100" value="80" data-hazard="tsunami" title="不透明度">
           </div>
         </div>
         <div id="powerline-hint" class="powerline-hint">
@@ -335,11 +335,11 @@ tileStd.addTo(map);
 
 // Hazard layers
 const hazardLayers = {
-  flood: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', { opacity: 0.5, maxZoom: 18 }),
+  flood: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', { opacity: 0.8, maxZoom: 18 }),
   sediment: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', { opacity: 0.5, maxZoom: 18 }),
   landslide: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_kyukeishachihousaigai/{z}/{x}/{y}.png', { opacity: 0.5, maxZoom: 18 }),
   jisuberi: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_jisuberikeikaikuiki/{z}/{x}/{y}.png', { opacity: 0.5, maxZoom: 18 }),
-  tsunami: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/04_tsunami_newlegend_data/{z}/{x}/{y}.png', { opacity: 0.5, maxZoom: 18 })
+  tsunami: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/04_tsunami_newlegend_data/{z}/{x}/{y}.png', { opacity: 0.8, maxZoom: 18 })
 };
 const hazardActive = { flood: false, sediment: false, landslide: false, jisuberi: false, tsunami: false };
 
