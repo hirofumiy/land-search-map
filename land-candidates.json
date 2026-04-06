@@ -3,7 +3,7 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.6200, 36.0500] },
+      "geometry": { "type": "Point", "coordinates": [140.6327, 36.0242] },
       "properties": {
         "id": "S-001",
         "status": "sale",
@@ -24,7 +24,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.5800, 35.7300] },
+      "geometry": { "type": "Point", "coordinates": [140.4534, 35.6408] },
       "properties": {
         "id": "S-002",
         "status": "sale",
@@ -45,7 +45,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.4900, 33.2800] },
+      "geometry": { "type": "Point", "coordinates": [130.6131, 33.3342] },
       "properties": {
         "id": "S-003",
         "status": "sale",
@@ -66,7 +66,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.7500, 32.8500] },
+      "geometry": { "type": "Point", "coordinates": [130.6924, 32.9046] },
       "properties": {
         "id": "S-004",
         "status": "sale",
@@ -87,7 +87,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [136.9200, 35.3500] },
+      "geometry": { "type": "Point", "coordinates": [137.2084, 35.1979] },
       "properties": {
         "id": "S-005",
         "status": "sale",
@@ -108,7 +108,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [133.0500, 35.4200] },
+      "geometry": { "type": "Point", "coordinates": [132.6856, 35.4086] },
       "properties": {
         "id": "S-006",
         "status": "sale",
@@ -129,7 +129,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.1000, 39.7500] },
+      "geometry": { "type": "Point", "coordinates": [140.4759, 39.4625] },
       "properties": {
         "id": "S-007",
         "status": "sale",
@@ -150,7 +150,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.7500, 36.1000] },
+      "geometry": { "type": "Point", "coordinates": [140.5783, 36.0283] },
       "properties": {
         "id": "J-001",
         "status": "jiage",
@@ -170,7 +170,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.5100, 33.3100] },
+      "geometry": { "type": "Point", "coordinates": [130.5864, 33.3576] },
       "properties": {
         "id": "J-002",
         "status": "jiage",
@@ -190,7 +190,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [133.1200, 35.3800] },
+      "geometry": { "type": "Point", "coordinates": [132.8564, 35.3981] },
       "properties": {
         "id": "J-003",
         "status": "jiage",
@@ -210,7 +210,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [140.0500, 39.8000] },
+      "geometry": { "type": "Point", "coordinates": [140.4537, 39.4475] },
       "properties": {
         "id": "J-004",
         "status": "jiage",
@@ -230,7 +230,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [130.8200, 32.8200] },
+      "geometry": { "type": "Point", "coordinates": [130.8419, 32.8770] },
       "properties": {
         "id": "J-005",
         "status": "jiage",
