@@ -158,9 +158,10 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
 /* Powerline legend */
 .powerline-hint {
   font-size: 10px; color: #64748b; margin-top: 6px; padding: 6px 8px;
-  background: #0f172a; border-radius: 4px; border: 1px solid #334155; display: none;
+  background: #0f172a; border-radius: 4px; border: 1px solid #334155;
 }
-.powerline-hint.visible { display: block; }
+.powerline-hint.active { color: #60a5fa; }
+#zoom-level { font-weight: 700; color: #f8fafc; }
 
 /* Popup */
 .leaflet-popup-content-wrapper { border-radius: 8px; }
@@ -232,7 +233,7 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
           </div>
         </div>
         <div id="powerline-hint" class="powerline-hint">
-          ⚡ ズームLv12以上で変電所間の送電線（推定）を表示します
+          ⚡ 現在 Lv<span id="zoom-level">6</span> ／ Lv12以上で送電線（推定）表示
         </div>
       </div>
 
@@ -641,14 +642,22 @@ document.querySelectorAll('.hazard-slider').forEach(slider => {
 });
 
 // ===== Power Lines (approximate grid connections) =====
+function updateZoomDisplay() {
+  const z = map.getZoom();
+  document.getElementById('zoom-level').textContent = z;
+  const hint = document.getElementById('powerline-hint');
+  if (z >= 12) hint.classList.add('active');
+  else hint.classList.remove('active');
+}
+map.on('zoomend', updateZoomDisplay);
+updateZoomDisplay();
+
 function buildPowerLines() {
   powerLineGroup.clearLayers();
   if (!substationsData || map.getZoom() < 12) {
     map.removeLayer(powerLineGroup);
-    document.getElementById('powerline-hint').classList.remove('visible');
     return;
   }
-  document.getElementById('powerline-hint').classList.add('visible');
 
   const bounds = map.getBounds();
   const visibleSubs = substationsData.features.filter(f => {
