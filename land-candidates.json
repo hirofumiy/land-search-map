@@ -5,20 +5,12 @@
       "type": "Feature",
       "geometry": { "type": "Point", "coordinates": [140.6327, 36.0242] },
       "properties": {
-        "id": "S-001",
-        "status": "sale",
+        "id": "S-001", "status": "sale",
         "address": "茨城県鹿嶋市大字荒野",
-        "area_sqm": 1200,
-        "price_man": 480,
-        "land_category": "雑種地",
-        "nearest_substation": "鹿嶋変電所",
-        "distance_km": 2.1,
-        "estimated_burden": "100〜300万円",
-        "road_access": "幅員6m市道に12m接道",
-        "agent": "鹿嶋不動産（株）",
-        "agent_phone": "0299-XX-XXXX",
-        "url": "",
-        "source": "アットホーム",
+        "area_sqm": 1200, "price_man": 480, "land_category": "雑種地",
+        "nearest_substation": "鹿嶋変電所", "distance_km": 2.1,
+        "estimated_burden": "100〜300万円", "road_access": "幅員6m市道に12m接道",
+        "agent": "鹿嶋不動産（株）", "url": "", "source": "アットホーム",
         "notes": "平坦地、元資材置場。ハザード対象外。"
       }
     },
@@ -26,20 +18,12 @@
       "type": "Feature",
       "geometry": { "type": "Point", "coordinates": [140.4534, 35.6408] },
       "properties": {
-        "id": "S-002",
-        "status": "sale",
+        "id": "S-002", "status": "sale",
         "address": "千葉県山武市松尾町",
-        "area_sqm": 2500,
-        "price_man": 750,
-        "land_category": "山林",
-        "nearest_substation": "成東変電所",
-        "distance_km": 3.4,
-        "estimated_burden": "100〜300万円",
-        "road_access": "幅員5m市道に15m接道",
-        "agent": "房総土地開発（株）",
-        "agent_phone": "0475-XX-XXXX",
-        "url": "",
-        "source": "SUUMO",
+        "area_sqm": 2500, "price_man": 750, "land_category": "山林",
+        "nearest_substation": "東金変電所", "distance_km": 3.4,
+        "estimated_burden": "100〜300万円", "road_access": "幅員5m市道に15m接道",
+        "agent": "房総土地開発（株）", "url": "", "source": "SUUMO",
         "notes": "造成が必要だが価格が安い。周辺に太陽光発電所あり。"
       }
     },
@@ -47,20 +31,12 @@
       "type": "Feature",
       "geometry": { "type": "Point", "coordinates": [130.6131, 33.3342] },
       "properties": {
-        "id": "S-003",
-        "status": "sale",
+        "id": "S-003", "status": "sale",
         "address": "福岡県久留米市北野町大城",
-        "area_sqm": 900,
-        "price_man": 350,
-        "land_category": "雑種地",
-        "nearest_substation": "北野変電所",
-        "distance_km": 1.8,
-        "estimated_burden": "10〜100万円",
-        "road_access": "幅員7m県道に20m接道",
-        "agent": "（株）久留米ランド",
-        "agent_phone": "0942-XX-XXXX",
-        "url": "",
-        "source": "アットホーム",
+        "area_sqm": 900, "price_man": 350, "land_category": "雑種地",
+        "nearest_substation": "北野変電所", "distance_km": 1.8,
+        "estimated_burden": "10〜100万円", "road_access": "幅員7m県道に20m接道",
+        "agent": "（株）久留米ランド", "url": "", "source": "アットホーム",
         "notes": "平坦地、接道良好。住宅から80m以上離れている。"
       }
     },
@@ -68,20 +44,12 @@
       "type": "Feature",
       "geometry": { "type": "Point", "coordinates": [130.6924, 32.9046] },
       "properties": {
-        "id": "S-004",
-        "status": "sale",
+        "id": "S-004", "status": "sale",
         "address": "熊本県熊本市北区植木町",
-        "area_sqm": 1800,
-        "price_man": 600,
-        "land_category": "原野",
-        "nearest_substation": "菊陽変電所",
-        "distance_km": 4.2,
-        "estimated_burden": "300〜500万円",
-        "road_access": "幅員5.5m市道に10m接道",
-        "agent": "九州不動産センター",
-        "agent_phone": "096-XXX-XXXX",
-        "url": "",
-        "source": "ジモティー",
+        "area_sqm": 1800, "price_man": 600, "land_category": "原野",
+        "nearest_substation": "菊陽変電所", "distance_km": 4.2,
+        "estimated_burden": "300〜500万円", "road_access": "幅員5.5m市道に10m接道",
+        "agent": "九州不動産センター", "url": "", "source": "ジモティー",
         "notes": "TSMC近郊。将来的に需要増加エリア。"
       }
     },
@@ -89,20 +57,12 @@
       "type": "Feature",
       "geometry": { "type": "Point", "coordinates": [137.2084, 35.1979] },
       "properties": {
-        "id": "S-005",
-        "status": "sale",
+        "id": "S-005", "status": "sale",
         "address": "愛知県豊田市藤岡飯野町",
-        "area_sqm": 3200,
-        "price_man": 980,
-        "land_category": "山林",
-        "nearest_substation": "藤岡変電所",
-        "distance_km": 2.8,
-        "estimated_burden": "100〜300万円",
-        "road_access": "幅員6m市道に18m接道",
-        "agent": "三河不動産（株）",
-        "agent_phone": "0565-XX-XXXX",
-        "url": "",
-        "source": "アットホーム",
+        "area_sqm": 3200, "price_man": 980, "land_category": "山林",
+        "nearest_substation": "豊田北変電所", "distance_km": 2.8,
+        "estimated_burden": "100〜300万円", "road_access": "幅員6m市道に18m接道",
+        "agent": "三河不動産（株）", "url": "", "source": "アットホーム",
         "notes": "造成済みエリアあり。周辺に工場多く系統が安定。"
       }
     },
@@ -110,20 +70,12 @@
       "type": "Feature",
       "geometry": { "type": "Point", "coordinates": [132.6856, 35.4086] },
       "properties": {
-        "id": "S-006",
-        "status": "sale",
+        "id": "S-006", "status": "sale",
         "address": "島根県出雲市大社町",
-        "area_sqm": 2800,
-        "price_man": 320,
-        "land_category": "雑種地",
-        "nearest_substation": "出雲変電所",
-        "distance_km": 3.1,
-        "estimated_burden": "10〜100万円",
-        "road_access": "幅員8m国道沿い 25m接道",
-        "agent": "出雲ホームズ",
-        "agent_phone": "0853-XX-XXXX",
-        "url": "",
-        "source": "地元業者HP",
+        "area_sqm": 2800, "price_man": 320, "land_category": "雑種地",
+        "nearest_substation": "松江変電所", "distance_km": 3.1,
+        "estimated_burden": "10〜100万円", "road_access": "幅員8m国道沿い 25m接道",
+        "agent": "出雲ホームズ", "url": "", "source": "地元業者HP",
         "notes": "広大な敷地。系統空き十分。価格交渉の余地あり。"
       }
     },
@@ -131,40 +83,246 @@
       "type": "Feature",
       "geometry": { "type": "Point", "coordinates": [140.4759, 39.4625] },
       "properties": {
-        "id": "S-007",
-        "status": "sale",
+        "id": "S-007", "status": "sale",
         "address": "秋田県大仙市大曲丸の内",
-        "area_sqm": 1500,
-        "price_man": 280,
-        "land_category": "宅地",
-        "nearest_substation": "大曲変電所",
-        "distance_km": 1.5,
-        "estimated_burden": "10〜100万円",
-        "road_access": "幅員6m市道に14m接道",
-        "agent": "あきた不動産",
-        "agent_phone": "0187-XX-XXXX",
-        "url": "",
-        "source": "アットホーム",
+        "area_sqm": 1500, "price_man": 280, "land_category": "宅地",
+        "nearest_substation": "秋田変電所", "distance_km": 1.5,
+        "estimated_burden": "10〜100万円", "road_access": "幅員6m市道に14m接道",
+        "agent": "あきた不動産", "url": "", "source": "アットホーム",
         "notes": "元工場跡地。変電所至近で負担金最安レベル。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.602, 35.897] },
+      "properties": {
+        "id": "S-008", "status": "sale",
+        "address": "茨城県鹿嶋市大字田野辺",
+        "area_sqm": 2594, "price_man": 2000, "land_category": "雑種地",
+        "nearest_substation": "鹿嶋変電所", "distance_km": 5.0,
+        "estimated_burden": "100〜300万円", "road_access": "公道接面",
+        "agent": null, "url": "", "source": "ジモティー",
+        "notes": "資材置場・事業用地に最適と明記。大型蓄電所向き。潮来変電所との中間エリア。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.598, 35.903] },
+      "properties": {
+        "id": "S-009", "status": "sale",
+        "address": "茨城県鹿嶋市大字泉川",
+        "area_sqm": 686, "price_man": 622, "land_category": "宅地",
+        "nearest_substation": "鹿嶋変電所", "distance_km": 4.0,
+        "estimated_burden": "100〜300万円", "road_access": "道路接面（要確認）",
+        "agent": null, "url": "", "source": "SUUMO",
+        "notes": "207坪。蓄電所500〜1000m²の規模にマッチ。坪単価3万円。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.553, 35.945] },
+      "properties": {
+        "id": "S-010", "status": "sale",
+        "address": "茨城県潮来市辻",
+        "area_sqm": 1071, "price_man": 1620, "land_category": "宅地",
+        "nearest_substation": "潮来変電所", "distance_km": 3.5,
+        "estimated_burden": "10〜100万円", "road_access": "公道接面",
+        "agent": null, "url": "", "source": "SUUMO",
+        "notes": "潮来変電所22MW Sランクに近い大型物件。蓄電所規模に十分対応。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.537, 35.936] },
+      "properties": {
+        "id": "S-011", "status": "sale",
+        "address": "茨城県潮来市日の出2丁目",
+        "area_sqm": 3572, "price_man": 5150, "land_category": "宅地",
+        "nearest_substation": "潮来変電所", "distance_km": 2.0,
+        "estimated_burden": "10〜100万円", "road_access": "公道接面",
+        "agent": null, "url": "", "source": "SUUMO",
+        "notes": "3572m²の最大規模物件。複数スロット設置可。Sランク変電所至近。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.413, 35.562] },
+      "properties": {
+        "id": "S-012", "status": "sale",
+        "address": "千葉県東金市熊野",
+        "area_sqm": 656, "price_man": 100, "land_category": "宅地",
+        "nearest_substation": "東金変電所", "distance_km": 3.0,
+        "estimated_burden": "10〜100万円", "road_access": "要確認",
+        "agent": null, "url": "", "source": "SUUMO",
+        "notes": "198坪100万円の破格値。Sランク変電所至近。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.384, 35.570] },
+      "properties": {
+        "id": "S-013", "status": "sale",
+        "address": "千葉県東金市福俵",
+        "area_sqm": 1743, "price_man": 1600, "land_category": "宅地",
+        "nearest_substation": "東金変電所", "distance_km": 3.5,
+        "estimated_burden": "10〜100万円", "road_access": "JR東金線 福俵駅周辺",
+        "agent": null, "url": "", "source": "ジモティー",
+        "notes": "527坪の広大地。多様な用途対応可。Sランク変電所エリア。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.534, 35.708] },
+      "properties": {
+        "id": "S-014", "status": "sale",
+        "address": "千葉県匝瑳市野手",
+        "area_sqm": 705, "price_man": 370, "land_category": "雑種地",
+        "nearest_substation": "匝瑳変電所", "distance_km": 4.0,
+        "estimated_burden": "100〜300万円", "road_access": "八日市場IC近く",
+        "agent": null, "url": "", "source": "SUUMO",
+        "notes": "地目雑種地・山林。平坦更地。蓄電所用途に最適地目。坪1.7万円。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.521, 35.701] },
+      "properties": {
+        "id": "S-015", "status": "sale",
+        "address": "千葉県匝瑳市平木",
+        "area_sqm": null, "price_man": 0, "land_category": "雑種地",
+        "nearest_substation": "匝瑳変電所", "distance_km": 5.0,
+        "estimated_burden": "100〜300万円", "road_access": "要確認",
+        "agent": null, "url": "", "source": "ジモティー",
+        "notes": "0円（無償譲渡）。2筆の雑種地。固定資産税4,500円/年。地上げ起点として最有力。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.504, 32.127] },
+      "properties": {
+        "id": "S-016", "status": "sale",
+        "address": "宮崎県児湯郡高鍋町大字南高鍋",
+        "area_sqm": 1888, "price_man": 600, "land_category": "無指定",
+        "nearest_substation": "高鍋変電所", "distance_km": 1.2,
+        "estimated_burden": "10〜100万円", "road_access": "北東角地・公道2面接面",
+        "agent": null, "url": "", "source": "LIFULL HOME'S",
+        "notes": "1888m²超格安。坪1万円。用途無指定で蓄電所設置に適性高。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.508, 32.136] },
+      "properties": {
+        "id": "S-017", "status": "sale",
+        "address": "宮崎県児湯郡高鍋町大字北高鍋（稲荷町）",
+        "area_sqm": 1165, "price_man": 2880, "land_category": "準工業地域",
+        "nearest_substation": "高鍋変電所", "distance_km": 0.8,
+        "estimated_burden": "10〜100万円", "road_access": "国道10号線前面接道",
+        "agent": null, "url": "", "source": "LIFULL HOME'S",
+        "notes": "準工業地域。国道沿い。蓄電所に最適ゾーニング。変電所徒歩圏。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.671, 32.580] },
+      "properties": {
+        "id": "S-018", "status": "sale",
+        "address": "宮崎県延岡市舞野町",
+        "area_sqm": 3491, "price_man": 280, "land_category": "雑種地",
+        "nearest_substation": "延岡変電所", "distance_km": 5.0,
+        "estimated_burden": "100〜300万円", "road_access": "車道接面",
+        "agent": "大興不動産延岡", "url": "", "source": "大興不動産",
+        "notes": "3491m²の大型雑種地。坪0.26万円の超格安。農転不要・即利用可。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.658, 32.572] },
+      "properties": {
+        "id": "S-019", "status": "sale",
+        "address": "宮崎県延岡市粟野名町",
+        "area_sqm": 1797, "price_man": 3500, "land_category": "雑種地（工業地域）",
+        "nearest_substation": "延岡変電所", "distance_km": 3.0,
+        "estimated_burden": "10〜100万円", "road_access": "工業エリア内・大型車通行可",
+        "agent": "大興不動産延岡", "url": "", "source": "大興不動産",
+        "notes": "工業地域内の雑種地。蓄電所には理想的用途地域。許認可障壁低い。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.640, 32.720] },
+      "properties": {
+        "id": "S-020", "status": "sale",
+        "address": "熊本県宇城市松橋町久具",
+        "area_sqm": 938, "price_man": 498, "land_category": "無指定（再建築不可）",
+        "nearest_substation": "広崎変電所", "distance_km": 2.5,
+        "estimated_burden": "10〜100万円", "road_access": "前面道路あり",
+        "agent": null, "url": "", "source": "goo住宅",
+        "notes": "再建築不可のため割安。蓄電所（建築物なし）には制限が問題にならない可能性。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [134.8194, 35.5514] },
+      "properties": {
+        "id": "S-021", "status": "sale",
+        "address": "兵庫県豊岡市清冷寺1811-1",
+        "area_sqm": 1280, "price_man": 200, "land_category": "宅地",
+        "nearest_substation": "豊岡変電所", "distance_km": 2.0,
+        "estimated_burden": "10〜100万円", "road_access": "公道接面",
+        "agent": "こうのとり不動産", "url": "", "source": "こうのとり不動産",
+        "notes": "ランクS変電所×格安200万×1280m²の三拍子。即問い合わせ推奨。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [137.7148, 34.8512] },
+      "properties": {
+        "id": "S-022", "status": "sale",
+        "address": "静岡県浜松市浜名区三ヶ日町",
+        "area_sqm": 929, "price_man": 929, "land_category": "雑種地",
+        "nearest_substation": "浜松北変電所", "distance_km": 3.0,
+        "estimated_burden": "10〜100万円", "road_access": "公道接面",
+        "agent": null, "url": "", "source": "アットホーム",
+        "notes": "資材置き場。雑種地で農転不要。Sランク変電所の雑種地は希少。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [133.0512, 35.4723] },
+      "properties": {
+        "id": "S-023", "status": "sale",
+        "address": "島根県松江市八束町遅江",
+        "area_sqm": 645, "price_man": 100, "land_category": "原野",
+        "nearest_substation": "松江変電所", "distance_km": 4.0,
+        "estimated_burden": "10〜100万円", "road_access": "要確認",
+        "agent": null, "url": "", "source": "かいとち",
+        "notes": "原野100万円。Sランク松江変電所圏内。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [134.1891, 35.4986] },
+      "properties": {
+        "id": "S-024", "status": "sale",
+        "address": "鳥取県鳥取市江津",
+        "area_sqm": 1559, "price_man": 471, "land_category": "要確認",
+        "nearest_substation": "鳥取変電所", "distance_km": 3.0,
+        "estimated_burden": "100〜300万円", "road_access": "公道接面",
+        "agent": "オクニシ不動産", "url": "", "source": "オクニシ不動産",
+        "notes": "坪1万円・大面積1559m²。Aランク変電所。"
       }
     },
     {
       "type": "Feature",
       "geometry": { "type": "Point", "coordinates": [140.5783, 36.0283] },
       "properties": {
-        "id": "J-001",
-        "status": "jiage",
+        "id": "J-001", "status": "jiage",
         "address": "茨城県鹿嶋市大字津賀（地番未特定）",
-        "area_sqm": 2000,
-        "price_man": null,
-        "land_category": "山林",
-        "nearest_substation": "鹿嶋変電所",
-        "distance_km": 1.2,
-        "estimated_burden": "10〜100万円",
-        "road_access": "幅員4m農道接道（要確認）",
-        "agent": null,
-        "url": null,
-        "source": "航空写真から候補特定",
+        "area_sqm": 2000, "price_man": null, "land_category": "山林",
+        "nearest_substation": "鹿嶋変電所", "distance_km": 1.2,
+        "estimated_burden": "10〜100万円", "road_access": "幅員4m農道接道（要確認）",
+        "agent": null, "url": null, "source": "航空写真から候補特定",
         "notes": "変電所至近の遊休地。地権者調査が必要。登記簿で確認要。"
       }
     },
@@ -172,59 +330,38 @@
       "type": "Feature",
       "geometry": { "type": "Point", "coordinates": [130.5864, 33.3576] },
       "properties": {
-        "id": "J-002",
-        "status": "jiage",
+        "id": "J-002", "status": "jiage",
         "address": "福岡県久留米市北野町中付近",
-        "area_sqm": 1500,
-        "price_man": null,
-        "land_category": "雑種地（推定）",
-        "nearest_substation": "北野変電所",
-        "distance_km": 0.8,
-        "estimated_burden": "10〜100万円",
-        "road_access": "要調査",
-        "agent": null,
-        "url": null,
-        "source": "Google Maps航空写真",
-        "notes": "変電所から800m、空き地を確認。地主への直接アプローチ推奨。"
+        "area_sqm": 1500, "price_man": null, "land_category": "雑種地（推定）",
+        "nearest_substation": "北野変電所", "distance_km": 0.8,
+        "estimated_burden": "10〜100万円", "road_access": "要調査",
+        "agent": null, "url": null, "source": "Google Maps航空写真",
+        "notes": "変電所から800m。空き地確認。地主への直接アプローチ推奨。"
       }
     },
     {
       "type": "Feature",
       "geometry": { "type": "Point", "coordinates": [132.8564, 35.3981] },
       "properties": {
-        "id": "J-003",
-        "status": "jiage",
+        "id": "J-003", "status": "jiage",
         "address": "島根県出雲市斐川町付近",
-        "area_sqm": 3000,
-        "price_man": null,
-        "land_category": "農地（転用要確認）",
-        "nearest_substation": "出雲変電所",
-        "distance_km": 2.5,
-        "estimated_burden": "10〜100万円",
-        "road_access": "要調査",
-        "agent": null,
-        "url": null,
-        "source": "航空写真から候補特定",
-        "notes": "農地のため転用許可が必要。農業委員会に事前確認を推奨。"
+        "area_sqm": 3000, "price_man": null, "land_category": "農地（転用要確認）",
+        "nearest_substation": "松江変電所", "distance_km": 2.5,
+        "estimated_burden": "10〜100万円", "road_access": "要調査",
+        "agent": null, "url": null, "source": "航空写真から候補特定",
+        "notes": "農地のため転用許可が必要。農業委員会に事前確認推奨。"
       }
     },
     {
       "type": "Feature",
       "geometry": { "type": "Point", "coordinates": [140.4537, 39.4475] },
       "properties": {
-        "id": "J-004",
-        "status": "jiage",
+        "id": "J-004", "status": "jiage",
         "address": "秋田県大仙市大曲西根付近",
-        "area_sqm": 2200,
-        "price_man": null,
-        "land_category": "原野",
-        "nearest_substation": "大曲変電所",
-        "distance_km": 2.0,
-        "estimated_burden": "10〜100万円",
-        "road_access": "幅員5m市道沿い（推定）",
-        "agent": null,
-        "url": null,
-        "source": "現地調査候補",
+        "area_sqm": 2200, "price_man": null, "land_category": "原野",
+        "nearest_substation": "秋田変電所", "distance_km": 2.0,
+        "estimated_burden": "10〜100万円", "road_access": "幅員5m市道沿い（推定）",
+        "agent": null, "url": null, "source": "現地調査候補",
         "notes": "遊休原野。冬季積雪あるが蓄電所運用に問題なし。地権者交渉が鍵。"
       }
     },
@@ -232,20 +369,91 @@
       "type": "Feature",
       "geometry": { "type": "Point", "coordinates": [130.8419, 32.8770] },
       "properties": {
-        "id": "J-005",
-        "status": "jiage",
+        "id": "J-005", "status": "jiage",
         "address": "熊本県菊池郡菊陽町原水付近",
-        "area_sqm": 1000,
-        "price_man": null,
-        "land_category": "雑種地（推定）",
-        "nearest_substation": "菊陽変電所",
-        "distance_km": 1.5,
-        "estimated_burden": "300〜500万円",
-        "road_access": "要調査",
-        "agent": null,
-        "url": null,
-        "source": "Google Maps航空写真",
-        "notes": "TSMC工場近接エリア。地価上昇中だが蓄電需要も高い。早期アプローチ推奨。"
+        "area_sqm": 1000, "price_man": null, "land_category": "雑種地（推定）",
+        "nearest_substation": "菊陽変電所", "distance_km": 1.5,
+        "estimated_burden": "300〜500万円", "road_access": "要調査",
+        "agent": null, "url": null, "source": "Google Maps航空写真",
+        "notes": "TSMC工場近接。地価上昇中だが蓄電需要も高い。早期アプローチ推奨。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.652, 35.908] },
+      "properties": {
+        "id": "J-006", "status": "jiage",
+        "address": "茨城県神栖市木崎（鹿嶋変電所周辺500m圏）",
+        "area_sqm": 2000, "price_man": null, "land_category": "雑種地・原野（推定）",
+        "nearest_substation": "鹿嶋変電所", "distance_km": 0.5,
+        "estimated_burden": "10〜100万円", "road_access": "工業地帯内",
+        "agent": null, "url": null, "source": "地図分析",
+        "notes": "工業地帯内の遊休地・資材置場が点在。市の企業立地相談窓口も活用可。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.564, 35.938] },
+      "properties": {
+        "id": "J-007", "status": "jiage",
+        "address": "茨城県潮来市辻・大字付近（潮来IC東側）",
+        "area_sqm": 2000, "price_man": null, "land_category": "遊休農地・雑種地",
+        "nearest_substation": "潮来変電所", "distance_km": 1.0,
+        "estimated_burden": "10〜100万円", "road_access": "潮来IC近接",
+        "agent": null, "url": null, "source": "潮来市空き地情報バンク",
+        "notes": "Sランク22MW至近の耕作放棄地帯。市の空き地情報バンクに問い合わせ推奨。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [140.520, 35.695] },
+      "properties": {
+        "id": "J-008", "status": "jiage",
+        "address": "千葉県匝瑳市飯高・平木・野手周辺",
+        "area_sqm": 3000, "price_man": null, "land_category": "雑種地・耕作放棄農地",
+        "nearest_substation": "匝瑳変電所", "distance_km": 3.0,
+        "estimated_burden": "100〜300万円", "road_access": "要調査",
+        "agent": null, "url": null, "source": "ジモティー調査+地図分析",
+        "notes": "0円物件確認済エリア。耕作放棄地増加傾向。JA千葉みどりへの用地紹介依頼も有効。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [130.862, 33.841] },
+      "properties": {
+        "id": "J-009", "status": "jiage",
+        "address": "福岡県北九州市小倉南区曽根新田（曽根変電所東側）",
+        "area_sqm": 2000, "price_man": null, "land_category": "農地・雑種地混在",
+        "nearest_substation": "曽根変電所", "distance_km": 0.8,
+        "estimated_burden": "10〜100万円", "road_access": "農道接面",
+        "agent": null, "url": null, "source": "現地調査推定",
+        "notes": "曽根変電所東側の遊休農地帯。変電所800m圏で系統接続費最小化。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [131.503, 32.132] },
+      "properties": {
+        "id": "J-010", "status": "jiage",
+        "address": "宮崎県児湯郡高鍋町大字上江（高鍋変電所至近）",
+        "area_sqm": 5000, "price_man": null, "land_category": "農地（畑・田）",
+        "nearest_substation": "高鍋変電所", "distance_km": 0.3,
+        "estimated_burden": "10〜100万円", "road_access": "県道・農道接面",
+        "agent": null, "url": null, "source": "NAVITIME変電所位置+地図分析",
+        "notes": "変電所300m圏。坪1万円以下。系統接続費を大幅圧縮できる最高ポテンシャルエリア。農業委員会事前相談要。"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [132.0936, 34.9016] },
+      "properties": {
+        "id": "J-011", "status": "jiage",
+        "address": "島根県浜田市三隅町（市有地）",
+        "area_sqm": null, "price_man": null, "land_category": "市有地（売却予定）",
+        "nearest_substation": "浜田変電所", "distance_km": 3.0,
+        "estimated_burden": "10〜100万円", "road_access": "要確認",
+        "agent": null, "url": null, "source": "浜田市市有財産売却情報",
+        "notes": "Sランク浜田変電所圏内。浜田市が市有財産売却計画を公表中。市役所直接アプローチ推奨。"
       }
     }
   ]
