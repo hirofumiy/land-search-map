@@ -6,6 +6,9 @@
 <title>蓄電所用地探索マップ</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- PMTiles + protomaps-leaflet for 登記所備付地図（公図）表示 -->
+<script src="https://unpkg.com/pmtiles@3.2.0/dist/pmtiles.js"></script>
+<script src="https://unpkg.com/protomaps-leaflet@4.0.1/dist/protomaps-leaflet.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow: hidden; }
@@ -243,6 +246,18 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
             <label class="hazard-switch"><input type="checkbox" data-hazard="tsunami"><span class="slider"></span></label>
           </div>
         </div>
+        <!-- 公図（登記所備付地図）トグル -->
+        <div style="margin-top:8px; padding-top:8px; border-top:1px solid #334155;">
+          <div class="section-title" style="margin-bottom:6px;">公図・地番</div>
+          <div class="hazard-toggle" id="cadastral-toggle">
+            <div class="hazard-dot" style="background:#ff9800;"></div>
+            <span style="flex:1;">登記所備付地図</span>
+            <label class="hazard-switch"><input type="checkbox" id="cadastral-cb"><span class="slider"></span></label>
+          </div>
+          <div id="cadastral-hint" style="font-size:9px; color:#64748b; margin-top:3px; padding-left:4px;">
+            Lv14+で筆界線 / Lv15+で地番表示（法務省オープンデータ 2024年版）<br>※地域により精度・カバー範囲が異なります
+          </div>
+        </div>
         <div id="powerline-hint" class="powerline-hint">
           ⚡ 現在 Lv<span id="zoom-level">6</span> ／ Lv12以上で送電線（推定）表示
         </div>
@@ -353,6 +368,65 @@ const hazardLayers = {
   tsunami: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/04_tsunami_newlegend_data/{z}/{x}/{y}.png', { opacity: 0.8, maxNativeZoom: 17, maxZoom: 21 })
 };
 const hazardActive = { flood: false, sediment: false, landslide: false, jisuberi: false, tsunami: false };
+
+// ===== 登記所備付地図（公図）レイヤー =====
+let cadastralLayer = null;
+let cadastralActive = false;
+
+function createCadastralLayer() {
+  if (typeof protomapsL === 'undefined') {
+    console.warn('protomaps-leaflet not loaded');
+    return null;
+  }
+  return protomapsL.leafletLayer({
+    url: 'https://data.source.coop/smartmaps/amx-2024-04/MojMap_amx_2024.pmtiles',
+    paint_rules: [
+      {
+        dataLayer: 'fude',
+        symbolizer: new protomapsL.PolygonSymbolizer({
+          fill: 'rgba(255,165,0,0.12)',
+          stroke: 'rgba(200,80,0,0.7)',
+          width: 1.2
+        }),
+        minzoom: 14,
+        maxzoom: 20
+      }
+    ],
+    label_rules: [
+      {
+        dataLayer: 'fude',
+        symbolizer: new protomapsL.CenteredTextSymbolizer({
+          labelProps: ['地番'],
+          fill: '#b33',
+          stroke: '#fff',
+          width: 3,
+          font: '700 13px "Hiragino Sans", "Meiryo", sans-serif'
+        }),
+        minzoom: 15,
+        maxzoom: 20
+      }
+    ],
+    maxDataZoom: 16,
+    attribution: '<a href="https://github.com/amx-project">AMX</a> | 法務省登記所備付地図'
+  });
+}
+
+// 公図トグル
+document.getElementById('cadastral-cb').addEventListener('change', function() {
+  const toggle = document.getElementById('cadastral-toggle');
+  if (this.checked) {
+    if (!cadastralLayer) cadastralLayer = createCadastralLayer();
+    if (cadastralLayer) {
+      cadastralLayer.addTo(map);
+      cadastralActive = true;
+      toggle.classList.add('active');
+    }
+  } else {
+    if (cadastralLayer) map.removeLayer(cadastralLayer);
+    cadastralActive = false;
+    toggle.classList.remove('active');
+  }
+});
 
 L.control.layers(
   { '標準地図': tileStd, '航空写真': tilePhoto },
