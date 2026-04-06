@@ -153,7 +153,17 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
 .hazard-toggle:hover { background: #334155; }
 .hazard-toggle.active { border-color: #3b82f6; background: #172554; }
 .hazard-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.hazard-slider { width: 50px; height: 4px; accent-color: #3b82f6; cursor: pointer; }
+.hazard-switch { position: relative; width: 32px; height: 18px; flex-shrink: 0; }
+.hazard-switch input { opacity: 0; width: 0; height: 0; }
+.hazard-switch .slider {
+  position: absolute; inset: 0; background: #475569; border-radius: 9px; cursor: pointer; transition: 0.2s;
+}
+.hazard-switch .slider::before {
+  content: ''; position: absolute; width: 14px; height: 14px; left: 2px; top: 2px;
+  background: white; border-radius: 50%; transition: 0.2s;
+}
+.hazard-switch input:checked + .slider { background: #3b82f6; }
+.hazard-switch input:checked + .slider::before { transform: translateX(14px); }
 
 /* Powerline legend */
 .powerline-hint {
@@ -209,27 +219,27 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
           <div class="hazard-toggle" data-hazard="flood">
             <div class="hazard-dot" style="background:#4fc3f7;"></div>
             <span style="flex:1;">洪水浸水想定</span>
-            <input type="range" class="hazard-slider" min="0" max="100" value="80" data-hazard="flood" title="不透明度">
+            <label class="hazard-switch"><input type="checkbox" data-hazard="flood"><span class="slider"></span></label>
           </div>
           <div class="hazard-toggle" data-hazard="sediment">
             <div class="hazard-dot" style="background:#ef6c00;"></div>
             <span style="flex:1;">土石流危険渓流</span>
-            <input type="range" class="hazard-slider" min="0" max="100" value="50" data-hazard="sediment" title="不透明度">
+            <label class="hazard-switch"><input type="checkbox" data-hazard="sediment"><span class="slider"></span></label>
           </div>
           <div class="hazard-toggle" data-hazard="landslide">
             <div class="hazard-dot" style="background:#d32f2f;"></div>
             <span style="flex:1;">急傾斜地崩壊</span>
-            <input type="range" class="hazard-slider" min="0" max="100" value="50" data-hazard="landslide" title="不透明度">
+            <label class="hazard-switch"><input type="checkbox" data-hazard="landslide"><span class="slider"></span></label>
           </div>
           <div class="hazard-toggle" data-hazard="jisuberi">
             <div class="hazard-dot" style="background:#8d6e63;"></div>
             <span style="flex:1;">地すべり危険箇所</span>
-            <input type="range" class="hazard-slider" min="0" max="100" value="50" data-hazard="jisuberi" title="不透明度">
+            <label class="hazard-switch"><input type="checkbox" data-hazard="jisuberi"><span class="slider"></span></label>
           </div>
           <div class="hazard-toggle" data-hazard="tsunami">
             <div class="hazard-dot" style="background:#7e57c2;"></div>
             <span style="flex:1;">津波浸水想定</span>
-            <input type="range" class="hazard-slider" min="0" max="100" value="80" data-hazard="tsunami" title="不透明度">
+            <label class="hazard-switch"><input type="checkbox" data-hazard="tsunami"><span class="slider"></span></label>
           </div>
         </div>
         <div id="powerline-hint" class="powerline-hint">
@@ -326,20 +336,20 @@ let measureMarkersArr = [];
 const map = L.map('map', { zoomControl: true }).setView([35.6, 137.0], 6);
 
 const tileStd = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
-  attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院</a>', maxZoom: 18
+  attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院</a>', maxNativeZoom: 18, maxZoom: 21
 });
 const tilePhoto = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg', {
-  attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院</a>', maxZoom: 18
+  attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院</a>', maxNativeZoom: 18, maxZoom: 21
 });
 tileStd.addTo(map);
 
 // Hazard layers
 const hazardLayers = {
-  flood: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', { opacity: 0.8, maxZoom: 18 }),
-  sediment: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', { opacity: 0.5, maxZoom: 18 }),
-  landslide: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_kyukeishachihousaigai/{z}/{x}/{y}.png', { opacity: 0.5, maxZoom: 18 }),
-  jisuberi: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_jisuberikeikaikuiki/{z}/{x}/{y}.png', { opacity: 0.5, maxZoom: 18 }),
-  tsunami: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/04_tsunami_newlegend_data/{z}/{x}/{y}.png', { opacity: 0.8, maxZoom: 18 })
+  flood: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', { opacity: 0.8, maxNativeZoom: 17, maxZoom: 21 }),
+  sediment: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', { opacity: 0.7, maxNativeZoom: 17, maxZoom: 21 }),
+  landslide: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_kyukeishachihousaigai/{z}/{x}/{y}.png', { opacity: 0.7, maxNativeZoom: 17, maxZoom: 21 }),
+  jisuberi: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_jisuberikeikaikuiki/{z}/{x}/{y}.png', { opacity: 0.7, maxNativeZoom: 17, maxZoom: 21 }),
+  tsunami: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/04_tsunami_newlegend_data/{z}/{x}/{y}.png', { opacity: 0.8, maxNativeZoom: 17, maxZoom: 21 })
 };
 const hazardActive = { flood: false, sediment: false, landslide: false, jisuberi: false, tsunami: false };
 
@@ -621,24 +631,16 @@ map.on('click', function(e) {
   }
 });
 
-// ===== Hazard Toggle (individual layers) =====
-document.querySelectorAll('.hazard-toggle').forEach(toggle => {
-  toggle.addEventListener('click', function(e) {
-    if (e.target.classList.contains('hazard-slider')) return; // don't toggle on slider drag
+// ===== Hazard Toggle (ON/OFF switches) =====
+document.querySelectorAll('.hazard-switch input[type="checkbox"]').forEach(cb => {
+  cb.addEventListener('change', function() {
     const key = this.dataset.hazard;
-    hazardActive[key] = !hazardActive[key];
-    this.classList.toggle('active', hazardActive[key]);
-    if (hazardActive[key]) hazardLayers[key].addTo(map);
+    const toggle = this.closest('.hazard-toggle');
+    hazardActive[key] = this.checked;
+    toggle.classList.toggle('active', this.checked);
+    if (this.checked) hazardLayers[key].addTo(map);
     else map.removeLayer(hazardLayers[key]);
   });
-});
-document.querySelectorAll('.hazard-slider').forEach(slider => {
-  slider.addEventListener('input', function(e) {
-    e.stopPropagation();
-    const key = this.dataset.hazard;
-    hazardLayers[key].setOpacity(this.value / 100);
-  });
-  slider.addEventListener('click', e => e.stopPropagation());
 });
 
 // ===== Power Lines (approximate grid connections) =====
