@@ -195,6 +195,7 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
     <div id="panel-header">
       <h1>蓄電所用地探索マップ</h1>
       <p>Battery Storage Site Exploration - 440 LLC</p>
+      <p id="data-date" style="font-size:9px; color:#60a5fa; margin-top:2px; line-height:1.3; white-space:pre-line;">📊 空き容量データ: 読込中...</p>
     </div>
     <div id="panel-body">
 
@@ -720,6 +721,15 @@ async function loadData() {
     const res = await fetch('substations.json');
     if (!res.ok) throw new Error();
     substationsData = await res.json();
+    // データ時点をメタデータから表示
+    if (substationsData.metadata) {
+      const dateEl = document.getElementById('data-date');
+      if (dateEl) {
+        let txt = '📊 ' + (substationsData.metadata.data_source_date || '');
+        if (substationsData.metadata.data_source_detail) txt += '\n' + substationsData.metadata.data_source_detail;
+        dateEl.textContent = txt;
+      }
+    }
   } catch { substationsData = {"type":"FeatureCollection","features":[]}; }
 
   try {

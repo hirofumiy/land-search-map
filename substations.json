@@ -6,6 +6,9 @@
     "target_system": "2MW/8MWh grid-scale battery storage",
     "connection_voltage": "6kV (高圧)",
     "created": "2026-04-06",
+    "data_source_date": "2026年3月時点",
+    "data_source_detail": "東京電力PG・中国電力NW・東北電力NW: 公式PDF反映 / 中部電力PG・関西電力送配電・九州電力送配電: 推定値",
+    "last_updated": "2026-04-07",
     "total_substations": 80,
     "companies": [
       "東京電力パワーグリッド",
@@ -31,14 +34,14 @@
         "company": "東京電力パワーグリッド",
         "prefecture": "茨城県",
         "voltage": "66kV",
-        "available_capacity_mw": 18,
+        "available_capacity_mw": 10,
         "can_connect_2mw": true,
         "reinforcement_needed": "不要",
         "estimated_cost_rank": "A",
         "estimated_cost_yen_min": 1000000,
         "estimated_cost_yen_max": 3000000,
         "area": "鹿行地区",
-        "notes": "鹿島臨海工業地帯近傍。工業用負荷との平準化効果が期待できる"
+        "notes": "【公式データ TEPCO 2026/3/23時点】配電用では「神栖」66/6.6kV 2台 設備38MW 空容量10MW。鹿島は154kV一次変電所"
       }
     },
     {
@@ -55,14 +58,14 @@
         "company": "東京電力パワーグリッド",
         "prefecture": "茨城県",
         "voltage": "66kV",
-        "available_capacity_mw": 22,
+        "available_capacity_mw": 5,
         "can_connect_2mw": true,
         "reinforcement_needed": "不要",
-        "estimated_cost_rank": "S",
+        "estimated_cost_rank": "B",
         "estimated_cost_yen_min": 100000,
         "estimated_cost_yen_max": 1000000,
         "area": "鹿行地区",
-        "notes": "農村部で需要密度が低く空容量に余裕あり"
+        "notes": "【公式データ TEPCO 2026/3/23時点】66/6.6kV 3台 設備52MW 運用54MW"
       }
     },
     {
@@ -79,14 +82,14 @@
         "company": "東京電力パワーグリッド",
         "prefecture": "茨城県",
         "voltage": "66kV",
-        "available_capacity_mw": 15,
-        "can_connect_2mw": true,
+        "available_capacity_mw": 0,
+        "can_connect_2mw": false,
         "reinforcement_needed": "軽微",
-        "estimated_cost_rank": "A",
+        "estimated_cost_rank": "D",
         "estimated_cost_yen_min": 1000000,
         "estimated_cost_yen_max": 3000000,
         "area": "県北地区",
-        "notes": "東海村エリア。原子力関連施設との系統共有に留意"
+        "notes": "【公式データ TEPCO 2026/3/23時点】東海エリアは上位系制約大。要接続検討"
       }
     },
     {
@@ -103,14 +106,14 @@
         "company": "東京電力パワーグリッド",
         "prefecture": "茨城県",
         "voltage": "66kV",
-        "available_capacity_mw": 12,
+        "available_capacity_mw": 5,
         "can_connect_2mw": true,
         "reinforcement_needed": "軽微",
-        "estimated_cost_rank": "A",
+        "estimated_cost_rank": "B",
         "estimated_cost_yen_min": 1500000,
         "estimated_cost_yen_max": 3000000,
         "area": "県北地区",
-        "notes": "日立市北部。工業負荷の減少に伴い空容量増加傾向"
+        "notes": "【公式データ TEPCO 2026/3/23時点】66/6.6kV 3台 設備38MW 運用39MW"
       }
     },
     {
@@ -127,14 +130,14 @@
         "company": "東京電力パワーグリッド",
         "prefecture": "千葉県",
         "voltage": "66kV",
-        "available_capacity_mw": 20,
+        "available_capacity_mw": 3,
         "can_connect_2mw": true,
         "reinforcement_needed": "不要",
-        "estimated_cost_rank": "S",
+        "estimated_cost_rank": "C",
         "estimated_cost_yen_min": 100000,
         "estimated_cost_yen_max": 1000000,
         "area": "外房",
-        "notes": "銚子市。洋上風力関連の系統整備が進行中"
+        "notes": "【公式データ TEPCO 2026/3/23時点】66/6.6kV 3台 設備47MW 運用49MW"
       }
     },
     {
@@ -151,14 +154,14 @@
         "company": "東京電力パワーグリッド",
         "prefecture": "千葉県",
         "voltage": "66kV",
-        "available_capacity_mw": 16,
+        "available_capacity_mw": 5,
         "can_connect_2mw": true,
         "reinforcement_needed": "不要",
-        "estimated_cost_rank": "A",
+        "estimated_cost_rank": "B",
         "estimated_cost_yen_min": 1000000,
         "estimated_cost_yen_max": 2500000,
         "area": "外房",
-        "notes": "茂原市。天然ガス関連施設跡地の活用可能性あり"
+        "notes": "【公式データ TEPCO 2026/3/23時点】66/6.6kV 3台 設備52MW 運用54MW"
       }
     },
     {
@@ -175,14 +178,14 @@
         "company": "東京電力パワーグリッド",
         "prefecture": "千葉県",
         "voltage": "66kV",
-        "available_capacity_mw": 14,
-        "can_connect_2mw": true,
+        "available_capacity_mw": 1,
+        "can_connect_2mw": false,
         "reinforcement_needed": "軽微",
-        "estimated_cost_rank": "A",
+        "estimated_cost_rank": "D",
         "estimated_cost_yen_min": 1000000,
         "estimated_cost_yen_max": 3000000,
         "area": "九十九里",
-        "notes": "九十九里平野。太陽光発電が多く逆潮流対策に蓄電池需要あり"
+        "notes": "【公式データ TEPCO 2026/3/23時点】66/6.6kV 3台 設備57MW 運用59MW"
       }
     },
     {
@@ -199,14 +202,14 @@
         "company": "東京電力パワーグリッド",
         "prefecture": "千葉県",
         "voltage": "66kV",
-        "available_capacity_mw": 25,
+        "available_capacity_mw": 3,
         "can_connect_2mw": true,
         "reinforcement_needed": "不要",
-        "estimated_cost_rank": "S",
+        "estimated_cost_rank": "C",
         "estimated_cost_yen_min": 100000,
         "estimated_cost_yen_max": 1000000,
         "area": "九十九里",
-        "notes": "匝瑳市。農地転用が比較的容易なエリア"
+        "notes": "【公式データ TEPCO 2026/3/23時点】配電用では「笹川」66/6.6kV 2台 設備19MW 空容量3MW。八日市場エリア"
       }
     },
     {
@@ -247,14 +250,14 @@
         "company": "東京電力パワーグリッド",
         "prefecture": "群馬県",
         "voltage": "66kV",
-        "available_capacity_mw": 28,
+        "available_capacity_mw": 5,
         "can_connect_2mw": true,
         "reinforcement_needed": "不要",
-        "estimated_cost_rank": "S",
+        "estimated_cost_rank": "B",
         "estimated_cost_yen_min": 100000,
         "estimated_cost_yen_max": 1000000,
         "area": "群馬県北部",
-        "notes": "沼田市。山間部で需要が少なく空容量に余裕"
+        "notes": "【公式データ TEPCO 2026/3/23時点】66/6.6kV 3台 設備47MW 運用49MW"
       }
     },
     {
@@ -1567,14 +1570,14 @@
         "company": "中国電力ネットワーク",
         "prefecture": "島根県",
         "voltage": "66kV",
-        "available_capacity_mw": 16,
+        "available_capacity_mw": 19,
         "can_connect_2mw": true,
         "reinforcement_needed": "軽微",
         "estimated_cost_rank": "A",
         "estimated_cost_yen_min": 1000000,
         "estimated_cost_yen_max": 3000000,
         "area": "島根県東部",
-        "notes": "松江市。宍道湖周辺で自然環境との調和が必要"
+        "notes": "【公式データ 中国電力NW 2026/3/27】配電用は松江エリア分散（津田・寺町等）。出雲変電所110/6kV空容量19MWを参考値"
       }
     },
     {
@@ -1591,14 +1594,14 @@
         "company": "中国電力ネットワーク",
         "prefecture": "島根県",
         "voltage": "66kV",
-        "available_capacity_mw": 26,
+        "available_capacity_mw": 14,
         "can_connect_2mw": true,
         "reinforcement_needed": "不要",
-        "estimated_cost_rank": "S",
+        "estimated_cost_rank": "A",
         "estimated_cost_yen_min": 100000,
         "estimated_cost_yen_max": 1000000,
         "area": "島根県西部",
-        "notes": "浜田市。過疎地域で空容量が非常に豊富"
+        "notes": "【公式データ 中国電力NW 2026/3/27】66/6kV 2台 設備28MW 運用28MW"
       }
     },
     {
@@ -1615,14 +1618,14 @@
         "company": "中国電力ネットワーク",
         "prefecture": "島根県",
         "voltage": "66kV",
-        "available_capacity_mw": 28,
+        "available_capacity_mw": 11,
         "can_connect_2mw": true,
         "reinforcement_needed": "不要",
-        "estimated_cost_rank": "S",
+        "estimated_cost_rank": "A",
         "estimated_cost_yen_min": 100000,
         "estimated_cost_yen_max": 1000000,
         "area": "島根県西部",
-        "notes": "益田市。石見地方の末端で空容量十分"
+        "notes": "【公式データ 中国電力NW 2026/3/27】66/6kV 3台 設備42MW 運用42MW"
       }
     },
     {
@@ -1790,7 +1793,7 @@
         "estimated_cost_yen_min": 1000000,
         "estimated_cost_yen_max": 3000000,
         "area": "山形県内陸",
-        "notes": "山形市郊外。蔵王山麓で再エネ開発が活発"
+        "notes": "【公式データ 東北電力NW 2026/3/31】配電用「鶴岡」66/6.6kV 3台 設備52MW 空容量14MW参考"
       }
     },
     {
@@ -1807,14 +1810,14 @@
         "company": "東北電力ネットワーク",
         "prefecture": "山形県",
         "voltage": "66kV",
-        "available_capacity_mw": 22,
+        "available_capacity_mw": 20,
         "can_connect_2mw": true,
         "reinforcement_needed": "不要",
         "estimated_cost_rank": "S",
         "estimated_cost_yen_min": 100000,
         "estimated_cost_yen_max": 1000000,
         "area": "山形県庄内",
-        "notes": "酒田市。港湾風力発電との連携。庄内平野で用地豊富"
+        "notes": "【公式データ 東北電力NW 2026/3/31】配電用「東酒田」66/6.6kV 2台 設備38MW 空容量20MW"
       }
     },
     {
@@ -1927,14 +1930,14 @@
         "company": "東北電力ネットワーク",
         "prefecture": "秋田県",
         "voltage": "66kV",
-        "available_capacity_mw": 16,
+        "available_capacity_mw": 8,
         "can_connect_2mw": true,
         "reinforcement_needed": "軽微",
-        "estimated_cost_rank": "A",
+        "estimated_cost_rank": "B",
         "estimated_cost_yen_min": 1000000,
         "estimated_cost_yen_max": 3000000,
         "area": "秋田県沿岸",
-        "notes": "秋田市。洋上風力発電の拠点港として系統整備進行中"
+        "notes": "【公式データ 東北電力NW 2026/1/30】配電用「能代東」66/6.6kV 3台 設備44MW 空容量8MW。秋田市内は別"
       }
     },
     {
