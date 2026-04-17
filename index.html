@@ -203,6 +203,7 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
       <h1>蓄電所用地探索マップ</h1>
       <p>Battery Storage Site Exploration - 440 LLC</p>
       <p id="data-date" style="font-size:9px; color:#60a5fa; margin-top:2px; line-height:1.3; white-space:pre-line;">📊 空き容量データ: 読込中...</p>
+      <div id="company-updates" style="display:none; margin-top:4px; padding:4px 8px; background:rgba(255,255,255,0.05); border-radius:4px; font-size:8.5px; color:#94a3b8; line-height:1.5;"></div>
     </div>
     <div id="panel-body">
 
@@ -260,6 +261,26 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
           </div>
           <div id="cadastral-hint" style="font-size:9px; color:#64748b; margin-top:3px; padding-left:4px;">
             Lv14+で筆界線 / Lv15+で地番表示（法務省オープンデータ 2024年版）<br>※地域により精度・カバー範囲が異なります
+          </div>
+          <!-- 公図ズレ補正コントロール -->
+          <div id="cadastral-offset" style="display:none; margin-top:6px; padding:6px; background:rgba(255,152,0,0.08); border:1px solid rgba(255,152,0,0.3); border-radius:4px;">
+            <div style="font-size:10px; color:#fbbf24; font-weight:600; margin-bottom:4px;">🔧 公図ズレ補正（旧公図向け）</div>
+            <div style="font-size:9px; color:#94a3b8; margin-bottom:4px;">航空写真と公図がズレている場合に調整</div>
+            <div style="display:flex; align-items:center; gap:6px; margin-bottom:3px;">
+              <span style="font-size:9px; color:#cbd5e1; width:35px;">東西:</span>
+              <input type="range" id="offset-x" min="-30" max="30" step="0.5" value="0" style="flex:1; height:4px;">
+              <span id="offset-x-val" style="font-size:9px; color:#fbbf24; width:40px; text-align:right;">0.0m</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
+              <span style="font-size:9px; color:#cbd5e1; width:35px;">南北:</span>
+              <input type="range" id="offset-y" min="-30" max="30" step="0.5" value="0" style="flex:1; height:4px;">
+              <span id="offset-y-val" style="font-size:9px; color:#fbbf24; width:40px; text-align:right;">0.0m</span>
+            </div>
+            <div style="display:flex; gap:4px;">
+              <button id="offset-save" style="flex:1; font-size:9px; padding:3px; background:#059669; color:white; border:none; border-radius:3px; cursor:pointer;">この地域で保存</button>
+              <button id="offset-reset" style="flex:1; font-size:9px; padding:3px; background:#475569; color:white; border:none; border-radius:3px; cursor:pointer;">リセット</button>
+            </div>
+            <div id="offset-status" style="font-size:8.5px; color:#94a3b8; margin-top:4px;"></div>
           </div>
         </div>
         <div id="powerline-hint" class="powerline-hint">
@@ -386,6 +407,80 @@ let cadastralLayer = null;
 let cadastralActive = false;
 const cadastralPMTiles = new pmtiles.PMTiles('https://data.source.coop/smartmaps/amx-2024-04/MojMap_amx_2024.pmtiles');
 
+// 公図ズレ補正（オフセット）：メートル単位 → 経度緯度換算
+let cadastralOffset = { x: 0, y: 0 }; // メートル（東西, 南北）
+
+// 1km×1kmグリッドキーで保存（地域単位）
+function getGridKey(lat, lng) {
+  return Math.floor(lat * 100) + '_' + Math.floor(lng * 100);
+}
+
+function loadOffsetForLocation(lat, lng) {
+  try {
+    const key = 'cadastralOffset_' + getGridKey(lat, lng);
+    const saved = localStorage.getItem(key);
+    if (saved) {
+      const o = JSON.parse(saved);
+      cadastralOffset.x = o.x || 0;
+      cadastralOffset.y = o.y || 0;
+      return true;
+    }
+  } catch(e) {}
+  cadastralOffset = { x: 0, y: 0 };
+  return false;
+}
+
+// メートル→経度緯度差分
+function meterToLngLat(mx, my, lat) {
+  const dLat = my / 111000;
+  const dLng = mx / (111000 * Math.cos(lat * Math.PI / 180));
+  return { dLat, dLng };
+}
+
+// 点が多角形内にあるか（Ray casting）
+function pointInRing(px, py, ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const xi = ring[i].x, yi = ring[i].y;
+    const xj = ring[j].x, yj = ring[j].y;
+    const intersect = ((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / (yj - yi) + xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+
+// 多角形の面積（VT座標系、シューレース公式）
+function polygonArea(ring) {
+  let area = 0;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    area += (ring[j].x + ring[i].x) * (ring[j].y - ring[i].y);
+  }
+  return Math.abs(area / 2);
+}
+
+// 多角形中心（経度緯度）
+function ringCenterLngLat(ring, tileX, tileY, z, extent) {
+  let cx = 0, cy = 0;
+  for (let i = 0; i < ring.length; i++) { cx += ring[i].x; cy += ring[i].y; }
+  cx /= ring.length; cy /= ring.length;
+  const n = Math.pow(2, z);
+  const worldX = (tileX + cx / extent) / n;
+  const worldY = (tileY + cy / extent) / n;
+  const lng = worldX * 360 - 180;
+  const latRad = Math.atan(Math.sinh(Math.PI * (1 - 2 * worldY)));
+  const lat = latRad * 180 / Math.PI;
+  return { lat, lng };
+}
+
+// 面積推定（平方メートル）
+function estimateAreaM2(ring, tileX, tileY, z, extent, centerLat) {
+  // タイル内座標 → メートル
+  const tileSizeM = 40075016.686 * Math.cos(centerLat * Math.PI / 180) / Math.pow(2, z);
+  const mPerUnit = tileSizeM / extent;
+  const areaInUnits = polygonArea(ring);
+  return areaInUnits * mPerUnit * mPerUnit;
+}
+
 function createCadastralLayer() {
   if (typeof Pbf === 'undefined' || typeof VectorTile === 'undefined') {
     console.warn('Pbf or VectorTile not loaded yet');
@@ -426,8 +521,19 @@ function createCadastralLayer() {
         var extent = 4096;
         var tileSize = size.x;
         var scaleFactor = (tileSize / extent) * scale;
-        var ox = offsetX * tileSize;
-        var oy = offsetY * tileSize;
+        // scale倍率を考慮（z>16で拡大表示するとき必要）
+        var ox = offsetX * tileSize * scale;
+        var oy = offsetY * tileSize * scale;
+
+        // ズレ補正（メートル → ピクセル）
+        var pxOffsetX = 0, pxOffsetY = 0;
+        if (cadastralOffset.x !== 0 || cadastralOffset.y !== 0) {
+          var tileCenterLat = Math.atan(Math.sinh(Math.PI * (1 - 2 * (coords.y + 0.5) / Math.pow(2, coords.z)))) * 180 / Math.PI;
+          var tileSizeM = 40075016.686 * Math.cos(tileCenterLat * Math.PI / 180) / Math.pow(2, coords.z);
+          var mPerPx = tileSizeM / tileSize;
+          pxOffsetX = cadastralOffset.x / mPerPx;
+          pxOffsetY = -cadastralOffset.y / mPerPx; // 南北は画面座標で反転
+        }
 
         // 筆界線（ポリゴン）描画
         ctx.fillStyle = 'rgba(255,140,0,0.12)';
@@ -442,9 +548,9 @@ function createCadastralLayer() {
             var ring = geom[r];
             if (ring.length < 3) continue;
             ctx.beginPath();
-            ctx.moveTo(ring[0].x * scaleFactor - ox, ring[0].y * scaleFactor - oy);
+            ctx.moveTo(ring[0].x * scaleFactor - ox + pxOffsetX, ring[0].y * scaleFactor - oy + pxOffsetY);
             for (var p = 1; p < ring.length; p++) {
-              ctx.lineTo(ring[p].x * scaleFactor - ox, ring[p].y * scaleFactor - oy);
+              ctx.lineTo(ring[p].x * scaleFactor - ox + pxOffsetX, ring[p].y * scaleFactor - oy + pxOffsetY);
             }
             ctx.closePath();
             ctx.fill();
@@ -475,6 +581,8 @@ function createCadastralLayer() {
             if (n === 0) continue;
             cx = (cx / n) * scaleFactor - ox;
             cy = (cy / n) * scaleFactor - oy;
+            cx += pxOffsetX;
+            cy += pxOffsetY;
             if (cx >= -20 && cx <= tileSize + 20 && cy >= -20 && cy <= tileSize + 20) {
               ctx.strokeText(label, cx, cy);
               ctx.fillText(label, cx, cy);
@@ -505,20 +613,25 @@ function createCadastralLayer() {
 // 公図トグル
 document.getElementById('cadastral-cb').addEventListener('change', function() {
   const toggle = document.getElementById('cadastral-toggle');
+  const offsetPanel = document.getElementById('cadastral-offset');
   if (this.checked) {
     if (!cadastralLayer) cadastralLayer = createCadastralLayer();
     if (cadastralLayer) {
       cadastralLayer.addTo(map);
       cadastralActive = true;
       toggle.classList.add('active');
+      if (offsetPanel) offsetPanel.style.display = 'block';
+      // 現在位置のオフセット復元
+      const c = map.getCenter();
+      if (loadOffsetForLocation(c.lat, c.lng)) applyOffsetToUI();
     } else {
-      // VectorTile未ロード時のリトライ
       setTimeout(() => {
         cadastralLayer = createCadastralLayer();
         if (cadastralLayer) {
           cadastralLayer.addTo(map);
           cadastralActive = true;
           toggle.classList.add('active');
+          if (offsetPanel) offsetPanel.style.display = 'block';
         }
       }, 1000);
     }
@@ -526,6 +639,167 @@ document.getElementById('cadastral-cb').addEventListener('change', function() {
     if (cadastralLayer) map.removeLayer(cadastralLayer);
     cadastralActive = false;
     toggle.classList.remove('active');
+    if (offsetPanel) offsetPanel.style.display = 'none';
+  }
+});
+
+// オフセット UI 連動
+function applyOffsetToUI() {
+  document.getElementById('offset-x').value = cadastralOffset.x;
+  document.getElementById('offset-y').value = cadastralOffset.y;
+  document.getElementById('offset-x-val').textContent = cadastralOffset.x.toFixed(1) + 'm';
+  document.getElementById('offset-y-val').textContent = cadastralOffset.y.toFixed(1) + 'm';
+}
+function redrawCadastral() {
+  if (cadastralLayer && cadastralActive) {
+    map.removeLayer(cadastralLayer);
+    cadastralLayer = createCadastralLayer();
+    cadastralLayer.addTo(map);
+  }
+}
+document.getElementById('offset-x').addEventListener('input', function() {
+  cadastralOffset.x = parseFloat(this.value);
+  document.getElementById('offset-x-val').textContent = cadastralOffset.x.toFixed(1) + 'm';
+  redrawCadastral();
+});
+document.getElementById('offset-y').addEventListener('input', function() {
+  cadastralOffset.y = parseFloat(this.value);
+  document.getElementById('offset-y-val').textContent = cadastralOffset.y.toFixed(1) + 'm';
+  redrawCadastral();
+});
+document.getElementById('offset-save').addEventListener('click', function() {
+  const c = map.getCenter();
+  const key = 'cadastralOffset_' + getGridKey(c.lat, c.lng);
+  localStorage.setItem(key, JSON.stringify(cadastralOffset));
+  document.getElementById('offset-status').textContent = '✅ この地域（1km四方）で保存しました';
+  setTimeout(() => { document.getElementById('offset-status').textContent = ''; }, 3000);
+});
+document.getElementById('offset-reset').addEventListener('click', function() {
+  cadastralOffset = { x: 0, y: 0 };
+  applyOffsetToUI();
+  redrawCadastral();
+  const c = map.getCenter();
+  const key = 'cadastralOffset_' + getGridKey(c.lat, c.lng);
+  localStorage.removeItem(key);
+  document.getElementById('offset-status').textContent = '🔄 リセットしました';
+  setTimeout(() => { document.getElementById('offset-status').textContent = ''; }, 3000);
+});
+
+// 地図移動時にオフセットを該当地域のものに切替
+map.on('moveend', function() {
+  if (cadastralActive) {
+    const c = map.getCenter();
+    const prevX = cadastralOffset.x, prevY = cadastralOffset.y;
+    loadOffsetForLocation(c.lat, c.lng);
+    if (cadastralOffset.x !== prevX || cadastralOffset.y !== prevY) {
+      applyOffsetToUI();
+      redrawCadastral();
+    }
+  }
+});
+
+// ===== 地番クリック検出 =====
+map.on('click', async function(e) {
+  if (!cadastralActive || map.getZoom() < 14) return;
+  if (typeof Pbf === 'undefined' || typeof VectorTile === 'undefined') return;
+
+  const lat = e.latlng.lat;
+  const lng = e.latlng.lng;
+
+  // オフセット分逆補正（クリック位置をデータ側の座標に戻す）
+  const { dLat, dLng } = meterToLngLat(cadastralOffset.x, cadastralOffset.y, lat);
+  const targetLat = lat - dLat;
+  const targetLng = lng - dLng;
+
+  const z = 16;
+  const n = Math.pow(2, z);
+  const worldX = (targetLng + 180) / 360;
+  const worldY = (1 - Math.log(Math.tan(targetLat * Math.PI / 180) + 1 / Math.cos(targetLat * Math.PI / 180)) / Math.PI) / 2;
+  const tileX = Math.floor(worldX * n);
+  const tileY = Math.floor(worldY * n);
+  const extent = 4096;
+  const px = (worldX * n - tileX) * extent;
+  const py = (worldY * n - tileY) * extent;
+
+  try {
+    const result = await cadastralPMTiles.getZxy(z, tileX, tileY);
+    if (!result || !result.data) return;
+    const vt = new VectorTile(new Pbf(new Uint8Array(result.data)));
+    const fudeLayer = vt.layers['fude'];
+    if (!fudeLayer) return;
+
+    let matched = null;
+    let matchedGeom = null;
+    for (let i = 0; i < fudeLayer.length; i++) {
+      const feat = fudeLayer.feature(i);
+      if (feat.type !== 3) continue;
+      const geom = feat.loadGeometry();
+      for (let r = 0; r < geom.length; r++) {
+        if (pointInRing(px, py, geom[r])) {
+          matched = feat;
+          matchedGeom = geom[r];
+          break;
+        }
+      }
+      if (matched) break;
+    }
+
+    if (matched) {
+      const props = matched.properties || {};
+      const chiban = props['地番'] || '不明';
+      const chimoku = props['地目'] || props['chimoku'] || '';
+      // 地図種別: gotType / 座標値種別 / 精度区分 など（データに含まれていれば）
+      const mapType = props['gotType'] || props['座標値種別'] || props['map_type'] || props['精度区分'] || '';
+      const isOfficial = mapType.toString().match(/14条|法14|高精度|1級|2級|3級/);
+      const isLegacy = mapType.toString().match(/旧公図|公図|14条地図以外/);
+
+      // 中心座標＆面積推定
+      const center = ringCenterLngLat(matchedGeom, tileX, tileY, z, extent);
+      const areaM2 = estimateAreaM2(matchedGeom, tileX, tileY, z, extent, center.lat);
+      const areaTsubo = areaM2 / 3.305785;
+
+      // 地図種別バッジ
+      let mapTypeBadge = '';
+      if (isOfficial) {
+        mapTypeBadge = '<span style="background:#059669; color:white; padding:1px 6px; border-radius:3px; font-size:10px;">14条地図 (高精度)</span>';
+      } else if (isLegacy) {
+        mapTypeBadge = '<span style="background:#ea580c; color:white; padding:1px 6px; border-radius:3px; font-size:10px;">旧公図 (ズレ有)</span>';
+      } else if (mapType) {
+        mapTypeBadge = '<span style="background:#64748b; color:white; padding:1px 6px; border-radius:3px; font-size:10px;">' + mapType + '</span>';
+      } else {
+        mapTypeBadge = '<span style="background:#64748b; color:white; padding:1px 6px; border-radius:3px; font-size:10px;">種別不明</span>';
+      }
+
+      // ディープリンク
+      const sv = 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=' + center.lat + ',' + center.lng;
+      const touri = 'https://www1.touki.or.jp/gateway.html';
+
+      // ポップアップに表示される地番をクリップボードコピー用に整形
+      const safeChiban = String(chiban).replace(/'/g, '&#39;');
+
+      const html = `
+        <div style="min-width:240px;">
+          <div style="font-size:14px; font-weight:700; color:#1e2761; margin-bottom:6px; padding-bottom:4px; border-bottom:1px solid #e5e7eb;">
+            📋 地番情報
+          </div>
+          <div style="font-size:12px; line-height:1.7;">
+            <div><b>地番：</b><span style="font-size:14px; color:#a22; font-weight:600;">${chiban}</span></div>
+            ${chimoku ? '<div><b>地目：</b>' + chimoku + '</div>' : ''}
+            <div><b>推定面積：</b>${Math.round(areaM2).toLocaleString()} m² <span style="color:#64748b;">(約${areaTsubo.toFixed(1)} 坪)</span></div>
+            <div><b>地図種別：</b>${mapTypeBadge}</div>
+            <div style="font-size:10px; color:#64748b; margin-top:2px;">中心: ${center.lat.toFixed(6)}, ${center.lng.toFixed(6)}</div>
+          </div>
+          ${isLegacy ? '<div style="margin-top:6px; padding:4px 6px; background:#fef3c7; color:#92400e; font-size:10px; border-radius:3px;">⚠️ 旧公図区域のため航空写真とズレている可能性があります。左のズレ補正で調整できます。</div>' : ''}
+          <div style="margin-top:8px; display:flex; flex-direction:column; gap:4px;">
+            <a href="${sv}" target="_blank" rel="noopener" style="display:block; padding:6px 8px; background:#3b82f6; color:white; text-decoration:none; font-size:11px; border-radius:3px; text-align:center;">🗺️ ストリートビューを開く</a>
+            <button onclick="navigator.clipboard.writeText('${safeChiban}'); window.open('${touri}', '_blank');" style="padding:6px 8px; background:#059669; color:white; border:none; font-size:11px; border-radius:3px; cursor:pointer;">📄 登記情報提供サービス<br><span style="font-size:9px; opacity:0.9;">(地番をコピー＆サイトを開く)</span></button>
+          </div>
+        </div>`;
+
+      L.popup({ maxWidth: 300 }).setLatLng(e.latlng).setContent(html).openOn(map);
+    }
+  } catch (err) {
+    console.error('Cadastral click error:', err);
   }
 });
 
@@ -597,6 +871,12 @@ function renderSubstations() {
     const costMax = p.estimated_cost_yen_max ? formatYen(p.estimated_cost_yen_max) : '';
     const costStr = p.estimated_cost || (costMin && costMax ? `${costMin}〜${costMax}` : '不明');
     const shortName = COMPANY_SHORT[p.company] || p.company;
+    // 電力会社別の更新日を取得
+    const companyUpdate = substationsData.metadata && substationsData.metadata.company_data_updates
+      ? substationsData.metadata.company_data_updates[p.company] : null;
+    const updateDateStr = companyUpdate
+      ? companyUpdate.last_updated + (companyUpdate.status === 'confirmed' ? ' (公式)' : ' (推定)')
+      : '不明';
     const marker = L.marker(coords, { icon: createSubstationIcon(rank) })
       .bindPopup(`
         <div class="popup-title">${p.name}</div>
@@ -607,6 +887,7 @@ function renderSubstations() {
         <div class="popup-row"><b>増強要否:</b> ${p.reinforcement_needed || '不明'}</div>
         <div class="popup-row"><b>ランク:</b> <span class="rank-badge rank-${rank}">${rank}</span></div>
         <div class="popup-row"><b>推定負担金:</b> ${costStr}</div>
+        <div class="popup-row"><b>空き容量更新日:</b> ${updateDateStr}</div>
         <div class="popup-row"><b>備考:</b> ${p.notes || ''}</div>
       `, { maxWidth: 300 })
       .on('click', () => drawConcentricCircles(L.latLng(coords)))
@@ -901,8 +1182,25 @@ async function loadData() {
       const dateEl = document.getElementById('data-date');
       if (dateEl) {
         let txt = '📊 ' + (substationsData.metadata.data_source_date || '');
-        if (substationsData.metadata.data_source_detail) txt += '\n' + substationsData.metadata.data_source_detail;
+        if (substationsData.metadata.update_schedule) txt += '（更新: ' + substationsData.metadata.update_schedule + '）';
         dateEl.textContent = txt;
+      }
+      // 電力会社別 最終更新日を表示
+      const updatesEl = document.getElementById('company-updates');
+      const companyUpdates = substationsData.metadata.company_data_updates;
+      if (updatesEl && companyUpdates) {
+        const SHORT = {'東京電力パワーグリッド':'TEPCO','中部電力パワーグリッド':'中部電力','関西電力送配電':'関西電力','九州電力送配電':'九州電力','中国電力ネットワーク':'中国電力','東北電力ネットワーク':'東北電力'};
+        let html = '<div style="font-weight:600; color:#60a5fa; margin-bottom:2px;">電力会社別 空き容量 最終更新日</div>';
+        for (const [company, info] of Object.entries(companyUpdates)) {
+          const name = SHORT[company] || company;
+          const badge = info.status === 'confirmed'
+            ? '<span style="color:#34d399;">公式</span>'
+            : '<span style="color:#fbbf24;">推定</span>';
+          html += '<div>' + name + ': ' + info.last_updated + ' ' + badge + '</div>';
+        }
+        html += '<div style="margin-top:2px; color:#64748b;">次回更新: ' + (substationsData.metadata.update_schedule || '') + '</div>';
+        updatesEl.innerHTML = html;
+        updatesEl.style.display = 'block';
       }
     }
   } catch { substationsData = {"type":"FeatureCollection","features":[]}; }

@@ -8,7 +8,8 @@
     "created": "2026-04-06",
     "data_source_date": "2026年3月時点",
     "data_source_detail": "東京電力PG・中国電力NW・東北電力NW: 公式PDF反映 / 中部電力PG・関西電力送配電・九州電力送配電: 推定値",
-    "last_updated": "2026-04-07",
+    "last_updated": "2026-04-14",
+    "update_schedule": "毎月1日・15日・30日",
     "total_substations": 80,
     "companies": [
       "東京電力パワーグリッド",
@@ -17,7 +18,15 @@
       "九州電力送配電",
       "中国電力ネットワーク",
       "東北電力ネットワーク"
-    ]
+    ],
+    "company_data_updates": {
+      "東京電力パワーグリッド": { "last_updated": "2026-03-23", "source": "公式PDF", "status": "confirmed" },
+      "中部電力パワーグリッド": { "last_updated": "2026-03-01", "source": "推定値", "status": "estimated" },
+      "関西電力送配電": { "last_updated": "2026-03-01", "source": "推定値", "status": "estimated" },
+      "九州電力送配電": { "last_updated": "2026-03-01", "source": "推定値", "status": "estimated" },
+      "中国電力ネットワーク": { "last_updated": "2026-03-15", "source": "公式PDF", "status": "confirmed" },
+      "東北電力ネットワーク": { "last_updated": "2026-03-15", "source": "公式PDF", "status": "confirmed" }
+    }
   },
   "features": [
     {
