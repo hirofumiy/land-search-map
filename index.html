@@ -3,7 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>蓄電所用地探索マップ</title>
+<title>蓄電所用地探索マップ | BatteryLand</title>
+<!-- 認証 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<!-- 認証ガード: セッション確認 + 試用期間チェック -->
+<script>
+(async function() {
+  const cfg = window.BATTERYLAND_CONFIG;
+  if (!cfg || !cfg.SUPABASE_ANON_KEY || cfg.SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
+    // 設定未完了 → 開発モード（認証スキップ）
+    window.__BATTERYLAND_DEV_MODE = true;
+    return;
+  }
+  const { createClient } = supabase;
+  const sb = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+  window.__sb = sb;
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    location.replace('login.html');
+    return;
+  }
+
+  // demo_users チェック
+  const { data: demoUser } = await sb
+    .from('demo_users')
+    .select('*')
+    .eq('id', session.user.id)
+    .single();
+
+  if (!demoUser) {
+    // 初回ログイン後にdemo_usersがまだない場合 → login.htmlで作成
+    location.replace('login.html');
+    return;
+  }
+
+  // 試用期間チェック
+  if (demoUser.plan === 'trial' || !demoUser.plan) {
+    if (new Date(demoUser.expires_at) < new Date()) {
+      location.replace('expired.html');
+      return;
+    }
+  }
+
+  // 認証OK → ユーザー情報を保持
+  window.__currentUser = { session, demoUser };
+})();
+</script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <!-- PMTiles + Pbf + VectorTile for 登記所備付地図（公図）表示 -->
@@ -200,9 +247,18 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
   <div id="map"></div>
   <div id="panel">
     <div id="panel-header">
-      <h1>蓄電所用地探索マップ</h1>
-      <p>Battery Storage Site Exploration - 440 LLC</p>
-      <p id="data-date" style="font-size:9px; color:#60a5fa; margin-top:2px; line-height:1.3; white-space:pre-line;">📊 空き容量データ: 読込中...</p>
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:8px;">
+        <div style="flex:1;">
+          <h1>🗺 BatteryLand</h1>
+          <p>蓄電所用地探索マップ | 合同会社440</p>
+          <p id="data-date" style="font-size:9px; color:#60a5fa; margin-top:2px; line-height:1.3; white-space:pre-line;">📊 空き容量データ: 読込中...</p>
+        </div>
+        <div id="user-info-bar" style="text-align:right; flex-shrink:0;">
+          <div id="user-display-name" style="font-size:11px; color:#94a3b8; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></div>
+          <div id="trial-remaining" style="font-size:10px; color:#fbbf24; margin-top:2px;"></div>
+          <button id="logout-btn" onclick="doLogout()" style="margin-top:4px; padding:3px 10px; background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.4); color:#fca5a5; border-radius:4px; font-size:10px; cursor:pointer;">ログアウト</button>
+        </div>
+      </div>
       <div id="company-updates" style="display:none; margin-top:4px; padding:4px 8px; background:rgba(255,255,255,0.05); border-radius:4px; font-size:8.5px; color:#94a3b8; line-height:1.5;"></div>
     </div>
     <div id="panel-body">
@@ -1218,6 +1274,46 @@ async function loadData() {
 // ===== Init =====
 buildFilters();
 loadData();
+
+// ===== Auth / ユーザー情報表示 =====
+(function initAuthUI() {
+  const user = window.__currentUser;
+  if (!user) return; // 開発モード or 認証前
+
+  const demoUser = user.demoUser;
+  const nameEl = document.getElementById('user-display-name');
+  const trialEl = document.getElementById('trial-remaining');
+
+  if (nameEl) {
+    nameEl.textContent = demoUser.display_name || demoUser.email?.split('@')[0] || 'ユーザー';
+  }
+
+  if (trialEl && (demoUser.plan === 'trial' || !demoUser.plan)) {
+    const expiresAt = new Date(demoUser.expires_at);
+    const now = new Date();
+    const diffH = Math.max(0, Math.round((expiresAt - now) / (1000 * 60 * 60)));
+    if (diffH > 24) {
+      const diffD = Math.ceil(diffH / 24);
+      trialEl.textContent = `⏳ 試用 残り${diffD}日`;
+    } else if (diffH > 0) {
+      trialEl.textContent = `⏳ 試用 残り${diffH}時間`;
+    } else {
+      trialEl.textContent = '⚠ 試用期間終了';
+      trialEl.style.color = '#ef4444';
+    }
+  } else if (demoUser.plan && demoUser.plan !== 'trial') {
+    if (trialEl) {
+      trialEl.textContent = `✓ ${demoUser.plan === 'premium' ? 'プレミアム' : 'ベーシック'}`;
+      trialEl.style.color = '#34d399';
+    }
+  }
+})();
+
+async function doLogout() {
+  if (!window.__sb) { location.href = 'login.html'; return; }
+  await window.__sb.auth.signOut();
+  location.href = 'login.html';
+}
 </script>
 </body>
 </html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ログイン | BatteryLand</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+  background: #0f172a;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.logo-area {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.logo-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 8px;
+}
+.logo-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: 2px;
+}
+.logo-sub {
+  font-size: 13px;
+  color: #60a5fa;
+  margin-top: 4px;
+  letter-spacing: 1px;
+}
+
+.card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 36px 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+.form-input {
+  width: 100%;
+  padding: 11px 14px;
+  background: #0f172a;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  color: #f8fafc;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+.form-input::placeholder { color: #475569; }
+
+.btn-primary {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+}
+.btn-primary:hover { background: linear-gradient(135deg, #3b82f6, #2563eb); transform: translateY(-1px); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.divider {
+  text-align: center;
+  margin: 20px 0;
+  color: #475569;
+  font-size: 13px;
+  position: relative;
+}
+.divider::before, .divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #334155;
+}
+.divider::before { left: 0; }
+.divider::after { right: 0; }
+
+.link-row {
+  text-align: center;
+  font-size: 14px;
+  color: #94a3b8;
+}
+.link-row a {
+  color: #60a5fa;
+  text-decoration: none;
+  font-weight: 600;
+}
+.link-row a:hover { text-decoration: underline; }
+
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 18px;
+  display: none;
+}
+.alert-error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+.alert-success {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #86efac;
+}
+
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.trial-badge {
+  background: linear-gradient(135deg, #0ea5e9, #6366f1);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.footer-note {
+  font-size: 11px;
+  color: #475569;
+  text-align: center;
+  margin-top: 24px;
+}
+</style>
+</head>
+<body>
+
+<div class="logo-area">
+  <span class="logo-icon">⚡</span>
+  <div class="logo-title">BatteryLand</div>
+  <div class="logo-sub">蓄電所用地探索システム</div>
+</div>
+
+<div class="card">
+  <div style="text-align:center; margin-bottom:20px;">
+    <span class="trial-badge">🎁 3日間無料トライアル実施中</span>
+  </div>
+
+  <h2 class="card-title">ログイン</h2>
+
+  <div class="alert alert-error" id="error-msg"></div>
+  <div class="alert alert-success" id="success-msg"></div>
+
+  <form id="login-form">
+    <div class="form-group">
+      <label class="form-label">メールアドレス</label>
+      <input type="email" id="email" class="form-input" placeholder="your@email.com" required autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label class="form-label">パスワード</label>
+      <input type="password" id="password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+    </div>
+    <button type="submit" class="btn-primary" id="login-btn">ログイン</button>
+  </form>
+
+  <div class="divider">または</div>
+
+  <div class="link-row">
+    アカウントをお持ちでない方は
+    <a href="signup.html">新規登録</a>
+  </div>
+</div>
+
+<div class="footer-note">
+  合同会社440 | © 2026 BatteryLand All rights reserved.
+</div>
+
+<script>
+(async function() {
+  const cfg = window.BATTERYLAND_CONFIG;
+  if (!cfg || !cfg.SUPABASE_ANON_KEY || cfg.SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
+    showError('設定が未完了です。config.js の SUPABASE_ANON_KEY を入力してください。');
+    return;
+  }
+
+  const { createClient } = supabase;
+  const sb = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+
+  // 既にログイン済みなら index.html へ
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    await handlePostLogin(sb, session.user);
+    return;
+  }
+
+  // URLパラメータ確認（signup後のメッセージ等）
+  const params = new URLSearchParams(location.search);
+  if (params.get('registered') === '1') {
+    showSuccess('登録が完了しました。メールを確認してログインしてください。');
+  }
+
+  // ログインフォーム
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const btn = document.getElementById('login-btn');
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>ログイン中...';
+    hideMessages();
+
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      btn.disabled = false;
+      btn.textContent = 'ログイン';
+      const msg = error.message.includes('Invalid') ? 'メールアドレスまたはパスワードが違います' : error.message;
+      showError(msg);
+      return;
+    }
+
+    // ログイン成功 → 試用期間チェック
+    await handlePostLogin(sb, data.user);
+  });
+
+  async function handlePostLogin(sb, authUser) {
+    // demo_users テーブルを確認
+    const { data: demoUser, error } = await sb
+      .from('demo_users')
+      .select('*')
+      .eq('id', authUser.id)
+      .single();
+
+    if (error && error.code === 'PGRST116') {
+      // 初回ログイン → demo_users レコードを作成
+      const now = new Date();
+      const expiresAt = new Date(now.getTime() + cfg.TRIAL_HOURS * 60 * 60 * 1000);
+      await sb.from('demo_users').insert({
+        id: authUser.id,
+        email: authUser.email,
+        display_name: authUser.user_metadata?.display_name || authUser.email.split('@')[0],
+        first_login_at: now.toISOString(),
+        expires_at: expiresAt.toISOString(),
+        plan: 'trial',
+      });
+      location.href = 'index.html';
+      return;
+    }
+
+    if (demoUser) {
+      // 試用期間チェック
+      if (demoUser.plan === 'trial' || !demoUser.plan) {
+        const expiresAt = new Date(demoUser.expires_at);
+        if (expiresAt < new Date()) {
+          location.href = 'expired.html';
+          return;
+        }
+      }
+      // 有効なセッション
+      location.href = 'index.html';
+    } else {
+      // 予期しないエラー
+      location.href = 'index.html';
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('error-msg');
+    el.textContent = '⚠ ' + msg;
+    el.style.display = 'block';
+  }
+  function showSuccess(msg) {
+    const el = document.getElementById('success-msg');
+    el.textContent = '✓ ' + msg;
+    el.style.display = 'block';
+  }
+  function hideMessages() {
+    document.getElementById('error-msg').style.display = 'none';
+    document.getElementById('success-msg').style.display = 'none';
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新規登録 | BatteryLand</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+  background: #0f172a;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.logo-area {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.logo-icon { font-size: 44px; display: block; margin-bottom: 6px; }
+.logo-title { font-size: 26px; font-weight: 800; color: #f8fafc; letter-spacing: 2px; }
+.logo-sub { font-size: 12px; color: #60a5fa; margin-top: 3px; letter-spacing: 1px; }
+
+.card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 32px 40px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.card-title { font-size: 20px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; text-align: center; }
+.card-sub { font-size: 13px; color: #64748b; text-align: center; margin-bottom: 22px; }
+
+.trial-info {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(99, 102, 241, 0.15));
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 22px;
+  text-align: center;
+}
+.trial-info .title { font-size: 15px; font-weight: 700; color: #c4b5fd; margin-bottom: 4px; }
+.trial-info .desc { font-size: 12px; color: #94a3b8; line-height: 1.6; }
+
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 13px; font-weight: 600; color: #94a3b8; margin-bottom: 6px; }
+.form-input {
+  width: 100%;
+  padding: 11px 14px;
+  background: #0f172a;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  color: #f8fafc;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+.form-input::placeholder { color: #475569; }
+.form-hint { font-size: 11px; color: #64748b; margin-top: 4px; }
+
+.btn-primary {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+.btn-primary:hover { background: linear-gradient(135deg, #3b82f6, #2563eb); transform: translateY(-1px); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.terms-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 14px;
+  margin-bottom: 4px;
+}
+.terms-check input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: #3b82f6;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.terms-check label {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.terms-check a { color: #60a5fa; text-decoration: none; }
+.terms-check a:hover { text-decoration: underline; }
+
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  display: none;
+}
+.alert-error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; }
+.alert-success { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.4); color: #86efac; }
+
+.divider { text-align: center; margin: 18px 0; color: #475569; font-size: 13px; position: relative; }
+.divider::before, .divider::after {
+  content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: #334155;
+}
+.divider::before { left: 0; }
+.divider::after { right: 0; }
+
+.link-row { text-align: center; font-size: 14px; color: #94a3b8; }
+.link-row a { color: #60a5fa; text-decoration: none; font-weight: 600; }
+.link-row a:hover { text-decoration: underline; }
+
+.spinner {
+  display: inline-block; width: 18px; height: 18px;
+  border: 2px solid rgba(255,255,255,0.3); border-radius: 50%;
+  border-top-color: #fff; animation: spin 0.8s linear infinite;
+  vertical-align: middle; margin-right: 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.footer-note { font-size: 11px; color: #475569; text-align: center; margin-top: 20px; }
+
+/* 登録完了モーダル */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  display: none; align-items: center; justify-content: center; z-index: 100;
+}
+.modal-overlay.active { display: flex; }
+.modal-card {
+  background: #1e293b; border: 1px solid #334155; border-radius: 16px;
+  padding: 40px; max-width: 380px; width: 90%; text-align: center;
+}
+.modal-icon { font-size: 56px; margin-bottom: 16px; }
+.modal-title { font-size: 22px; font-weight: 800; color: #f8fafc; margin-bottom: 10px; }
+.modal-desc { font-size: 14px; color: #94a3b8; line-height: 1.7; margin-bottom: 24px; }
+.modal-btn {
+  display: inline-block; padding: 12px 32px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff; border: none; border-radius: 8px;
+  font-size: 16px; font-weight: 700; cursor: pointer; text-decoration: none;
+}
+</style>
+</head>
+<body>
+
+<div class="logo-area">
+  <span class="logo-icon">⚡</span>
+  <div class="logo-title">BatteryLand</div>
+  <div class="logo-sub">蓄電所用地探索システム</div>
+</div>
+
+<div class="card">
+  <h2 class="card-title">新規アカウント登録</h2>
+  <p class="card-sub">登録後すぐに3日間無料でご利用いただけます</p>
+
+  <div class="trial-info">
+    <div class="title">🎁 3日間無料トライアル</div>
+    <div class="desc">
+      登録から72時間、すべての機能を無料でお試しいただけます。<br>
+      クレジットカードの登録は不要です。
+    </div>
+  </div>
+
+  <div class="alert alert-error" id="error-msg"></div>
+  <div class="alert alert-success" id="success-msg"></div>
+
+  <form id="signup-form">
+    <div class="form-group">
+      <label class="form-label">お名前</label>
+      <input type="text" id="display-name" class="form-input" placeholder="山田 太郎" required autocomplete="name">
+      <p class="form-hint">ひろさんへの通知に使用されます</p>
+    </div>
+    <div class="form-group">
+      <label class="form-label">メールアドレス</label>
+      <input type="email" id="email" class="form-input" placeholder="your@email.com" required autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label class="form-label">パスワード</label>
+      <input type="password" id="password" class="form-input" placeholder="8文字以上" required minlength="8" autocomplete="new-password">
+      <p class="form-hint">8文字以上で設定してください</p>
+    </div>
+    <div class="form-group">
+      <label class="form-label">パスワード（確認）</label>
+      <input type="password" id="password-confirm" class="form-input" placeholder="••••••••" required autocomplete="new-password">
+    </div>
+
+    <div class="terms-check">
+      <input type="checkbox" id="terms-agree" required>
+      <label for="terms-agree">
+        <a href="#" onclick="return false;">利用規約</a>および
+        <a href="#" onclick="return false;">プライバシーポリシー</a>に同意します
+      </label>
+    </div>
+
+    <button type="submit" class="btn-primary" id="signup-btn">無料登録する</button>
+  </form>
+
+  <div class="divider">すでにアカウントをお持ちの方</div>
+
+  <div class="link-row">
+    <a href="login.html">ログインはこちら</a>
+  </div>
+</div>
+
+<div class="footer-note">
+  合同会社440 | © 2026 BatteryLand All rights reserved.
+</div>
+
+<!-- 登録完了モーダル -->
+<div class="modal-overlay" id="success-modal">
+  <div class="modal-card">
+    <div class="modal-icon">🎉</div>
+    <div class="modal-title">登録完了！</div>
+    <div class="modal-desc" id="modal-desc">
+      登録が完了しました。<br>
+      さっそくBatteryLandをお試しください。
+    </div>
+    <a href="login.html" class="modal-btn">ログインして始める</a>
+  </div>
+</div>
+
+<script>
+(async function() {
+  const cfg = window.BATTERYLAND_CONFIG;
+  if (!cfg || !cfg.SUPABASE_ANON_KEY || cfg.SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
+    showError('設定が未完了です。config.js の SUPABASE_ANON_KEY を入力してください。');
+    document.getElementById('signup-btn').disabled = true;
+    return;
+  }
+
+  const { createClient } = supabase;
+  const sb = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+
+  // 既にログイン済みなら index.html へ
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) { location.href = 'index.html'; return; }
+
+  // 登録フォーム
+  document.getElementById('signup-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('display-name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
+    const btn = document.getElementById('signup-btn');
+
+    // バリデーション
+    if (!name) { showError('お名前を入力してください'); return; }
+    if (password.length < 8) { showError('パスワードは8文字以上で設定してください'); return; }
+    if (password !== passwordConfirm) { showError('パスワードが一致しません'); return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>登録中...';
+    hideMessages();
+
+    // Supabase 新規登録
+    const { data, error } = await sb.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { display_name: name },
+        // メール確認なし（Supabase Dashboard で Confirm email をOFFに）
+      }
+    });
+
+    if (error) {
+      btn.disabled = false;
+      btn.textContent = '無料登録する';
+      if (error.message.includes('already registered') || error.message.includes('already been registered')) {
+        showError('このメールアドレスは既に登録されています。ログインしてください。');
+      } else {
+        showError('登録に失敗しました: ' + error.message);
+      }
+      return;
+    }
+
+    // 登録成功 → LINE通知（Edge Function経由）
+    try {
+      await notifyLine(sb, { name, email });
+    } catch (err) {
+      console.warn('LINE通知に失敗しました（登録は完了）:', err);
+    }
+
+    // 成功モーダル表示
+    const isEmailConfirm = !data.session; // セッションがない場合はメール確認が必要
+    const modalDesc = document.getElementById('modal-desc');
+    if (isEmailConfirm) {
+      modalDesc.innerHTML = `
+        <strong style="color:#f8fafc">${name}</strong>さん、ありがとうございます！<br><br>
+        確認メールを送信しました。<br>
+        メールのリンクをクリックしてからログインしてください。
+      `;
+    } else {
+      modalDesc.innerHTML = `
+        <strong style="color:#f8fafc">${name}</strong>さん、ありがとうございます！<br><br>
+        登録が完了しました。<br>
+        3日間の無料トライアルをお楽しみください。
+      `;
+    }
+    document.getElementById('success-modal').classList.add('active');
+  });
+
+  // LINE通知 (Supabase Edge Function を呼び出す)
+  async function notifyLine(sb, { name, email }) {
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      const headers = { 'Content-Type': 'application/json' };
+      // Edge Function が SUPABASE_URL/functions/v1/notify-line で動く
+      const res = await fetch(cfg.SUPABASE_URL + '/functions/v1/notify-line', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ name, email }),
+      });
+      if (!res.ok) console.warn('LINE通知 HTTP error:', res.status);
+    } catch (err) {
+      console.warn('LINE通知エラー:', err);
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('error-msg');
+    el.textContent = '⚠ ' + msg;
+    el.style.display = 'block';
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  function hideMessages() {
+    document.getElementById('error-msg').style.display = 'none';
+    document.getElementById('success-msg').style.display = 'none';
+  }
+})();
+</script>
+</body>
+</html>
