@@ -55,7 +55,7 @@ body {
 .plans-container {
   display: flex;
   gap: 24px;
-  max-width: 860px;
+  max-width: 1160px;
   margin: 0 auto 48px;
   justify-content: center;
   flex-wrap: wrap;
@@ -152,22 +152,30 @@ body {
   border: none;
   letter-spacing: 0.5px;
 }
-.btn-plan-basic {
+.btn-plan-lite {
   background: #1e293b;
   border: 2px solid #475569;
   color: #e2e8f0;
 }
-.btn-plan-basic:hover {
+.btn-plan-lite:hover {
   border-color: #60a5fa;
   color: #60a5fa;
   background: rgba(59, 130, 246, 0.1);
 }
-.btn-plan-premium {
+.btn-plan-standard {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: #fff;
 }
-.btn-plan-premium:hover {
+.btn-plan-standard:hover {
   background: linear-gradient(135deg, #818cf8, #a78bfa);
+  transform: translateY(-1px);
+}
+.btn-plan-enterprise {
+  background: linear-gradient(135deg, #0f766e, #0d9488);
+  color: #fff;
+}
+.btn-plan-enterprise:hover {
+  background: linear-gradient(135deg, #14b8a6, #0f766e);
   transform: translateY(-1px);
 }
 
@@ -270,50 +278,73 @@ body {
 <!-- 料金プラン -->
 <div class="plans-container">
 
-  <!-- ベーシックプラン -->
+  <!-- Liteプラン -->
   <div class="plan-card">
-    <div class="plan-name">ベーシックプラン</div>
+    <div class="plan-name">Lite</div>
     <div class="plan-price">
-      <span class="amount">¥9,800</span>
+      <span class="amount">¥98,000</span>
       <span class="unit">/ 月</span>
     </div>
-    <div class="plan-tax">税込 ¥10,780 / 月</div>
-    <p class="plan-desc">蓄電所候補地の基本的な調査・絞り込みに最適なプランです。</p>
+    <div class="plan-tax">税別 / 税込 ¥107,800</div>
+    <p class="plan-desc">蓄電所候補地の基本的な調査・絞り込みからはじめたい方に。</p>
     <ul class="plan-features">
       <li><span class="check">✓</span> 用地候補マップ（全国）</li>
       <li><span class="check">✓</span> 変電所・空き容量データ</li>
       <li><span class="check">✓</span> 地番クリック / 公図表示</li>
       <li><span class="check">✓</span> 登記情報へのディープリンク</li>
       <li><span class="check">✓</span> 毎週自動更新（物件情報）</li>
-      <li><span class="cross">✗</span> <span style="color:#64748b">APIアクセス</span></li>
       <li><span class="cross">✗</span> <span style="color:#64748b">複数ユーザー共有</span></li>
+      <li><span class="cross">✗</span> <span style="color:#64748b">優先サポート</span></li>
     </ul>
-    <button class="btn-plan btn-plan-basic" id="btn-basic" onclick="selectPlan('basic')">
-      ベーシックプランを選択
+    <button class="btn-plan btn-plan-lite" onclick="selectPlan('lite')">
+      Liteプランを選択
     </button>
   </div>
 
-  <!-- プレミアムプラン -->
+  <!-- Standardプラン -->
   <div class="plan-card popular">
     <div class="popular-badge">⭐ おすすめ</div>
-    <div class="plan-name">プレミアムプラン</div>
+    <div class="plan-name">Standard</div>
     <div class="plan-price">
-      <span class="amount">¥29,800</span>
+      <span class="amount">¥198,000</span>
       <span class="unit">/ 月</span>
     </div>
-    <div class="plan-tax">税込 ¥32,780 / 月</div>
-    <p class="plan-desc">本格的な事業展開をサポートする全機能が使える上位プランです。</p>
+    <div class="plan-tax">税別 / 税込 ¥217,800</div>
+    <p class="plan-desc">本格的な用地調査・事業開発を推進するチーム向けプランです。</p>
     <ul class="plan-features">
-      <li><span class="check">✓</span> ベーシックの全機能</li>
-      <li><span class="check">✓</span> APIアクセス（外部連携）</li>
-      <li><span class="check">✓</span> 複数ユーザー共有（5名まで）</li>
+      <li><span class="check">✓</span> Liteの全機能</li>
+      <li><span class="check">✓</span> 複数ユーザー共有（3名まで）</li>
       <li><span class="check">✓</span> 優先サポート（メール）</li>
-      <li><span class="check">✓</span> カスタムデータリクエスト</li>
       <li><span class="check">✓</span> 毎月1日・15日・30日 変電所更新</li>
       <li><span class="check">✓</span> 新機能 先行アクセス</li>
+      <li><span class="cross">✗</span> <span style="color:#64748b">専任サポート</span></li>
+      <li><span class="cross">✗</span> <span style="color:#64748b">カスタム開発</span></li>
     </ul>
-    <button class="btn-plan btn-plan-premium" id="btn-premium" onclick="selectPlan('premium')">
-      プレミアムプランを選択
+    <button class="btn-plan btn-plan-standard" onclick="selectPlan('standard')">
+      Standardプランを選択
+    </button>
+  </div>
+
+  <!-- Enterpriseプラン -->
+  <div class="plan-card">
+    <div class="plan-name">Enterprise</div>
+    <div class="plan-price">
+      <span class="amount">¥500,000</span>
+      <span class="unit">/ 月</span>
+    </div>
+    <div class="plan-tax">税別 / 税込 ¥550,000</div>
+    <p class="plan-desc">大規模開発・法人向けの全機能＋専任サポート付きプランです。</p>
+    <ul class="plan-features">
+      <li><span class="check">✓</span> Standardの全機能</li>
+      <li><span class="check">✓</span> 複数ユーザー共有（無制限）</li>
+      <li><span class="check">✓</span> 専任サポート担当</li>
+      <li><span class="check">✓</span> カスタム開発・データ対応</li>
+      <li><span class="check">✓</span> APIアクセス（外部連携）</li>
+      <li><span class="check">✓</span> 請求書払い対応</li>
+      <li><span class="check">✓</span> SLA保証</li>
+    </ul>
+    <button class="btn-plan btn-plan-enterprise" onclick="selectPlan('enterprise')">
+      Enterpriseに問い合わせる
     </button>
   </div>
 
@@ -439,21 +470,25 @@ body {
 
 function selectPlan(plan) {
   const cfg = window.BATTERYLAND_CONFIG;
-  let url;
 
-  if (plan === 'basic') {
-    url = cfg.STRIPE_BASIC_PAYMENT_LINK;
-  } else {
-    url = cfg.STRIPE_PREMIUM_PAYMENT_LINK;
-  }
-
-  if (!url || url.includes('YOUR')) {
-    alert('Stripe決済リンクが設定されていません。config.js を確認してください。\n\n【設定方法】\nStripe Dashboard → Payment Links → 新しいリンクを作成\n作成したURLを config.js の STRIPE_BASIC_PAYMENT_LINK / STRIPE_PREMIUM_PAYMENT_LINK に入力してください。');
+  // Enterpriseはお問い合わせへ
+  if (plan === 'enterprise') {
+    location.href = 'mailto:info@440marketing.biz?subject=BatteryLand%20Enterprise%E3%83%97%E3%83%A9%E3%83%B3%20%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B&body=%E3%81%8A%E5%90%8D%E5%89%8D%3A%0A%E4%BC%9A%E7%A4%BE%E5%90%8D%3A%0A%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B%E5%86%85%E5%AE%B9%3A';
     return;
   }
 
-  // success_url / cancel_url をURLパラメータで渡すことで、
-  // Stripe Payment Links の返却先を制御できます
+  let url;
+  if (plan === 'lite') {
+    url = cfg.STRIPE_LITE_PAYMENT_LINK;
+  } else if (plan === 'standard') {
+    url = cfg.STRIPE_STANDARD_PAYMENT_LINK;
+  }
+
+  if (!url || url.includes('YOUR')) {
+    alert('現在、オンライン決済の準備中です。\nお申し込みはメールにてお問い合わせください。\n\ninfo@440marketing.biz');
+    return;
+  }
+
   const returnUrl = encodeURIComponent(location.origin + '/expired.html?success=1');
   location.href = url + '?return_url=' + returnUrl;
 }
