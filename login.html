@@ -243,10 +243,13 @@ body {
     return;
   }
 
-  // URLパラメータ確認（signup後のメッセージ等）
+  // URLパラメータ確認
   const params = new URLSearchParams(location.search);
   if (params.get('registered') === '1') {
-    showSuccess('登録が完了しました。メールを確認してログインしてください。');
+    showSuccess('登録が完了しました。ログインしてください。');
+  }
+  if (params.get('reason') === 'session_expired') {
+    showError('別の端末でログインされたため、このセッションは終了しました。再度ログインしてください。');
   }
 
   // ログインフォーム
@@ -275,6 +278,9 @@ body {
   });
 
   async function handlePostLogin(sb, authUser) {
+    // ★ 新しいsession_tokenを生成（ログインのたびに更新 → 他端末を追い出す）
+    const sessionToken = crypto.randomUUID();
+
     // demo_users テーブルを確認
     const { data: demoUser, error } = await sb
       .from('demo_users')
@@ -293,7 +299,9 @@ body {
         first_login_at: now.toISOString(),
         expires_at: expiresAt.toISOString(),
         plan: 'trial',
+        session_token: sessionToken,
       });
+      localStorage.setItem('bl_session_token', sessionToken);
       location.href = 'index.html';
       return;
     }
@@ -307,10 +315,13 @@ body {
           return;
         }
       }
-      // 有効なセッション
+      // ★ session_tokenをDBに保存（他端末のトークンを上書きして無効化）
+      await sb.from('demo_users')
+        .update({ session_token: sessionToken })
+        .eq('id', authUser.id);
+      localStorage.setItem('bl_session_token', sessionToken);
       location.href = 'index.html';
     } else {
-      // 予期しないエラー
       location.href = 'index.html';
     }
   }

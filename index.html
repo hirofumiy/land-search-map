@@ -7,12 +7,11 @@
 <!-- 認証 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
-<!-- 認証ガード: セッション確認 + 試用期間チェック -->
+<!-- 認証ガード: セッション確認 + 試用期間チェック + シングルセッション制限 -->
 <script>
 (async function() {
   const cfg = window.BATTERYLAND_CONFIG;
   if (!cfg || !cfg.SUPABASE_ANON_KEY || cfg.SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
-    // 設定未完了 → 開発モード（認証スキップ）
     window.__BATTERYLAND_DEV_MODE = true;
     return;
   }
@@ -34,7 +33,6 @@
     .single();
 
   if (!demoUser) {
-    // 初回ログイン後にdemo_usersがまだない場合 → login.htmlで作成
     location.replace('login.html');
     return;
   }
@@ -47,8 +45,54 @@
     }
   }
 
-  // 認証OK → ユーザー情報を保持
+  // ★ シングルセッションチェック（ページ読み込み時）
+  const localToken = localStorage.getItem('bl_session_token');
+  if (demoUser.session_token && localToken !== demoUser.session_token) {
+    // 別端末でログインされた → 強制ログアウト
+    await sb.auth.signOut();
+    localStorage.removeItem('bl_session_token');
+    location.replace('login.html?reason=session_expired');
+    return;
+  }
+
+  // 認証OK
   window.__currentUser = { session, demoUser };
+
+  // ★ 5分ごとにシングルセッションを再チェック（使用中に別端末ログインを検知）
+  window.__sessionCheckInterval = setInterval(async () => {
+    try {
+      const { data: latest } = await sb
+        .from('demo_users')
+        .select('session_token, expires_at, plan')
+        .eq('id', session.user.id)
+        .single();
+
+      if (!latest) return;
+
+      const currentToken = localStorage.getItem('bl_session_token');
+
+      // 試用期間が終了していないか再確認
+      if (latest.plan === 'trial' && new Date(latest.expires_at) < new Date()) {
+        clearInterval(window.__sessionCheckInterval);
+        location.replace('expired.html');
+        return;
+      }
+
+      // session_tokenが変わっていたら別端末でログインされた
+      if (latest.session_token && currentToken !== latest.session_token) {
+        clearInterval(window.__sessionCheckInterval);
+        // 穏やかに通知してからリダイレクト
+        if (confirm('別の端末でログインされました。このページを終了します。')) {
+          // OK押した場合
+        }
+        await sb.auth.signOut();
+        localStorage.removeItem('bl_session_token');
+        location.replace('login.html?reason=session_expired');
+      }
+    } catch (e) {
+      console.warn('セッションチェックエラー:', e);
+    }
+  }, 5 * 60 * 1000); // 5分ごと
 })();
 </script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />

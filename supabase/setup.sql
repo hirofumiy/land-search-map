@@ -23,6 +23,8 @@ ALTER TABLE demo_users ADD COLUMN IF NOT EXISTS first_login_at timestamptz DEFAU
 ALTER TABLE demo_users ADD COLUMN IF NOT EXISTS plan text NOT NULL DEFAULT 'trial';
 ALTER TABLE demo_users ADD COLUMN IF NOT EXISTS stripe_customer_id text;
 ALTER TABLE demo_users ADD COLUMN IF NOT EXISTS stripe_subscription_id text;
+-- ★ シングルセッション制限用トークン（ログインのたびに新しいUUIDを発行）
+ALTER TABLE demo_users ADD COLUMN IF NOT EXISTS session_token uuid;
 
 -- 試用期間を24時間 → 72時間に変更（既存レコードを更新）
 UPDATE demo_users
