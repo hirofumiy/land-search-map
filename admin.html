@@ -689,11 +689,10 @@ tbody tr { cursor: pointer; }
       users.forEach(user => {
         const tr = document.createElement('tr');
 
-        // 試用残り時間の計算
+        // 試用残り時間の計算（expires_atを使用）
         let trialCell = '-';
-        if (user.trial_started_at) {
-          const trialEnd = new Date(user.trial_started_at);
-          trialEnd.setHours(trialEnd.getHours() + (cfg.TRIAL_HOURS || 72));
+        if (user.expires_at && (!user.plan || user.plan === 'trial')) {
+          const trialEnd = new Date(user.expires_at);
           const now = new Date();
           const diffMs = trialEnd - now;
 
@@ -704,6 +703,8 @@ tbody tr { cursor: pointer; }
           } else {
             trialCell = `<span class="trial-expired">終了済み</span>`;
           }
+        } else if (user.expires_at && user.plan !== 'trial') {
+          trialCell = '<span style="color:#475569">-</span>';
         }
 
         // プランバッジ
