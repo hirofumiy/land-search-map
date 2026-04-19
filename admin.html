@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理者ダッシュボード | BatteryLand</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+  background: #0f172a;
+  min-height: 100vh;
+  color: #e2e8f0;
+}
+
+/* ヘッダー */
+.header {
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.header-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: 1px;
+}
+.admin-badge {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+}
+.btn-logout {
+  padding: 8px 18px;
+  background: transparent;
+  border: 1px solid #475569;
+  color: #94a3b8;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-logout:hover {
+  border-color: #ef4444;
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* メインコンテンツ */
+.main {
+  padding: 28px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* タブ */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  background: #1e293b;
+  padding: 6px;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  width: fit-content;
+}
+.tab-btn {
+  padding: 10px 22px;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.tab-btn:hover { color: #94a3b8; background: rgba(255,255,255,0.04); }
+.tab-btn.active {
+  background: #3b82f6;
+  color: #fff;
+}
+
+/* タブパネル */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* パネルヘッダー */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.panel-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+.panel-count {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* テーブル */
+.table-wrapper {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+thead {
+  background: #0f172a;
+}
+th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  white-space: nowrap;
+}
+td {
+  padding: 13px 16px;
+  font-size: 14px;
+  color: #cbd5e1;
+  border-top: 1px solid #1e293b;
+  vertical-align: middle;
+}
+tr:hover td { background: rgba(59, 130, 246, 0.05); }
+
+/* バッジ */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.badge-trial { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
+.badge-active { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+.badge-expired { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+.badge-prospect { background: rgba(234, 179, 8, 0.2); color: #fde047; }
+.badge-contracted { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+.badge-tier1 { background: rgba(100, 116, 139, 0.3); color: #94a3b8; }
+.badge-tier2 { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+.badge-tier3 { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; }
+
+/* スピナー */
+.loading-wrap {
+  text-align: center;
+  padding: 60px;
+  color: #64748b;
+}
+.spinner {
+  display: inline-block; width: 28px; height: 28px;
+  border: 3px solid rgba(255,255,255,0.1); border-radius: 50%;
+  border-top-color: #3b82f6; animation: spin 0.8s linear infinite;
+  margin-bottom: 12px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 代理店登録フォーム */
+.form-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 28px 32px;
+  max-width: 580px;
+}
+.form-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 20px;
+}
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: #0f172a;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  color: #f8fafc;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+.form-input::placeholder { color: #475569; }
+.form-hint { font-size: 11px; color: #64748b; margin-top: 4px; }
+.code-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+.code-badge {
+  background: #0f172a;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: monospace;
+  font-size: 16px;
+  color: #34d399;
+  letter-spacing: 2px;
+  flex: 1;
+}
+.btn-regen {
+  padding: 10px 14px;
+  background: #334155;
+  border: 1px solid #475569;
+  color: #94a3b8;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-regen:hover { background: #475569; color: #f8fafc; }
+
+.btn-primary {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  transform: translateY(-1px);
+}
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  display: none;
+}
+.alert-error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; }
+.alert-success { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.4); color: #86efac; }
+
+/* モーダル */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+.modal-overlay.active { display: flex; }
+.modal-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.modal-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #f8fafc;
+}
+.modal-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 4px;
+}
+.modal-close {
+  background: transparent;
+  border: 1px solid #475569;
+  color: #94a3b8;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.modal-close:hover { border-color: #ef4444; color: #fca5a5; background: rgba(239,68,68,0.1); }
+
+.modal-section {
+  margin-bottom: 24px;
+}
+.modal-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #334155;
+}
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.detail-item {}
+.detail-label { font-size: 11px; color: #64748b; margin-bottom: 3px; }
+.detail-value { font-size: 14px; color: #f8fafc; font-weight: 500; }
+
+/* 代理店行クリック */
+tbody tr { cursor: pointer; }
+
+/* 統計カード */
+.stats-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.stat-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 16px 20px;
+  min-width: 140px;
+}
+.stat-label { font-size: 12px; color: #64748b; margin-bottom: 4px; }
+.stat-value { font-size: 26px; font-weight: 800; color: #f8fafc; }
+.stat-sub { font-size: 12px; color: #64748b; margin-top: 2px; }
+
+/* 紹介コード表示 */
+.ref-code {
+  font-family: monospace;
+  font-size: 13px;
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* テーブル内の試用残り時間 */
+.trial-time { font-size: 12px; color: #fbbf24; }
+.trial-expired { font-size: 12px; color: #ef4444; }
+</style>
+</head>
+<body>
+
+<!-- ヘッダー -->
+<div class="header">
+  <div class="header-left">
+    <span style="font-size:22px;">⚡</span>
+    <span class="header-title">BatteryLand 管理者ダッシュボード</span>
+    <span class="admin-badge">ADMIN</span>
+  </div>
+  <button class="btn-logout" id="logout-btn">ログアウト</button>
+</div>
+
+<!-- メイン -->
+<div class="main">
+
+  <!-- タブ -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="users">👥 ユーザー管理</button>
+    <button class="tab-btn" data-tab="partners">🤝 代理店管理</button>
+    <button class="tab-btn" data-tab="register">➕ 代理店新規登録</button>
+  </div>
+
+  <!-- タブ1: ユーザー管理 -->
+  <div class="tab-panel active" id="tab-users">
+    <div class="panel-header">
+      <div class="panel-title">ユーザー一覧</div>
+      <div class="panel-count" id="user-count">読み込み中...</div>
+    </div>
+    <div class="stats-row" id="user-stats">
+      <div class="stat-card">
+        <div class="stat-label">総ユーザー数</div>
+        <div class="stat-value" id="stat-total-users">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">トライアル中</div>
+        <div class="stat-value" id="stat-trial-users">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">有料ユーザー</div>
+        <div class="stat-value" id="stat-paid-users">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">トライアル終了</div>
+        <div class="stat-value" id="stat-expired-users">-</div>
+      </div>
+    </div>
+    <div class="table-wrapper">
+      <div class="loading-wrap" id="users-loading">
+        <div class="spinner"></div>
+        <div>読み込み中...</div>
+      </div>
+      <table id="users-table" style="display:none;">
+        <thead>
+          <tr>
+            <th>メールアドレス</th>
+            <th>表示名</th>
+            <th>プラン</th>
+            <th>試用残り時間</th>
+            <th>紹介コード</th>
+            <th>登録日</th>
+          </tr>
+        </thead>
+        <tbody id="users-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- タブ2: 代理店管理 -->
+  <div class="tab-panel" id="tab-partners">
+    <div class="panel-header">
+      <div class="panel-title">代理店一覧</div>
+      <div class="panel-count" id="partner-count">読み込み中...</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">総代理店数</div>
+        <div class="stat-value" id="stat-total-partners">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">契約済み</div>
+        <div class="stat-value" id="stat-contracted-partners">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">商談中</div>
+        <div class="stat-value" id="stat-prospect-partners">-</div>
+      </div>
+    </div>
+    <div class="table-wrapper">
+      <div class="loading-wrap" id="partners-loading">
+        <div class="spinner"></div>
+        <div>読み込み中...</div>
+      </div>
+      <table id="partners-table" style="display:none;">
+        <thead>
+          <tr>
+            <th>会社名</th>
+            <th>担当者</th>
+            <th>紹介コード</th>
+            <th>Tier</th>
+            <th>紹介数</th>
+            <th>契約状況</th>
+            <th>登録日</th>
+          </tr>
+        </thead>
+        <tbody id="partners-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- タブ3: 代理店新規登録 -->
+  <div class="tab-panel" id="tab-register">
+    <div class="panel-header">
+      <div class="panel-title">代理店新規登録</div>
+    </div>
+    <div class="form-card">
+      <h3>代理店情報を入力</h3>
+
+      <div class="alert alert-error" id="reg-error"></div>
+      <div class="alert alert-success" id="reg-success"></div>
+
+      <div class="form-group">
+        <label class="form-label">会社名 <span style="color:#ef4444">*</span></label>
+        <input type="text" id="reg-company" class="form-input" placeholder="株式会社〇〇エナジー" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">担当者名</label>
+        <input type="text" id="reg-contact" class="form-input" placeholder="山田 太郎">
+      </div>
+      <div class="form-group">
+        <label class="form-label">担当者メール <span style="color:#ef4444">*</span></label>
+        <input type="email" id="reg-email" class="form-input" placeholder="contact@example.com" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">紹介コード（自動生成）</label>
+        <div class="code-preview">
+          <div class="code-badge" id="gen-code">--------</div>
+          <button class="btn-regen" id="regen-btn" type="button">再生成</button>
+        </div>
+        <p class="form-hint">8文字の英数字コードです。代理店がユーザーに共有します。</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">メモ</label>
+        <textarea id="reg-notes" class="form-input" rows="3" placeholder="商談経緯・備考など..."></textarea>
+      </div>
+
+      <button class="btn-primary" id="reg-submit-btn">代理店を登録する</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- 代理店詳細モーダル -->
+<div class="modal-overlay" id="partner-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-company-name">会社名</div>
+        <div class="modal-subtitle" id="modal-company-sub"></div>
+      </div>
+      <button class="modal-close" id="modal-close-btn">✕</button>
+    </div>
+
+    <!-- 基本情報 -->
+    <div class="modal-section">
+      <div class="modal-section-title">基本情報</div>
+      <div class="detail-grid" id="modal-basic-info"></div>
+    </div>
+
+    <!-- 紹介実績 -->
+    <div class="modal-section">
+      <div class="modal-section-title">紹介実績</div>
+      <div class="table-wrapper" style="margin-top:0;">
+        <table>
+          <thead>
+            <tr>
+              <th>ユーザー</th>
+              <th>ステータス</th>
+              <th>プラン</th>
+              <th>月額</th>
+              <th>紹介日</th>
+            </tr>
+          </thead>
+          <tbody id="modal-referrals-tbody">
+            <tr><td colspan="5" style="text-align:center;color:#64748b;">読み込み中...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 振込先情報 -->
+    <div class="modal-section">
+      <div class="modal-section-title">振込先情報</div>
+      <div class="detail-grid" id="modal-bank-info"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(async function() {
+  const cfg = window.BATTERYLAND_CONFIG;
+
+  // Supabase設定チェック
+  if (!cfg || !cfg.SUPABASE_ANON_KEY || cfg.SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
+    alert('config.js の設定が未完了です。');
+    return;
+  }
+
+  const { createClient } = supabase;
+  const sb = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+
+  // =====================================================
+  // 認証チェック: ページロード時に管理者確認
+  // =====================================================
+  const { data: { session } } = await sb.auth.getSession();
+
+  if (!session) {
+    // 未ログイン → ログインページへ
+    location.href = 'login.html';
+    return;
+  }
+
+  const userEmail = session.user.email;
+
+  // 管理者メールアドレス確認
+  if (userEmail !== cfg.ADMIN_EMAIL && userEmail !== cfg.ADMIN_EMAIL_2) {
+    // 管理者でない場合 → トップへリダイレクト
+    alert('管理者専用ページです。アクセス権限がありません。');
+    location.href = 'index.html';
+    return;
+  }
+
+  // =====================================================
+  // ログアウト
+  // =====================================================
+  document.getElementById('logout-btn').addEventListener('click', async () => {
+    await sb.auth.signOut();
+    location.href = 'login.html';
+  });
+
+  // =====================================================
+  // タブ切り替え
+  // =====================================================
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.dataset.tab;
+
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabPanels.forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      document.getElementById('tab-' + targetTab).classList.add('active');
+
+      // タブ切り替え時にデータ読み込み
+      if (targetTab === 'partners') loadPartners();
+    });
+  });
+
+  // =====================================================
+  // ユーザー一覧読み込み
+  // =====================================================
+  async function loadUsers() {
+    try {
+      const { data: users, error } = await sb
+        .from('demo_users')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // 統計更新
+      const totalUsers = users.length;
+      const trialUsers = users.filter(u => !u.plan || u.plan === 'trial').length;
+      const paidUsers = users.filter(u => u.plan && u.plan !== 'trial' && u.plan !== 'expired').length;
+      const expiredUsers = users.filter(u => u.plan === 'expired').length;
+
+      document.getElementById('stat-total-users').textContent = totalUsers;
+      document.getElementById('stat-trial-users').textContent = trialUsers;
+      document.getElementById('stat-paid-users').textContent = paidUsers;
+      document.getElementById('stat-expired-users').textContent = expiredUsers;
+      document.getElementById('user-count').textContent = `全${totalUsers}件`;
+
+      // テーブル描画
+      const tbody = document.getElementById('users-tbody');
+      tbody.innerHTML = '';
+
+      users.forEach(user => {
+        const tr = document.createElement('tr');
+
+        // 試用残り時間の計算
+        let trialCell = '-';
+        if (user.trial_started_at) {
+          const trialEnd = new Date(user.trial_started_at);
+          trialEnd.setHours(trialEnd.getHours() + (cfg.TRIAL_HOURS || 72));
+          const now = new Date();
+          const diffMs = trialEnd - now;
+
+          if (diffMs > 0) {
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffMins = Math.floor((diffMs % 3600000) / 60000);
+            trialCell = `<span class="trial-time">${diffHours}時間${diffMins}分</span>`;
+          } else {
+            trialCell = `<span class="trial-expired">終了済み</span>`;
+          }
+        }
+
+        // プランバッジ
+        const plan = user.plan || 'trial';
+        let planBadge;
+        if (plan === 'trial') planBadge = `<span class="badge badge-trial">TRIAL</span>`;
+        else if (plan === 'expired') planBadge = `<span class="badge badge-expired">期限切れ</span>`;
+        else planBadge = `<span class="badge badge-active">${plan.toUpperCase()}</span>`;
+
+        // 紹介コード
+        const refCode = user.referral_code
+          ? `<span class="ref-code">${user.referral_code}</span>`
+          : '<span style="color:#475569">-</span>';
+
+        // 登録日
+        const createdAt = user.created_at
+          ? new Date(user.created_at).toLocaleDateString('ja-JP')
+          : '-';
+
+        tr.innerHTML = `
+          <td>${escapeHtml(user.email || '-')}</td>
+          <td>${escapeHtml(user.display_name || '-')}</td>
+          <td>${planBadge}</td>
+          <td>${trialCell}</td>
+          <td>${refCode}</td>
+          <td>${createdAt}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // ローディング非表示・テーブル表示
+      document.getElementById('users-loading').style.display = 'none';
+      document.getElementById('users-table').style.display = 'table';
+
+    } catch (err) {
+      console.error('ユーザー読み込みエラー:', err);
+      document.getElementById('users-loading').innerHTML =
+        '<div style="color:#fca5a5;">読み込みに失敗しました: ' + err.message + '</div>';
+    }
+  }
+
+  // =====================================================
+  // 代理店一覧読み込み
+  // =====================================================
+  let partnersData = [];
+
+  async function loadPartners() {
+    // ローディング状態に戻す（再読み込み対応）
+    document.getElementById('partners-loading').style.display = 'block';
+    document.getElementById('partners-table').style.display = 'none';
+
+    try {
+      const { data: partners, error } = await sb
+        .from('partners')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      partnersData = partners;
+
+      // 統計
+      const total = partners.length;
+      const contracted = partners.filter(p => p.contract_status === 'contracted').length;
+      const prospect = partners.filter(p => p.contract_status === 'prospect').length;
+
+      document.getElementById('stat-total-partners').textContent = total;
+      document.getElementById('stat-contracted-partners').textContent = contracted;
+      document.getElementById('stat-prospect-partners').textContent = prospect;
+      document.getElementById('partner-count').textContent = `全${total}件`;
+
+      // テーブル描画
+      const tbody = document.getElementById('partners-tbody');
+      tbody.innerHTML = '';
+
+      partners.forEach(partner => {
+        const tr = document.createElement('tr');
+
+        // Tierバッジ
+        const tierBadge = `<span class="badge badge-tier${partner.tier || 1}">Tier${partner.tier || 1}</span>`;
+
+        // 契約状況バッジ
+        const statusMap = {
+          'prospect': '<span class="badge badge-prospect">商談中</span>',
+          'contracted': '<span class="badge badge-contracted">契約済み</span>',
+          'inactive': '<span class="badge badge-expired">停止中</span>',
+        };
+        const statusBadge = statusMap[partner.contract_status] || partner.contract_status;
+
+        // 登録日
+        const createdAt = partner.created_at
+          ? new Date(partner.created_at).toLocaleDateString('ja-JP')
+          : '-';
+
+        tr.innerHTML = `
+          <td><strong style="color:#f8fafc;">${escapeHtml(partner.company_name)}</strong></td>
+          <td>${escapeHtml(partner.contact_name || '-')}</td>
+          <td><span class="ref-code">${escapeHtml(partner.referral_code)}</span></td>
+          <td>${tierBadge}</td>
+          <td>${partner.active_referrals || 0}社</td>
+          <td>${statusBadge}</td>
+          <td>${createdAt}</td>
+        `;
+
+        // 行クリックで詳細モーダル
+        tr.addEventListener('click', () => openPartnerModal(partner));
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('partners-loading').style.display = 'none';
+      document.getElementById('partners-table').style.display = 'table';
+
+    } catch (err) {
+      console.error('代理店読み込みエラー:', err);
+      document.getElementById('partners-loading').innerHTML =
+        '<div style="color:#fca5a5;">読み込みに失敗しました: ' + err.message + '</div>';
+    }
+  }
+
+  // =====================================================
+  // 代理店詳細モーダル
+  // =====================================================
+  async function openPartnerModal(partner) {
+    // タイトル設定
+    document.getElementById('modal-company-name').textContent = partner.company_name;
+    document.getElementById('modal-company-sub').textContent =
+      `紹介コード: ${partner.referral_code} | ${partner.contact_email}`;
+
+    // 基本情報
+    const commissionRate = getTierCommission(partner.tier);
+    document.getElementById('modal-basic-info').innerHTML = `
+      <div class="detail-item">
+        <div class="detail-label">担当者名</div>
+        <div class="detail-value">${escapeHtml(partner.contact_name || '-')}</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">担当者メール</div>
+        <div class="detail-value">${escapeHtml(partner.contact_email)}</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">Tier / コミッション率</div>
+        <div class="detail-value">Tier${partner.tier || 1} / ${commissionRate}%</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">紹介数</div>
+        <div class="detail-value">${partner.active_referrals || 0}社</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">契約状況</div>
+        <div class="detail-value">${partner.contract_status || 'prospect'}</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">有効状態</div>
+        <div class="detail-value">${partner.is_active ? '有効' : '停止中'}</div>
+      </div>
+      <div class="detail-item" style="grid-column: 1/-1;">
+        <div class="detail-label">メモ</div>
+        <div class="detail-value">${escapeHtml(partner.notes || '-')}</div>
+      </div>
+    `;
+
+    // 振込先情報
+    document.getElementById('modal-bank-info').innerHTML = `
+      <div class="detail-item">
+        <div class="detail-label">銀行名</div>
+        <div class="detail-value">${escapeHtml(partner.bank_name || '-')}</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">支店名</div>
+        <div class="detail-value">${escapeHtml(partner.bank_branch || '-')}</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">口座種別</div>
+        <div class="detail-value">${escapeHtml(partner.bank_account_type || '-')}</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">口座番号</div>
+        <div class="detail-value">${escapeHtml(partner.bank_account_no || '-')}</div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-label">口座名義</div>
+        <div class="detail-value">${escapeHtml(partner.bank_account_name || '-')}</div>
+      </div>
+    `;
+
+    // 紹介実績一覧を取得
+    const referralsTbody = document.getElementById('modal-referrals-tbody');
+    referralsTbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#64748b;">読み込み中...</td></tr>';
+
+    try {
+      const { data: referrals, error } = await sb
+        .from('partner_referrals')
+        .select('*, demo_users(email, display_name)')
+        .eq('partner_id', partner.id)
+        .order('referred_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (referrals.length === 0) {
+        referralsTbody.innerHTML =
+          '<tr><td colspan="5" style="text-align:center;color:#64748b;padding:24px;">紹介実績はまだありません</td></tr>';
+      } else {
+        referralsTbody.innerHTML = '';
+        referrals.forEach(ref => {
+          const tr = document.createElement('tr');
+          const user = ref.demo_users || {};
+          const statusBadgeMap = {
+            'trial': '<span class="badge badge-trial">TRIAL</span>',
+            'active': '<span class="badge badge-active">有効</span>',
+            'expired': '<span class="badge badge-expired">期限切れ</span>',
+          };
+          const statusBadge = statusBadgeMap[ref.status] || ref.status;
+          const referredAt = ref.referred_at
+            ? new Date(ref.referred_at).toLocaleDateString('ja-JP')
+            : '-';
+
+          tr.innerHTML = `
+            <td>${escapeHtml(user.email || '-')}</td>
+            <td>${statusBadge}</td>
+            <td>${escapeHtml(ref.plan || '-')}</td>
+            <td>${ref.monthly_amount ? '¥' + ref.monthly_amount.toLocaleString() : '-'}</td>
+            <td>${referredAt}</td>
+          `;
+          referralsTbody.appendChild(tr);
+        });
+      }
+    } catch (err) {
+      console.error('紹介実績取得エラー:', err);
+      referralsTbody.innerHTML =
+        '<tr><td colspan="5" style="color:#fca5a5;">取得に失敗しました</td></tr>';
+    }
+
+    // モーダル表示
+    document.getElementById('partner-modal').classList.add('active');
+  }
+
+  // モーダル閉じる
+  document.getElementById('modal-close-btn').addEventListener('click', () => {
+    document.getElementById('partner-modal').classList.remove('active');
+  });
+  document.getElementById('partner-modal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('partner-modal')) {
+      document.getElementById('partner-modal').classList.remove('active');
+    }
+  });
+
+  // =====================================================
+  // Tier判定・コミッション率
+  // =====================================================
+  function getTierCommission(tier) {
+    // tier1=20%, tier2=25%, tier3=30%
+    if (tier === 3) return 30;
+    if (tier === 2) return 25;
+    return 20;
+  }
+
+  function calcTier(activeReferrals) {
+    // 1〜30社=Tier1、31〜50社=Tier2、51社以上=Tier3
+    if (activeReferrals >= 51) return 3;
+    if (activeReferrals >= 31) return 2;
+    return 1;
+  }
+
+  // =====================================================
+  // 代理店新規登録フォーム
+  // =====================================================
+
+  // 8文字英数字コード生成
+  function generateCode() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // 紛らわしい文字を除外
+    let code = '';
+    for (let i = 0; i < 8; i++) {
+      code += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return code;
+  }
+
+  // 初期コード生成
+  let currentCode = generateCode();
+  document.getElementById('gen-code').textContent = currentCode;
+
+  // 再生成ボタン
+  document.getElementById('regen-btn').addEventListener('click', () => {
+    currentCode = generateCode();
+    document.getElementById('gen-code').textContent = currentCode;
+  });
+
+  // 登録ボタン
+  document.getElementById('reg-submit-btn').addEventListener('click', async () => {
+    const companyName = document.getElementById('reg-company').value.trim();
+    const contactName = document.getElementById('reg-contact').value.trim();
+    const contactEmail = document.getElementById('reg-email').value.trim();
+    const notes = document.getElementById('reg-notes').value.trim();
+    const btn = document.getElementById('reg-submit-btn');
+
+    hideRegMessages();
+
+    // バリデーション
+    if (!companyName) { showRegError('会社名を入力してください'); return; }
+    if (!contactEmail) { showRegError('担当者メールを入力してください'); return; }
+    if (!contactEmail.includes('@')) { showRegError('有効なメールアドレスを入力してください'); return; }
+
+    btn.disabled = true;
+    btn.textContent = '登録中...';
+
+    try {
+      const { data, error } = await sb
+        .from('partners')
+        .insert({
+          company_name: companyName,
+          contact_name: contactName || null,
+          contact_email: contactEmail,
+          referral_code: currentCode,
+          tier: 1,
+          active_referrals: 0,
+          contract_status: 'prospect',
+          is_active: true,
+          notes: notes || null,
+        });
+
+      if (error) {
+        if (error.message.includes('unique') || error.message.includes('duplicate')) {
+          if (error.message.includes('referral_code')) {
+            showRegError('紹介コードが重複しています。再生成してください。');
+            currentCode = generateCode();
+            document.getElementById('gen-code').textContent = currentCode;
+          } else {
+            showRegError('このメールアドレスは既に登録されています。');
+          }
+        } else {
+          showRegError('登録に失敗しました: ' + error.message);
+        }
+        return;
+      }
+
+      // 登録成功
+      showRegSuccess(`✓ 代理店「${companyName}」を登録しました。紹介コード: ${currentCode}`);
+
+      // フォームリセット
+      document.getElementById('reg-company').value = '';
+      document.getElementById('reg-contact').value = '';
+      document.getElementById('reg-email').value = '';
+      document.getElementById('reg-notes').value = '';
+      currentCode = generateCode();
+      document.getElementById('gen-code').textContent = currentCode;
+
+    } catch (err) {
+      console.error('代理店登録エラー:', err);
+      showRegError('予期しないエラーが発生しました: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '代理店を登録する';
+    }
+  });
+
+  function showRegError(msg) {
+    const el = document.getElementById('reg-error');
+    el.textContent = '⚠ ' + msg;
+    el.style.display = 'block';
+  }
+  function showRegSuccess(msg) {
+    const el = document.getElementById('reg-success');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+  function hideRegMessages() {
+    document.getElementById('reg-error').style.display = 'none';
+    document.getElementById('reg-success').style.display = 'none';
+  }
+
+  // =====================================================
+  // ユーティリティ
+  // =====================================================
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  // =====================================================
+  // 初期データ読み込み（ユーザー一覧）
+  // =====================================================
+  loadUsers();
+
+})();
+</script>
+</body>
+</html>

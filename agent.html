@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>代理店プログラム申込 | BatteryLand</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+  background: #0f172a;
+  min-height: 100vh;
+  color: #e2e8f0;
+}
+
+/* ヘッダー */
+.top-header {
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.top-header .logo-icon { font-size: 22px; }
+.top-header .logo-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: 1px;
+}
+.top-header .logo-sub {
+  font-size: 12px;
+  color: #60a5fa;
+  margin-left: 4px;
+}
+
+/* ヒーローセクション */
+.hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+  padding: 72px 32px 64px;
+  text-align: center;
+  border-bottom: 1px solid #1e293b;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  color: #a5b4fc;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+}
+.hero h1 {
+  font-size: 40px;
+  font-weight: 800;
+  color: #f8fafc;
+  line-height: 1.25;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
+.hero h1 span { color: #60a5fa; }
+.hero p {
+  font-size: 17px;
+  color: #94a3b8;
+  line-height: 1.8;
+  max-width: 600px;
+  margin: 0 auto 32px;
+}
+.hero-cta {
+  display: inline-block;
+  padding: 14px 36px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+}
+.hero-cta:hover {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+}
+
+/* コミッション説明 */
+.commission-section {
+  max-width: 960px;
+  margin: 60px auto;
+  padding: 0 24px;
+}
+.section-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #f8fafc;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.section-sub {
+  font-size: 14px;
+  color: #64748b;
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.commission-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.commission-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 28px 24px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s;
+}
+.commission-card:hover { transform: translateY(-4px); }
+.commission-card.highlighted {
+  border-color: #3b82f6;
+  background: linear-gradient(135deg, #1e293b 0%, #1e1b4b 100%);
+}
+.tier-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+.commission-card.highlighted .tier-label { color: #93c5fd; }
+.commission-rate {
+  font-size: 52px;
+  font-weight: 800;
+  color: #f8fafc;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.commission-card.highlighted .commission-rate { color: #60a5fa; }
+.commission-unit {
+  font-size: 20px;
+  color: #94a3b8;
+  margin-bottom: 12px;
+}
+.commission-cond {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.6;
+}
+.commission-card.highlighted .commission-cond { color: #94a3b8; }
+
+/* メリットセクション */
+.benefits-section {
+  max-width: 960px;
+  margin: 0 auto 60px;
+  padding: 0 24px;
+}
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+.benefit-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 24px;
+}
+.benefit-icon { font-size: 32px; margin-bottom: 12px; }
+.benefit-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 6px;
+}
+.benefit-desc { font-size: 13px; color: #94a3b8; line-height: 1.6; }
+
+/* 申込フォームセクション */
+.form-section {
+  max-width: 600px;
+  margin: 0 auto 80px;
+  padding: 0 24px;
+}
+.form-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 36px 40px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.form-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #f8fafc;
+  margin-bottom: 6px;
+}
+.form-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+.form-input {
+  width: 100%;
+  padding: 11px 14px;
+  background: #0f172a;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  color: #f8fafc;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: vertical;
+}
+.form-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+.form-input::placeholder { color: #475569; }
+.optional-tag {
+  font-size: 11px;
+  color: #475569;
+  margin-left: 6px;
+}
+.required-tag {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+}
+.btn-submit:hover {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  display: none;
+}
+.alert-error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; }
+
+.spinner {
+  display: inline-block; width: 18px; height: 18px;
+  border: 2px solid rgba(255,255,255,0.3); border-radius: 50%;
+  border-top-color: #fff; animation: spin 0.8s linear infinite;
+  vertical-align: middle; margin-right: 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 完了メッセージ */
+.complete-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 48px 40px;
+  text-align: center;
+  display: none;
+}
+.complete-card.show { display: block; }
+.complete-icon { font-size: 60px; margin-bottom: 20px; }
+.complete-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #f8fafc;
+  margin-bottom: 12px;
+}
+.complete-desc {
+  font-size: 15px;
+  color: #94a3b8;
+  line-height: 1.8;
+  margin-bottom: 28px;
+}
+.complete-note {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-size: 13px;
+  color: #93c5fd;
+  line-height: 1.7;
+}
+.btn-back {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 11px 28px;
+  background: #334155;
+  color: #e2e8f0;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.btn-back:hover { background: #475569; }
+
+/* フッター */
+.footer {
+  text-align: center;
+  padding: 24px;
+  border-top: 1px solid #1e293b;
+  font-size: 12px;
+  color: #475569;
+}
+.footer a { color: #60a5fa; text-decoration: none; }
+
+/* レスポンシブ */
+@media (max-width: 640px) {
+  .hero h1 { font-size: 28px; }
+  .commission-grid { grid-template-columns: 1fr; }
+  .form-card { padding: 24px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ヘッダー -->
+<div class="top-header">
+  <span class="logo-icon">⚡</span>
+  <span class="logo-title">BatteryLand</span>
+  <span class="logo-sub">代理店プログラム</span>
+</div>
+
+<!-- ヒーロー -->
+<div class="hero">
+  <div class="hero-badge">🤝 Partner Program</div>
+  <h1>BatteryLandを紹介して<br><span>安定収入</span>を得る</h1>
+  <p>
+    再エネ・蓄電所事業者向けSaaS「BatteryLand」の代理店として、<br>
+    紹介報酬で毎月安定したコミッション収入を獲得しましょう。
+  </p>
+  <button class="hero-cta" onclick="scrollToForm()">代理店に申し込む</button>
+</div>
+
+<!-- コミッション説明 -->
+<div class="commission-section">
+  <div class="section-title">コミッション率</div>
+  <div class="section-sub">紹介数に応じてTierが上がり、コミッション率もアップします</div>
+
+  <div class="commission-grid">
+    <!-- Tier1 -->
+    <div class="commission-card">
+      <div class="tier-label">Tier 1</div>
+      <div class="commission-rate">20</div>
+      <div class="commission-unit">%</div>
+      <div class="commission-cond">
+        紹介数 1〜30社<br>
+        スタート時から適用
+      </div>
+    </div>
+    <!-- Tier2 -->
+    <div class="commission-card highlighted">
+      <div class="tier-label">Tier 2</div>
+      <div class="commission-rate">25</div>
+      <div class="commission-unit">%</div>
+      <div class="commission-cond">
+        紹介数 31〜50社<br>
+        実績に応じて自動昇格
+      </div>
+    </div>
+    <!-- Tier3 -->
+    <div class="commission-card">
+      <div class="tier-label">Tier 3</div>
+      <div class="commission-rate">30</div>
+      <div class="commission-unit">%</div>
+      <div class="commission-cond">
+        紹介数 51社以上<br>
+        トップパートナー限定
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- メリット -->
+<div class="benefits-section">
+  <div class="section-title">代理店プログラムの特徴</div>
+  <div class="section-sub" style="margin-bottom:28px;">パートナーとして共に再エネ市場を拡大しましょう</div>
+
+  <div class="benefits-grid">
+    <div class="benefit-card">
+      <div class="benefit-icon">💰</div>
+      <div class="benefit-title">継続コミッション</div>
+      <div class="benefit-desc">紹介したユーザーが契約している限り、毎月継続的にコミッションが発生します。</div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">📊</div>
+      <div class="benefit-title">専用ダッシュボード</div>
+      <div class="benefit-desc">紹介実績・コミッション額をリアルタイムで確認できる代理店専用ページを提供します。</div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">🔗</div>
+      <div class="benefit-title">専用紹介コード</div>
+      <div class="benefit-desc">あなた専用の8文字コードを発行。紹介相手がコード付きURLで登録すれば自動で紐付けされます。</div>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">⚡</div>
+      <div class="benefit-title">再エネ特化SaaS</div>
+      <div class="benefit-desc">蓄電所・変電所・土地探索に特化した専門ツール。再エネ業界への強力な提案材料になります。</div>
+    </div>
+  </div>
+</div>
+
+<!-- 申込フォーム -->
+<div class="form-section" id="apply-form-section">
+
+  <!-- フォーム本体 -->
+  <div class="form-card" id="apply-form-card">
+    <div class="form-title">代理店申込フォーム</div>
+    <div class="form-subtitle">
+      内容を確認後、3営業日以内に担当者よりご連絡いたします。
+    </div>
+
+    <div class="alert alert-error" id="form-error"></div>
+
+    <form id="agent-form">
+      <div class="form-group">
+        <label class="form-label">
+          会社名<span class="required-tag">*</span>
+        </label>
+        <input type="text" id="f-company" class="form-input" placeholder="株式会社〇〇エナジー" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">
+          担当者名<span class="required-tag">*</span>
+        </label>
+        <input type="text" id="f-name" class="form-input" placeholder="山田 太郎" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">
+          メールアドレス<span class="required-tag">*</span>
+        </label>
+        <input type="email" id="f-email" class="form-input" placeholder="contact@example.com" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">
+          電話番号<span class="optional-tag">任意</span>
+        </label>
+        <input type="tel" id="f-phone" class="form-input" placeholder="03-0000-0000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">
+          メッセージ・ご質問<span class="optional-tag">任意</span>
+        </label>
+        <textarea id="f-message" class="form-input" rows="4"
+          placeholder="代理店の動機、ご質問、既存のネットワーク情報など自由にご記入ください。"></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submit-btn">申込を送信する</button>
+    </form>
+  </div>
+
+  <!-- 送信完了メッセージ -->
+  <div class="complete-card" id="complete-card">
+    <div class="complete-icon">✅</div>
+    <div class="complete-title">申込を受け付けました</div>
+    <div class="complete-desc">
+      BatteryLand代理店プログラムへのお申込みありがとうございます。<br>
+      担当者より<strong style="color:#f8fafc;">3営業日以内</strong>にご連絡いたします。
+    </div>
+    <div class="complete-note">
+      📧 <strong id="complete-email"></strong> 宛に受付確認メールをお送りしました。<br>
+      メールが届かない場合は <a href="mailto:info@440marketing.biz" style="color:#60a5fa;">info@440marketing.biz</a> までお問い合わせください。
+    </div>
+    <a href="index.html" class="btn-back">BatteryLandトップへ</a>
+  </div>
+
+</div>
+
+<!-- フッター -->
+<div class="footer">
+  <p>© 2026 合同会社440 | BatteryLand All rights reserved.</p>
+  <p style="margin-top:6px;">
+    <a href="index.html">トップ</a> |
+    <a href="mailto:info@440marketing.biz">お問い合わせ</a>
+  </p>
+</div>
+
+<script>
+// フォームまでスクロール
+function scrollToForm() {
+  document.getElementById('apply-form-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+(async function() {
+  const cfg = window.BATTERYLAND_CONFIG;
+
+  // Supabase初期化（通知用）
+  let sb = null;
+  if (cfg && cfg.SUPABASE_ANON_KEY && cfg.SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY') {
+    const { createClient } = supabase;
+    sb = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+  }
+
+  // フォーム送信
+  document.getElementById('agent-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const company = document.getElementById('f-company').value.trim();
+    const name = document.getElementById('f-name').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const message = document.getElementById('f-message').value.trim();
+    const btn = document.getElementById('submit-btn');
+    const errorEl = document.getElementById('form-error');
+
+    errorEl.style.display = 'none';
+
+    // バリデーション
+    if (!company) { showError('会社名を入力してください'); return; }
+    if (!name) { showError('担当者名を入力してください'); return; }
+    if (!email || !email.includes('@')) { showError('有効なメールアドレスを入力してください'); return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>送信中...';
+
+    try {
+      // =====================================================
+      // Supabase Edge Function: notify-agent-application を呼び出す
+      // （後でEdge Functionを作成予定 - 現時点は呼び出しコードのみ）
+      // =====================================================
+      if (sb && cfg) {
+        try {
+          const res = await fetch(cfg.SUPABASE_URL + '/functions/v1/notify-agent-application', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + cfg.SUPABASE_ANON_KEY,
+            },
+            body: JSON.stringify({
+              company_name: company,
+              contact_name: name,
+              contact_email: email,
+              phone: phone || null,
+              message: message || null,
+            }),
+          });
+          const result = await res.json().catch(() => ({}));
+          console.log('代理店申込通知結果:', result);
+          if (!res.ok) {
+            console.warn('通知 HTTP error:', res.status, result);
+            // 通知失敗でもフォーム送信は成功扱いにする
+          }
+        } catch (notifyErr) {
+          // 通知エラーは無視（申込自体は成功扱い）
+          console.warn('LINE通知エラー（申込は受付済み）:', notifyErr);
+        }
+      }
+
+      // =====================================================
+      // 送信完了処理
+      // =====================================================
+      document.getElementById('complete-email').textContent = email;
+      document.getElementById('apply-form-card').style.display = 'none';
+      document.getElementById('complete-card').classList.add('show');
+
+      // ページトップへスムーズスクロール
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch (err) {
+      console.error('送信エラー:', err);
+      showError('送信に失敗しました。時間をおいて再度お試しください。');
+      btn.disabled = false;
+      btn.textContent = '申込を送信する';
+    }
+  });
+
+  function showError(msg) {
+    const el = document.getElementById('form-error');
+    el.textContent = '⚠ ' + msg;
+    el.style.display = 'block';
+  }
+
+})();
+</script>
+</body>
+</html>

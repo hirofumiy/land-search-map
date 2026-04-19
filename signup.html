@@ -184,6 +184,21 @@ body {
     </div>
   </div>
 
+  <!-- 紹介コードバッジ（URLに?ref=がある場合のみ表示） -->
+  <div id="ref-badge" style="
+    display:none;
+    background: rgba(52, 211, 153, 0.1);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    text-align: center;
+    font-size: 13px;
+    color: #34d399;
+  ">
+    🔗 紹介コード: <strong id="ref-code-display" style="font-family:monospace;letter-spacing:1px;"></strong>
+  </div>
+
   <div class="alert alert-error" id="error-msg"></div>
   <div class="alert alert-success" id="success-msg"></div>
 
@@ -258,6 +273,18 @@ body {
   const { data: { session } } = await sb.auth.getSession();
   if (session) { location.href = 'index.html'; return; }
 
+  // =====================================================
+  // 紹介コード: URLパラメータ ?ref=AGENT_CODE を取得
+  // =====================================================
+  const urlParams = new URLSearchParams(location.search);
+  const refCode = urlParams.get('ref') ? urlParams.get('ref').toUpperCase() : null;
+
+  if (refCode) {
+    // 紹介コードバッジを表示
+    document.getElementById('ref-code-display').textContent = refCode;
+    document.getElementById('ref-badge').style.display = 'block';
+  }
+
   // 登録フォーム
   document.getElementById('signup-form').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -298,6 +325,18 @@ body {
       return;
     }
 
+    // =====================================================
+    // 紹介コード処理: 登録成功後に代理店情報を紐付け
+    // =====================================================
+    if (refCode && data.user) {
+      try {
+        await processReferral(sb, data.user.id, refCode);
+      } catch (refErr) {
+        // 紹介コード処理の失敗は登録失敗にしない（ログのみ）
+        console.warn('紹介コード処理エラー（登録は完了）:', refErr);
+      }
+    }
+
     // 登録成功 → LINE通知（Edge Function経由）
     try {
       await notifyLine(sb, { name, email });
@@ -323,6 +362,66 @@ body {
     }
     document.getElementById('success-modal').classList.add('active');
   });
+
+  // =====================================================
+  // 紹介コード処理関数
+  // 1. demo_usersのreferral_codeに保存
+  // 2. partnersテーブルからpartner_idを取得
+  // 3. partner_referralsにレコード追加
+  // 4. partnersのactive_referralsを+1更新
+  // =====================================================
+  async function processReferral(sb, userId, refCode) {
+    // 1. demo_usersのreferral_codeを更新
+    const { error: userUpdateError } = await sb
+      .from('demo_users')
+      .update({ referral_code: refCode })
+      .eq('id', userId);
+
+    if (userUpdateError) {
+      console.warn('demo_users referral_code 更新エラー:', userUpdateError);
+      // 続行する（致命的エラーではない）
+    }
+
+    // 2. partnersテーブルからreferral_codeが一致するパートナーを取得
+    const { data: partner, error: partnerError } = await sb
+      .from('partners')
+      .select('id, active_referrals')
+      .eq('referral_code', refCode)
+      .eq('is_active', true)
+      .single();
+
+    if (partnerError || !partner) {
+      console.warn('紹介コードに対応するパートナーが見つかりません:', refCode, partnerError);
+      return; // パートナーが存在しない場合はここで終了
+    }
+
+    // 3. partner_referralsにレコード追加
+    const { error: referralError } = await sb
+      .from('partner_referrals')
+      .insert({
+        partner_id: partner.id,
+        user_id: userId,
+        status: 'trial',
+        referred_at: new Date().toISOString(),
+      });
+
+    if (referralError) {
+      console.warn('partner_referrals 追加エラー:', referralError);
+      return;
+    }
+
+    // 4. partnersのactive_referralsを+1更新
+    const { error: partnerUpdateError } = await sb
+      .from('partners')
+      .update({ active_referrals: (partner.active_referrals || 0) + 1 })
+      .eq('id', partner.id);
+
+    if (partnerUpdateError) {
+      console.warn('partners active_referrals 更新エラー:', partnerUpdateError);
+    }
+
+    console.log('紹介コード処理完了:', refCode, '→ partner_id:', partner.id);
+  }
 
   // LINE通知 (Supabase Edge Function を呼び出す)
   async function notifyLine(sb, { name, email }) {

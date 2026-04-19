@@ -179,6 +179,67 @@ body {
   transform: translateY(-1px);
 }
 
+/* 機能比較テーブル */
+.comparison-section {
+  max-width: 960px;
+  margin: 0 auto 48px;
+  padding: 0 20px;
+}
+.comparison-section h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f8fafc;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.comparison-wrapper {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+}
+.comparison-table thead th {
+  padding: 14px 18px;
+  background: #0f172a;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #334155;
+}
+.comparison-table thead th:first-child {
+  text-align: left;
+  color: #64748b;
+}
+.comparison-table thead th.col-standard { color: #a5b4fc; }
+.comparison-table thead th.col-enterprise { color: #5eead4; }
+.comparison-table tbody td {
+  padding: 11px 18px;
+  font-size: 13px;
+  color: #cbd5e1;
+  border-top: 1px solid #334155;
+  text-align: center;
+  vertical-align: middle;
+}
+.comparison-table tbody td:first-child {
+  text-align: left;
+  color: #e2e8f0;
+  font-size: 14px;
+}
+.comparison-table tbody tr:hover td { background: rgba(59,130,246,0.04); }
+.comp-ok { color: #34d399; font-size: 18px; font-weight: 700; }
+.comp-no { color: #475569; font-size: 18px; }
+.comp-text { color: #94a3b8; font-size: 12px; }
+.comp-text-em { color: #e2e8f0; font-size: 12px; font-weight: 600; }
+
 /* 特徴セクション */
 .features-section {
   max-width: 860px;
@@ -348,6 +409,115 @@ body {
     </button>
   </div>
 
+</div>
+
+<!-- 機能比較テーブル -->
+<div class="comparison-section">
+  <h2>プラン別機能比較</h2>
+  <div class="comparison-wrapper">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th style="width:42%;">機能</th>
+          <th class="col-lite">Lite</th>
+          <th class="col-standard">Standard</th>
+          <th class="col-enterprise">Enterprise</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Mapboxベースマップ</td>
+          <td><span class="comp-ok">○</span></td>
+          <td><span class="comp-ok">○</span></td>
+          <td><span class="comp-ok">○</span></td>
+        </tr>
+        <tr>
+          <td>変電所マーカー（全国）</td>
+          <td><span class="comp-ok">○</span></td>
+          <td><span class="comp-ok">○</span></td>
+          <td><span class="comp-ok">○</span></td>
+        </tr>
+        <tr>
+          <td>空き容量ランク色分け</td>
+          <td><span class="comp-ok">○</span></td>
+          <td><span class="comp-ok">○</span></td>
+          <td><span class="comp-ok">○</span></td>
+        </tr>
+        <tr>
+          <td>住所検索・距離計測</td>
+          <td><span class="comp-ok">○</span></td>
+          <td><span class="comp-ok">○</span></td>
+          <td><span class="comp-ok">○</span></td>
+        </tr>
+        <tr>
+          <td>空き容量データ更新頻度</td>
+          <td><span class="comp-text">四半期</span></td>
+          <td><span class="comp-text-em">毎月</span></td>
+          <td><span class="comp-text-em">毎月＋速報</span></td>
+        </tr>
+        <tr>
+          <td>ハザードマップ重畳</td>
+          <td><span class="comp-no">×</span></td>
+          <td><span class="comp-ok">○</span></td>
+          <td><span class="comp-ok">○</span></td>
+        </tr>
+        <tr>
+          <td>公図・地番オーバーレイ</td>
+          <td><span class="comp-no">×</span></td>
+          <td><span class="comp-ok">○</span></td>
+          <td><span class="comp-ok">○</span></td>
+        </tr>
+        <tr>
+          <td>送電線ルート表示</td>
+          <td><span class="comp-no">×</span></td>
+          <td><span class="comp-ok">○</span></td>
+          <td><span class="comp-ok">○</span></td>
+        </tr>
+        <tr>
+          <td>変電所詳細情報</td>
+          <td><span class="comp-text">概要のみ</span></td>
+          <td><span class="comp-text-em">全件</span></td>
+          <td><span class="comp-text-em">全件</span></td>
+        </tr>
+        <tr>
+          <td>売出物件・地上げ対象情報</td>
+          <td><span class="comp-no">×</span></td>
+          <td><span class="comp-text-em">○（月1回更新）</span></td>
+          <td><span class="comp-text-em">○（毎週更新）</span></td>
+        </tr>
+        <tr>
+          <td>レインズ連携物件情報（予定）</td>
+          <td><span class="comp-no">×</span></td>
+          <td><span class="comp-no">×</span></td>
+          <td><span class="comp-ok">○</span></td>
+        </tr>
+        <tr>
+          <td>CSV/PDFエクスポート</td>
+          <td><span class="comp-no">×</span></td>
+          <td><span class="comp-ok">○</span></td>
+          <td><span class="comp-ok">○</span></td>
+        </tr>
+        <tr>
+          <td>お気に入り・メモ保存</td>
+          <td><span class="comp-no">×</span></td>
+          <td><span class="comp-ok">○</span></td>
+          <td><span class="comp-ok">○</span></td>
+        </tr>
+        <tr>
+          <td>チーム共有・案件管理</td>
+          <td><span class="comp-no">×</span></td>
+          <td><span class="comp-no">×</span></td>
+          <td><span class="comp-ok">○</span></td>
+        </tr>
+        <tr>
+          <td>サポート</td>
+          <td><span class="comp-text">メール</span></td>
+          <td><span class="comp-text-em">メール+チャット</span></td>
+          <td><span class="comp-text-em">専任担当者</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <!-- 特徴 -->

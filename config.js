@@ -26,6 +26,10 @@ const BATTERYLAND_CONFIG = {
   // アプリ名・会社名
   APP_NAME: 'BatteryLand',
   COMPANY_NAME: '合同会社440',
+
+  // 管理者メールアドレス
+  ADMIN_EMAIL: 'hirofumiy@440marketing.biz',
+  ADMIN_EMAIL_2: 'hirofumiy@gmail.com',
 };
 
 // グローバルに公開
