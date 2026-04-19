@@ -327,15 +327,17 @@ body {
   // LINE通知 (Supabase Edge Function を呼び出す)
   async function notifyLine(sb, { name, email }) {
     try {
-      const { data: { session } } = await sb.auth.getSession();
-      const headers = { 'Content-Type': 'application/json' };
-      // Edge Function が SUPABASE_URL/functions/v1/notify-line で動く
       const res = await fetch(cfg.SUPABASE_URL + '/functions/v1/notify-line', {
         method: 'POST',
-        headers,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + cfg.SUPABASE_ANON_KEY,
+        },
         body: JSON.stringify({ name, email }),
       });
-      if (!res.ok) console.warn('LINE通知 HTTP error:', res.status);
+      const result = await res.json();
+      console.log('LINE通知結果:', result);
+      if (!res.ok) console.warn('LINE通知 HTTP error:', res.status, result);
     } catch (err) {
       console.warn('LINE通知エラー:', err);
     }
