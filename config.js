@@ -15,9 +15,9 @@ const BATTERYLAND_CONFIG = {
 
   // Stripe Payment Links (Stripe Dashboard → Payment Links で作成)
   // Liteプラン: ¥98,000/月（税別）
-  STRIPE_LITE_PAYMENT_LINK: 'https://buy.stripe.com/test_LITE_LINK',
+  STRIPE_LITE_PAYMENT_LINK: 'https://buy.stripe.com/28E00dbaV1IAf9F4C263K00',
   // Standardプラン: ¥198,000/月（税別）
-  STRIPE_STANDARD_PAYMENT_LINK: 'https://buy.stripe.com/test_STANDARD_LINK',
+  STRIPE_STANDARD_PAYMENT_LINK: 'https://buy.stripe.com/3cI8wJa6Raf6e5B6Ka63K01',
   // Enterpriseプラン: ¥500,000/月（税別）→ メール問い合わせ対応のためStripeリンク不要
 
   // 試用期間 (時間)
