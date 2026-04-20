@@ -360,7 +360,12 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
             <label class="hazard-switch"><input type="checkbox" id="cadastral-cb"><span class="slider"></span></label>
           </div>
           <div id="cadastral-hint" style="font-size:9px; color:#64748b; margin-top:3px; padding-left:4px;">
-            Lv14+で筆界線 / Lv15+で地番表示（法務省オープンデータ 2024年版）<br>※地域により精度・カバー範囲が異なります
+            Lv14+で筆界線 / Lv15+で地番表示（法務省オープンデータ 2024年版）<br>
+            ⚠️ 全国約60〜70%対応。山間部・離島・旧来の紙公図エリアはデータなし
+          </div>
+          <div id="cadastral-zoom-hint" style="display:none; margin-top:4px; padding:5px 7px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.35); border-radius:4px; font-size:9px; color:#fbbf24;">
+            📍 表示にはズームLv14以上が必要です。<br>
+            <span id="cadastral-zoom-in-btn" style="cursor:pointer; text-decoration:underline; color:#60a5fa;">→ 現在地をLv14にズームする</span>
           </div>
           <!-- 公図ズレ補正コントロール -->
           <div id="cadastral-offset" style="display:none; margin-top:6px; padding:6px; background:rgba(255,152,0,0.08); border:1px solid rgba(255,152,0,0.3); border-radius:4px;">
@@ -714,7 +719,17 @@ function createCadastralLayer() {
 document.getElementById('cadastral-cb').addEventListener('change', function() {
   const toggle = document.getElementById('cadastral-toggle');
   const offsetPanel = document.getElementById('cadastral-offset');
+  const zoomHint = document.getElementById('cadastral-zoom-hint');
+
   if (this.checked) {
+    // Lv14未満の場合はガイドを表示してスイッチをOFFに戻す
+    if (map.getZoom() < 14) {
+      this.checked = false;
+      if (zoomHint) zoomHint.style.display = 'block';
+      return;
+    }
+    if (zoomHint) zoomHint.style.display = 'none';
+
     if (!cadastralLayer) cadastralLayer = createCadastralLayer();
     if (cadastralLayer) {
       cadastralLayer.addTo(map);
@@ -740,6 +755,36 @@ document.getElementById('cadastral-cb').addEventListener('change', function() {
     cadastralActive = false;
     toggle.classList.remove('active');
     if (offsetPanel) offsetPanel.style.display = 'none';
+    if (zoomHint) zoomHint.style.display = 'none';
+  }
+});
+
+// 「現在地をLv14にズームする」リンク
+document.getElementById('cadastral-zoom-in-btn').addEventListener('click', function() {
+  map.setZoom(14);
+  // ズーム後に自動でONにする
+  setTimeout(() => {
+    const cb = document.getElementById('cadastral-cb');
+    const zoomHint = document.getElementById('cadastral-zoom-hint');
+    if (map.getZoom() >= 14) {
+      cb.checked = true;
+      cb.dispatchEvent(new Event('change'));
+      if (zoomHint) zoomHint.style.display = 'none';
+    }
+  }, 400);
+});
+
+// ズームが14以上になったらヒントを自動で消す
+map.on('zoomend', function() {
+  const zoomHint = document.getElementById('cadastral-zoom-hint');
+  if (zoomHint && zoomHint.style.display !== 'none' && map.getZoom() >= 14) {
+    zoomHint.style.display = 'none';
+    // スイッチを自動ON
+    const cb = document.getElementById('cadastral-cb');
+    if (!cb.checked) {
+      cb.checked = true;
+      cb.dispatchEvent(new Event('change'));
+    }
   }
 });
 
