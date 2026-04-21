@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>使い方マニュアル | BatteryLand</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Hiragino Mincho ProN', 'Hiragino Sans', 'Meiryo', serif;
+  background: #f5f0e8;
+  min-height: 100vh;
+  color: #1a1a1a;
+}
+.header {
+  background: #ede8dc;
+  border-bottom: 2px solid #c8b89a;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.header-logo { font-size: 20px; }
+.header-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #2c2c2c;
+  letter-spacing: 2px;
+  font-family: 'Segoe UI', sans-serif;
+}
+.btn-back {
+  padding: 7px 18px;
+  background: #fff8f0;
+  border: 1px solid #b8a88a;
+  color: #5a4a3a;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s;
+  font-family: sans-serif;
+}
+.btn-back:hover {
+  background: #c8b89a;
+  color: #2c2c2c;
+}
+
+.main {
+  padding: 40px 28px;
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.page-header {
+  border-bottom: 2px solid #c8b89a;
+  padding-bottom: 20px;
+  margin-bottom: 40px;
+}
+.page-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #2c2c2c;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.page-sub {
+  font-size: 13px;
+  color: #7a6a5a;
+  line-height: 1.6;
+}
+
+/* セクション共通 */
+.section {
+  margin-bottom: 48px;
+}
+.section-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #2c2c2c;
+  letter-spacing: 0.5px;
+  padding: 12px 18px;
+  background: #ede8dc;
+  border-left: 4px solid #b8a88a;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 24px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ステップリスト */
+.step-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.step-item {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  background: #faf7f2;
+  border: 1px solid #d8c8b0;
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+.step-num {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  background: #c8b89a;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+.step-content {}
+.step-heading {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2c2c2c;
+  margin-bottom: 5px;
+  line-height: 1.5;
+}
+.step-desc {
+  font-size: 13px;
+  color: #5a4a3a;
+  line-height: 1.8;
+}
+
+/* ランク表 */
+.rank-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+  background: #faf7f2;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #d8c8b0;
+}
+.rank-table thead th {
+  background: #ede8dc;
+  color: #3a2c1a;
+  font-weight: 800;
+  padding: 11px 16px;
+  text-align: left;
+  border-bottom: 2px solid #c8b89a;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+.rank-table tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e8dfd0;
+  vertical-align: middle;
+  color: #2c2c2c;
+  line-height: 1.6;
+}
+.rank-table tbody tr:last-child td { border-bottom: none; }
+.rank-badge {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 800;
+  font-size: 13px;
+  text-align: center;
+  line-height: 28px;
+  font-family: 'Segoe UI', sans-serif;
+}
+.rank-s { background: #16a34a; }
+.rank-a { background: #2563eb; }
+.rank-b { background: #ca8a04; }
+.rank-c { background: #ea580c; }
+.rank-d { background: #dc2626; }
+.rank-none { background: #64748b; font-size: 11px; }
+
+/* マーカー凡例 */
+.marker-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.marker-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #faf7f2;
+  border: 1px solid #d8c8b0;
+  border-radius: 8px;
+  padding: 12px 18px;
+  min-width: 160px;
+  flex: 1;
+}
+.marker-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid rgba(0,0,0,0.15);
+}
+.marker-label {
+  font-size: 13px;
+  color: #2c2c2c;
+  font-weight: 600;
+  font-family: 'Segoe UI', sans-serif;
+}
+.marker-sub {
+  font-size: 11px;
+  color: #7a6a5a;
+  margin-top: 1px;
+}
+
+/* FAQ */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid #d8c8b0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.faq-item {
+  background: #faf7f2;
+  border-bottom: 1px dashed #d8c8b0;
+  padding: 20px 24px;
+}
+.faq-item:last-child { border-bottom: none; }
+.faq-q {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2c2c2c;
+  margin-bottom: 8px;
+  display: flex;
+  gap: 10px;
+}
+.faq-q-badge {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  background: #b8a88a;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', sans-serif;
+  margin-top: 1px;
+}
+.faq-a {
+  font-size: 13px;
+  color: #5a4a3a;
+  line-height: 1.85;
+  padding-left: 32px;
+}
+
+/* フッター */
+.footer {
+  margin-top: 60px;
+  padding: 24px 0;
+  border-top: 1px solid #d8c8b0;
+  text-align: center;
+  font-size: 12px;
+  color: #9a8a7a;
+  font-family: 'Segoe UI', sans-serif;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <span class="header-logo">⚡</span>
+    <span class="header-title">BatteryLand</span>
+  </div>
+  <a href="index.html" class="btn-back">← マップに戻る</a>
+</div>
+
+<div class="main">
+
+  <div class="page-header">
+    <div class="page-title">使い方マニュアル</div>
+    <div class="page-sub">BatteryLandの基本操作ガイド</div>
+  </div>
+
+  <!-- セクション1: 基本的な使い方 -->
+  <div class="section">
+    <div class="section-title">基本的な使い方</div>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-heading">電力会社を選ぶ</div>
+          <div class="step-desc">左パネルの「電力会社フィルター」のチェックボックスで、対象エリアを選択します。複数の電力会社を同時に選択することも可能です。チェックを外すとそのエリアの変電所ピンが非表示になります。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-heading">ランクで絞り込む</div>
+          <div class="step-desc">左パネルの「ランクフィルター」でS〜Dのランクを選択します。S（20MW以上）が最も接続しやすい変電所です。初期状態では全ランクが表示されています。目的の条件に合わせて絞り込んでください。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-heading">地図でピンを確認する</div>
+          <div class="step-desc">地図上に表示されるカラーピンが各変電所の位置です。ピンをクリックすると、変電所名・空き容量・ランク・都道府県などの詳細情報がポップアップで表示されます。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-heading">住所で検索・半径検索をする</div>
+          <div class="step-desc">左パネルの住所検索欄に候補地の住所を入力し、「半径検索」を実行します。指定した半径（km）以内にある変電所の一覧が距離順で表示されます。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-heading">ランキングで高空き容量を探す</div>
+          <div class="step-desc">左パネル下部の「変電所ランキング」リストに、空き容量の多い変電所が順に表示されます。リスト内のアイテムをクリックすると、マップが該当変電所の位置に移動します。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- セクション2: 変電所ランク基準 -->
+  <div class="section">
+    <div class="section-title">変電所ランク基準</div>
+    <table class="rank-table">
+      <thead>
+        <tr>
+          <th>ランク</th>
+          <th>空き容量</th>
+          <th>接続しやすさ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rank-badge rank-s">S</span></td>
+          <td><strong>20MW以上</strong></td>
+          <td>◎ 接続工事なしで申込可能な可能性が高い</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge rank-a">A</span></td>
+          <td><strong>10〜20MW</strong></td>
+          <td>○ 軽微な工事のみで接続可能な可能性</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge rank-b">B</span></td>
+          <td><strong>5〜10MW</strong></td>
+          <td>△ 一部工事が必要な場合あり</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge rank-c">C</span></td>
+          <td><strong>2〜5MW</strong></td>
+          <td>△ 系統補強が必要な場合が多い</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge rank-d">D</span></td>
+          <td><strong>2MW未満</strong></td>
+          <td>✕ 系統補強工事が必要・困難な場合あり</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge rank-none">−</span></td>
+          <td><strong>データなし</strong></td>
+          <td>東電PGなど空き容量未公開のエリア（位置情報のみ表示）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- セクション3: マーカーの色と意味 -->
+  <div class="section">
+    <div class="section-title">マーカーの色と意味</div>
+    <div class="marker-list">
+      <div class="marker-item">
+        <div class="marker-dot" style="background:#16a34a;"></div>
+        <div>
+          <div class="marker-label">緑 — ランクS</div>
+          <div class="marker-sub">空き容量 20MW以上</div>
+        </div>
+      </div>
+      <div class="marker-item">
+        <div class="marker-dot" style="background:#2563eb;"></div>
+        <div>
+          <div class="marker-label">青 — ランクA</div>
+          <div class="marker-sub">空き容量 10〜20MW</div>
+        </div>
+      </div>
+      <div class="marker-item">
+        <div class="marker-dot" style="background:#ca8a04;"></div>
+        <div>
+          <div class="marker-label">黄 — ランクB</div>
+          <div class="marker-sub">空き容量 5〜10MW</div>
+        </div>
+      </div>
+      <div class="marker-item">
+        <div class="marker-dot" style="background:#ea580c;"></div>
+        <div>
+          <div class="marker-label">橙 — ランクC</div>
+          <div class="marker-sub">空き容量 2〜5MW</div>
+        </div>
+      </div>
+      <div class="marker-item">
+        <div class="marker-dot" style="background:#dc2626;"></div>
+        <div>
+          <div class="marker-label">赤 — ランクD</div>
+          <div class="marker-sub">空き容量 2MW未満</div>
+        </div>
+      </div>
+      <div class="marker-item">
+        <div class="marker-dot" style="background:#64748b;"></div>
+        <div>
+          <div class="marker-label">灰 — データなし</div>
+          <div class="marker-sub">東電PG等（未公開）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- セクション4: よくある質問 -->
+  <div class="section">
+    <div class="section-title">よくある質問</div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-badge">Q</span>
+          データはどこから取得しているのですか？
+        </div>
+        <div class="faq-a">
+          各電力会社が公式に公開している系統空き容量CSV・PDFを収集・整理してデータベース化しています。最新の情報は定期的に更新しています。
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-badge">Q</span>
+          東京電力エリアの変電所データはありますか？
+        </div>
+        <div class="faq-a">
+          東京電力パワーグリッド（東電PG）は他社のような系統空き容量CSVを公開していないため、位置情報（変電所の場所）のみ搭載しています。空き容量・ランクは「-」（データなし・灰色ピン）として表示されます。
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-badge">Q</span>
+          ランクSの変電所であれば必ず接続できますか？
+        </div>
+        <div class="faq-a">
+          BatteryLandは接続可否を保証するものではありません。ランクは空き容量データをもとにした参考指標です。実際の接続可否・条件については、必ず各電力会社への事前相談・接続検討申込みをご確認ください。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy;2026 合同会社440 | BatteryLand
+  </div>
+
+</div>
+
+</body>
+</html>

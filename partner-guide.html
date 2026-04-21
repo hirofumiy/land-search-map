@@ -456,37 +456,22 @@ body {
     <div class="section-number">SECTION 03</div>
     <div class="section-title">💴 料金プラン</div>
 
-    <div class="plan-grid">
-      <div class="plan-card">
-        <div class="plan-header">
-          <div class="plan-name">Lite</div>
-        </div>
-        <div class="plan-body">
-          <div class="plan-price">¥98,000</div>
-          <div class="plan-price-unit">/ 月（税別）</div>
-          <div class="plan-features">
-            <div class="plan-feature"><span class="chk">✓</span><span>全国変電所マップ閲覧</span></div>
-            <div class="plan-feature"><span class="chk">✓</span><span>ランク別フィルタ</span></div>
-            <div class="plan-feature"><span class="chk">✓</span><span>半径検索</span></div>
-            <div class="plan-feature"><span class="chk">✓</span><span>1ユーザーアカウント</span></div>
-          </div>
-        </div>
-      </div>
-
+    <div class="plan-grid" style="grid-template-columns: repeat(2, 1fr);">
       <div class="plan-card recommend">
         <div class="plan-header">
           <div class="plan-name">Standard</div>
           <div class="plan-badge">人気</div>
         </div>
         <div class="plan-body">
-          <div class="plan-price">¥198,000</div>
+          <div class="plan-price">¥150,000</div>
           <div class="plan-price-unit">/ 月（税別）</div>
+          <div class="plan-price-unit" style="color:#6366f1;font-weight:700;margin-top:4px;">初回登録料 ¥50,000（税別）</div>
           <div class="plan-features">
-            <div class="plan-feature"><span class="chk">✓</span><span>Liteの全機能</span></div>
-            <div class="plan-feature"><span class="chk">✓</span><span>売出物件・地上げ候補表示</span></div>
-            <div class="plan-feature"><span class="chk">✓</span><span>ハザードマップ除外フィルタ</span></div>
-            <div class="plan-feature"><span class="chk">✓</span><span>3ユーザーアカウント</span></div>
-            <div class="plan-feature"><span class="chk">✓</span><span>月次データ更新通知</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>1電力会社エリアの変電所マップ</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>追加エリア：+¥50,000/社/月</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>空き容量ランク別フィルタ</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>半径検索・距離計測</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>月次データ更新</span></div>
           </div>
         </div>
       </div>
@@ -497,20 +482,21 @@ body {
         </div>
         <div class="plan-body">
           <div class="plan-price">¥500,000</div>
-          <div class="plan-price-unit">/ 月（税別）〜</div>
+          <div class="plan-price-unit">/ 月（税別）</div>
+          <div class="plan-price-unit" style="color:#0f766e;font-weight:700;margin-top:4px;">初回登録料 ¥100,000（税別）</div>
           <div class="plan-features">
+            <div class="plan-feature"><span class="chk">✓</span><span>全電力会社エリア含む（追加料金なし）</span></div>
             <div class="plan-feature"><span class="chk">✓</span><span>Standardの全機能</span></div>
             <div class="plan-feature"><span class="chk">✓</span><span>APIアクセス</span></div>
             <div class="plan-feature"><span class="chk">✓</span><span>無制限ユーザー</span></div>
-            <div class="plan-feature"><span class="chk">✓</span><span>専任サポート</span></div>
-            <div class="plan-feature"><span class="chk">✓</span><span>カスタマイズ対応</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>専任サポート・請求書払い</span></div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="commission-note" style="margin-top:16px;">
-      ※ 初回3日間の無料トライアルあり。クレジットカード不要でお試しいただけます。
+      ※ 無料トライアルあり。クレジットカード不要でお試しいただけます。
     </div>
   </div>
 
@@ -533,19 +519,19 @@ body {
           <td><span class="tier-badge tier1">Tier 1</span></td>
           <td>1〜30社</td>
           <td><strong>月額の 20%</strong></td>
-          <td>¥198,000 × 3社 × 20% = <strong>¥118,800</strong></td>
+          <td>¥150,000 × 3社 × 20% = <strong>¥90,000</strong></td>
         </tr>
         <tr>
           <td><span class="tier-badge tier2">Tier 2</span></td>
           <td>31〜50社</td>
           <td><strong>月額の 25%</strong></td>
-          <td>¥198,000 × 3社 × 25% = <strong>¥148,500</strong></td>
+          <td>¥150,000 × 3社 × 25% = <strong>¥112,500</strong></td>
         </tr>
         <tr>
           <td><span class="tier-badge tier3">Tier 3</span></td>
           <td>51社以上</td>
           <td><strong>月額の 30%</strong></td>
-          <td>¥198,000 × 3社 × 30% = <strong>¥178,200</strong></td>
+          <td>¥150,000 × 3社 × 30% = <strong>¥135,000</strong></td>
         </tr>
       </tbody>
     </table>
@@ -581,7 +567,7 @@ body {
         <div class="step-num">3</div>
         <div class="step-content">
           <div class="step-title">顧客が無料トライアル開始</div>
-          <div class="step-text">紹介コード付きURLからサインアップ → 3日間無料トライアル開始。</div>
+          <div class="step-text">紹介コード付きURLからサインアップ → 無料トライアル開始。</div>
         </div>
       </div>
       <div class="flow-step">

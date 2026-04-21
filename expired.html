@@ -54,8 +54,8 @@ body {
 /* 価格テーブル */
 .plans-container {
   display: flex;
-  gap: 24px;
-  max-width: 1160px;
+  gap: 28px;
+  max-width: 900px;
   margin: 0 auto 48px;
   justify-content: center;
   flex-wrap: wrap;
@@ -65,9 +65,9 @@ body {
   background: #1e293b;
   border: 1px solid #334155;
   border-radius: 16px;
-  padding: 32px 28px;
+  padding: 36px 32px;
   width: 100%;
-  max-width: 380px;
+  max-width: 420px;
   position: relative;
   transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -106,7 +106,7 @@ body {
 .plan-card.popular .plan-name { color: #a5b4fc; }
 
 .plan-price {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 .plan-price .amount {
   font-size: 42px;
@@ -119,7 +119,37 @@ body {
   color: #94a3b8;
   margin-left: 4px;
 }
-.plan-tax { font-size: 12px; color: #64748b; margin-bottom: 20px; }
+.plan-tax { font-size: 12px; color: #64748b; margin-bottom: 6px; }
+
+.plan-init-fee {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(99,102,241,0.12);
+  border: 1px solid rgba(99,102,241,0.3);
+  color: #a5b4fc;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+.plan-card:not(.popular) .plan-init-fee {
+  background: rgba(20,184,166,0.1);
+  border-color: rgba(20,184,166,0.3);
+  color: #5eead4;
+}
+
+.plan-option-note {
+  font-size: 12px;
+  color: #60a5fa;
+  background: rgba(59,130,246,0.08);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
 
 .plan-desc { font-size: 14px; color: #94a3b8; margin-bottom: 24px; line-height: 1.6; }
 
@@ -130,7 +160,7 @@ body {
   gap: 10px;
   font-size: 14px;
   color: #cbd5e1;
-  padding: 6px 0;
+  padding: 7px 0;
   border-bottom: 1px solid #1e293b;
 }
 .plan-card.popular .plan-features li { border-bottom-color: #1e1b4b; }
@@ -152,16 +182,6 @@ body {
   border: none;
   letter-spacing: 0.5px;
 }
-.btn-plan-lite {
-  background: #1e293b;
-  border: 2px solid #475569;
-  color: #e2e8f0;
-}
-.btn-plan-lite:hover {
-  border-color: #60a5fa;
-  color: #60a5fa;
-  background: rgba(59, 130, 246, 0.1);
-}
 .btn-plan-standard {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: #fff;
@@ -181,7 +201,7 @@ body {
 
 /* 機能比較テーブル */
 .comparison-section {
-  max-width: 960px;
+  max-width: 760px;
   margin: 0 auto 48px;
   padding: 0 20px;
 }
@@ -202,7 +222,7 @@ body {
 .comparison-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 560px;
+  min-width: 480px;
 }
 .comparison-table thead th {
   padding: 14px 18px;
@@ -266,10 +286,7 @@ body {
   align-items: flex-start;
   gap: 12px;
 }
-.feature-icon {
-  font-size: 28px;
-  flex-shrink: 0;
-}
+.feature-icon { font-size: 28px; flex-shrink: 0; }
 .feature-text h3 { font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 4px; }
 .feature-text p { font-size: 13px; color: #94a3b8; line-height: 1.5; }
 
@@ -324,7 +341,7 @@ body {
   </div>
 
   <div class="trial-ended-badge">
-    ⏰ 3日間の無料トライアルが終了しました
+    ⏰ 7日間の無料トライアルが終了しました
   </div>
 
   <div class="user-name-label" id="user-name-label"></div>
@@ -339,47 +356,30 @@ body {
 <!-- 料金プラン -->
 <div class="plans-container">
 
-  <!-- Liteプラン -->
-  <div class="plan-card">
-    <div class="plan-name">Lite</div>
-    <div class="plan-price">
-      <span class="amount">¥98,000</span>
-      <span class="unit">/ 月</span>
-    </div>
-    <div class="plan-tax">税別 / 税込 ¥107,800</div>
-    <p class="plan-desc">蓄電所候補地の基本的な調査・絞り込みからはじめたい方に。</p>
-    <ul class="plan-features">
-      <li><span class="check">✓</span> 用地候補マップ（全国）</li>
-      <li><span class="check">✓</span> 変電所・空き容量データ</li>
-      <li><span class="check">✓</span> 地番クリック / 公図表示</li>
-      <li><span class="check">✓</span> 登記情報へのディープリンク</li>
-      <li><span class="check">✓</span> 毎週自動更新（物件情報）</li>
-      <li><span class="cross">✗</span> <span style="color:#64748b">複数ユーザー共有</span></li>
-      <li><span class="cross">✗</span> <span style="color:#64748b">優先サポート</span></li>
-    </ul>
-    <button class="btn-plan btn-plan-lite" onclick="selectPlan('lite')">
-      Liteプランを選択
-    </button>
-  </div>
-
   <!-- Standardプラン -->
   <div class="plan-card popular">
     <div class="popular-badge">⭐ おすすめ</div>
     <div class="plan-name">Standard</div>
     <div class="plan-price">
-      <span class="amount">¥198,000</span>
+      <span class="amount">¥150,000</span>
       <span class="unit">/ 月</span>
     </div>
-    <div class="plan-tax">税別 / 税込 ¥217,800</div>
-    <p class="plan-desc">本格的な用地調査・事業開発を推進するチーム向けプランです。</p>
+    <div class="plan-tax">税別 / 税込 ¥165,000</div>
+    <div class="plan-init-fee">初回登録料 ¥50,000（税別）</div>
+    <div class="plan-option-note">
+      📌 1電力会社エリアの変電所マップが付属<br>
+      ＋ 追加エリアは1社につき <strong>¥50,000/月</strong>（税別）
+    </div>
+    <p class="plan-desc">特定エリアに絞った用地調査・事業開発チーム向けプランです。</p>
     <ul class="plan-features">
-      <li><span class="check">✓</span> Liteの全機能</li>
-      <li><span class="check">✓</span> 複数ユーザー共有（3名まで）</li>
-      <li><span class="check">✓</span> 優先サポート（メール）</li>
-      <li><span class="check">✓</span> 毎月1日・15日・30日 変電所更新</li>
-      <li><span class="check">✓</span> 新機能 先行アクセス</li>
+      <li><span class="check">✓</span> 選択した電力会社の変電所マップ</li>
+      <li><span class="check">✓</span> 空き容量ランク別フィルタ（S〜D）</li>
+      <li><span class="check">✓</span> 半径検索・距離計測</li>
+      <li><span class="check">✓</span> 変電所詳細情報（空き容量・ランク）</li>
+      <li><span class="check">✓</span> 月次データ更新</li>
+      <li><span class="check">✓</span> メールサポート</li>
       <li><span class="cross">✗</span> <span style="color:#64748b">専任サポート</span></li>
-      <li><span class="cross">✗</span> <span style="color:#64748b">カスタム開発</span></li>
+      <li><span class="cross">✗</span> <span style="color:#64748b">請求書払い</span></li>
     </ul>
     <button class="btn-plan btn-plan-standard" onclick="selectPlan('standard')">
       Standardプランを選択
@@ -394,8 +394,10 @@ body {
       <span class="unit">/ 月</span>
     </div>
     <div class="plan-tax">税別 / 税込 ¥550,000</div>
-    <p class="plan-desc">大規模開発・法人向けの全機能＋専任サポート付きプランです。</p>
+    <div class="plan-init-fee">初回登録料 ¥100,000（税別）</div>
+    <p class="plan-desc">全電力会社エリアを網羅し、大規模開発に対応する法人向けプランです。</p>
     <ul class="plan-features">
+      <li><span class="check">✓</span> <strong>全電力会社</strong>の変電所マップ（追加料金なし）</li>
       <li><span class="check">✓</span> Standardの全機能</li>
       <li><span class="check">✓</span> 複数ユーザー共有（無制限）</li>
       <li><span class="check">✓</span> 専任サポート担当</li>
@@ -418,22 +420,29 @@ body {
     <table class="comparison-table">
       <thead>
         <tr>
-          <th style="width:42%;">機能</th>
-          <th class="col-lite">Lite</th>
+          <th style="width:50%;">機能・仕様</th>
           <th class="col-standard">Standard</th>
           <th class="col-enterprise">Enterprise</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Mapboxベースマップ</td>
-          <td><span class="comp-ok">○</span></td>
-          <td><span class="comp-ok">○</span></td>
-          <td><span class="comp-ok">○</span></td>
+          <td>月額利用料（税別）</td>
+          <td><span class="comp-text-em">¥150,000</span></td>
+          <td><span class="comp-text-em">¥500,000</span></td>
         </tr>
         <tr>
-          <td>変電所マーカー（全国）</td>
-          <td><span class="comp-ok">○</span></td>
+          <td>初回登録料（税別）</td>
+          <td><span class="comp-text-em">¥50,000</span></td>
+          <td><span class="comp-text-em">¥100,000</span></td>
+        </tr>
+        <tr>
+          <td>対応電力会社エリア</td>
+          <td><span class="comp-text">1社付属<br>（追加+¥50,000/社/月）</span></td>
+          <td><span class="comp-text-em">全社含む</span></td>
+        </tr>
+        <tr>
+          <td>変電所マーカー表示</td>
           <td><span class="comp-ok">○</span></td>
           <td><span class="comp-ok">○</span></td>
         </tr>
@@ -441,79 +450,56 @@ body {
           <td>空き容量ランク色分け</td>
           <td><span class="comp-ok">○</span></td>
           <td><span class="comp-ok">○</span></td>
-          <td><span class="comp-ok">○</span></td>
         </tr>
         <tr>
-          <td>住所検索・距離計測</td>
-          <td><span class="comp-ok">○</span></td>
-          <td><span class="comp-ok">○</span></td>
-          <td><span class="comp-ok">○</span></td>
-        </tr>
-        <tr>
-          <td>空き容量データ更新頻度</td>
-          <td><span class="comp-text">四半期</span></td>
-          <td><span class="comp-text-em">毎月</span></td>
-          <td><span class="comp-text-em">毎月＋速報</span></td>
-        </tr>
-        <tr>
-          <td>ハザードマップ重畳</td>
-          <td><span class="comp-no">×</span></td>
-          <td><span class="comp-ok">○</span></td>
-          <td><span class="comp-ok">○</span></td>
-        </tr>
-        <tr>
-          <td>公図・地番オーバーレイ</td>
-          <td><span class="comp-no">×</span></td>
-          <td><span class="comp-ok">○</span></td>
-          <td><span class="comp-ok">○</span></td>
-        </tr>
-        <tr>
-          <td>送電線ルート表示</td>
-          <td><span class="comp-no">×</span></td>
+          <td>半径検索・距離計測</td>
           <td><span class="comp-ok">○</span></td>
           <td><span class="comp-ok">○</span></td>
         </tr>
         <tr>
           <td>変電所詳細情報</td>
-          <td><span class="comp-text">概要のみ</span></td>
           <td><span class="comp-text-em">全件</span></td>
           <td><span class="comp-text-em">全件</span></td>
         </tr>
         <tr>
-          <td>売出物件・地上げ対象情報</td>
-          <td><span class="comp-no">×</span></td>
-          <td><span class="comp-text-em">○（月1回更新）</span></td>
-          <td><span class="comp-text-em">○（毎週更新）</span></td>
+          <td>空き容量データ更新頻度</td>
+          <td><span class="comp-text-em">毎月</span></td>
+          <td><span class="comp-text-em">毎月＋速報</span></td>
         </tr>
         <tr>
-          <td>レインズ連携物件情報（予定）</td>
-          <td><span class="comp-no">×</span></td>
-          <td><span class="comp-no">×</span></td>
+          <td>ハザードマップ重畳</td>
+          <td><span class="comp-ok">○</span></td>
           <td><span class="comp-ok">○</span></td>
         </tr>
         <tr>
           <td>CSV/PDFエクスポート</td>
-          <td><span class="comp-no">×</span></td>
           <td><span class="comp-ok">○</span></td>
           <td><span class="comp-ok">○</span></td>
         </tr>
         <tr>
-          <td>お気に入り・メモ保存</td>
+          <td>複数ユーザー共有</td>
           <td><span class="comp-no">×</span></td>
-          <td><span class="comp-ok">○</span></td>
-          <td><span class="comp-ok">○</span></td>
+          <td><span class="comp-ok">○（無制限）</span></td>
         </tr>
         <tr>
           <td>チーム共有・案件管理</td>
           <td><span class="comp-no">×</span></td>
+          <td><span class="comp-ok">○</span></td>
+        </tr>
+        <tr>
+          <td>APIアクセス（外部連携）</td>
           <td><span class="comp-no">×</span></td>
           <td><span class="comp-ok">○</span></td>
         </tr>
         <tr>
           <td>サポート</td>
           <td><span class="comp-text">メール</span></td>
-          <td><span class="comp-text-em">メール+チャット</span></td>
           <td><span class="comp-text-em">専任担当者</span></td>
+        </tr>
+        <tr>
+          <td>請求書払い</td>
+          <td><span class="comp-no">×</span></td>
+          <td><span class="comp-ok">○</span></td>
         </tr>
       </tbody>
     </table>
@@ -527,15 +513,15 @@ body {
     <div class="feature-item">
       <div class="feature-icon">🗺</div>
       <div class="feature-text">
-        <h3>用地候補マップ</h3>
-        <p>全国の蓄電所設置候補地を地図上で一覧確認。航空写真・公図と重ねて詳細確認できます。</p>
+        <h3>変電所マップ</h3>
+        <p>全国の変電所を地図上で一覧。空き容量ランク・距離で蓄電所候補地を高速絞り込み。</p>
       </div>
     </div>
     <div class="feature-item">
       <div class="feature-icon">⚡</div>
       <div class="feature-text">
-        <h3>変電所空き容量</h3>
-        <p>電力会社別の変電所データを定期取得。接続検討前の一次スクリーニングに活用できます。</p>
+        <h3>系統空き容量</h3>
+        <p>各電力会社公式データを毎月取得・整理。接続検討前の一次スクリーニングに活用できます。</p>
       </div>
     </div>
     <div class="feature-item">
@@ -560,11 +546,15 @@ body {
   <h2>よくある質問</h2>
   <div class="faq-item">
     <div class="faq-q">Q. いつでもキャンセルできますか？</div>
-    <div class="faq-a">A. はい、いつでもキャンセル可能です。解約月の月末まで引き続きご利用いただけます。</div>
+    <div class="faq-a">A. はい、いつでもキャンセル可能です。解約月の月末まで引き続きご利用いただけます。初回登録料は返金いたしません。</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Q. Standardで後から電力会社エリアを追加できますか？</div>
+    <div class="faq-a">A. はい、可能です。追加したい電力会社エリアを1社につき月額¥50,000（税別）でオプション追加できます。追加のお申し込みはメールにてお問い合わせください。</div>
   </div>
   <div class="faq-item">
     <div class="faq-q">Q. 支払い方法は？</div>
-    <div class="faq-a">A. クレジットカード（Visa・Mastercard・JCB・American Express）でのお支払いに対応しています。</div>
+    <div class="faq-a">A. クレジットカード（Visa・Mastercard・JCB・American Express）でのお支払いに対応しています。Enterpriseプランは請求書払いも可能です。</div>
   </div>
   <div class="faq-item">
     <div class="faq-q">Q. データは何次情報ですか？</div>
@@ -572,7 +562,7 @@ body {
   </div>
   <div class="faq-item">
     <div class="faq-q">Q. 法人での契約は可能ですか？</div>
-    <div class="faq-a">A. もちろん可能です。請求書払いをご希望の場合はお問い合わせください。</div>
+    <div class="faq-a">A. もちろん可能です。Enterpriseプランでは請求書払いもご利用いただけます。</div>
   </div>
 </div>
 
@@ -608,7 +598,7 @@ body {
   // ユーザー名を表示
   const { data: demoUser } = await sb
     .from('demo_users')
-    .select('display_name, email')
+    .select('display_name, email, plan')
     .eq('id', session.user.id)
     .single();
 
@@ -643,24 +633,19 @@ function selectPlan(plan) {
 
   // Enterpriseはお問い合わせへ
   if (plan === 'enterprise') {
-    location.href = 'mailto:info@440marketing.biz?subject=BatteryLand%20Enterprise%E3%83%97%E3%83%A9%E3%83%B3%20%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B&body=%E3%81%8A%E5%90%8D%E5%89%8D%3A%0A%E4%BC%9A%E7%A4%BE%E5%90%8D%3A%0A%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B%E5%86%85%E5%AE%B9%3A';
+    location.href = 'mailto:info@440marketing.biz?subject=BatteryLand%20Enterprise%E3%83%97%E3%83%A9%E3%83%B3%20%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B&body=%E3%81%8A%E5%90%8D%E5%89%8D%3A%0A%E4%BC%9A%E7%A4%BE%E5%90%8D%3A%0A%E5%B8%8C%E6%9C%9B%E9%9B%BB%E5%8A%9B%E4%BC%9A%E7%A4%BE%E3%82%A8%E3%83%AA%E3%82%A2%3A%0A%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B%E5%86%85%E5%AE%B9%3A';
     return;
   }
 
-  let url;
-  if (plan === 'lite') {
-    url = cfg.STRIPE_LITE_PAYMENT_LINK;
-  } else if (plan === 'standard') {
-    url = cfg.STRIPE_STANDARD_PAYMENT_LINK;
+  if (plan === 'standard') {
+    const url = cfg.STRIPE_STANDARD_PAYMENT_LINK;
+    if (!url || url.includes('YOUR')) {
+      alert('現在、オンライン決済の準備中です。\nお申し込みはメールにてお問い合わせください。\n\ninfo@440marketing.biz');
+      return;
+    }
+    const returnUrl = encodeURIComponent(location.origin + '/expired.html?success=1');
+    location.href = url + '?return_url=' + returnUrl;
   }
-
-  if (!url || url.includes('YOUR')) {
-    alert('現在、オンライン決済の準備中です。\nお申し込みはメールにてお問い合わせください。\n\ninfo@440marketing.biz');
-    return;
-  }
-
-  const returnUrl = encodeURIComponent(location.origin + '/expired.html?success=1');
-  location.href = url + '?return_url=' + returnUrl;
 }
 
 function showPaymentSuccess() {
