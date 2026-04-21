@@ -418,6 +418,8 @@ tbody tr { cursor: pointer; }
     <button class="tab-btn active" data-tab="users">👥 ユーザー管理</button>
     <button class="tab-btn" data-tab="partners">🤝 代理店管理</button>
     <button class="tab-btn" data-tab="register">➕ 代理店新規登録</button>
+    <button class="tab-btn" data-tab="docs">📁 代理店資料</button>
+    <button class="tab-btn" data-tab="news">🔔 おしらせ管理</button>
   </div>
 
   <!-- タブ1: ユーザー管理 -->
@@ -504,6 +506,94 @@ tbody tr { cursor: pointer; }
         </thead>
         <tbody id="partners-tbody"></tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- タブ4: 代理店資料 -->
+  <div class="tab-panel" id="tab-docs">
+    <div class="panel-header">
+      <div class="panel-title">代理店資料ライブラリ</div>
+      <div class="panel-count" id="docs-count"></div>
+    </div>
+    <div style="margin-bottom:20px;">
+      <div class="form-card" style="max-width:100%;margin-bottom:20px;">
+        <h3>📎 資料を追加</h3>
+        <div class="alert alert-error" id="doc-error"></div>
+        <div class="alert alert-success" id="doc-success"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="form-group">
+            <label class="form-label">資料タイトル <span style="color:#ef4444">*</span></label>
+            <input type="text" id="doc-title" class="form-input" placeholder="BatteryLand 代理店向け説明資料">
+          </div>
+          <div class="form-group">
+            <label class="form-label">カテゴリ</label>
+            <select id="doc-category" class="form-input" style="background:#0f172a;">
+              <option value="説明資料">説明資料</option>
+              <option value="料金表">料金表</option>
+              <option value="契約書">契約書</option>
+              <option value="マニュアル">マニュアル</option>
+              <option value="その他">その他</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ファイルURL <span style="color:#ef4444">*</span></label>
+          <input type="url" id="doc-url" class="form-input" placeholder="https://drive.google.com/file/d/... または Dropbox・OneDriveのリンク">
+          <p class="form-hint">Google Drive / Dropbox / OneDrive などの共有リンクを貼り付けてください</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label">説明・備考</label>
+          <input type="text" id="doc-desc" class="form-input" placeholder="代理店営業時に使用するメイン資料など">
+        </div>
+        <button class="btn-primary" id="doc-submit-btn" style="padding:10px 24px;font-size:14px;">資料を追加する</button>
+      </div>
+
+      <!-- 資料一覧 -->
+      <div id="docs-list-wrap">
+        <div class="loading-wrap" id="docs-loading"><div class="spinner"></div><div>読み込み中...</div></div>
+        <div id="docs-grid" style="display:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- タブ5: おしらせ管理 -->
+  <div class="tab-panel" id="tab-news">
+    <div class="panel-header">
+      <div class="panel-title">おしらせ管理</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;">
+      <div class="form-card" style="max-width:100%;">
+        <h3>📝 おしらせを追加</h3>
+        <div class="alert alert-error" id="news-error"></div>
+        <div class="alert alert-success" id="news-success"></div>
+        <div class="form-group">
+          <label class="form-label">タイトル <span style="color:#ef4444">*</span></label>
+          <input type="text" id="news-title" class="form-input" placeholder="機能追加のお知らせ">
+        </div>
+        <div class="form-group">
+          <label class="form-label">タグ</label>
+          <select id="news-tag" class="form-input" style="background:#0f172a;">
+            <option value="update">システム更新</option>
+            <option value="data">データ更新</option>
+            <option value="feature">機能追加</option>
+            <option value="notice">お知らせ</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">本文 <span style="color:#ef4444">*</span></label>
+          <textarea id="news-body" class="form-input" rows="6" placeholder="更新内容を記入してください&#10;・箇条書きも可"></textarea>
+        </div>
+        <button class="btn-primary" id="news-submit-btn" style="padding:10px 24px;font-size:14px;">おしらせを投稿する</button>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#94a3b8;margin-bottom:12px;">📋 投稿済みおしらせ（直近5件）</div>
+        <div id="news-preview-list" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="color:#475569;font-size:13px;">読み込み中...</div>
+        </div>
+        <div style="margin-top:16px;">
+          <a href="news.html" target="_blank" style="font-size:13px;color:#60a5fa;text-decoration:none;">→ おしらせページを確認 ↗</a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -655,6 +745,8 @@ tbody tr { cursor: pointer; }
 
       // タブ切り替え時にデータ読み込み
       if (targetTab === 'partners') loadPartners();
+      if (targetTab === 'docs') loadDocs();
+      if (targetTab === 'news') loadNewsPreview();
     });
   });
 
@@ -1086,6 +1178,141 @@ tbody tr { cursor: pointer; }
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
   }
+
+  // =====================================================
+  // 代理店資料管理
+  // =====================================================
+  async function loadDocs() {
+    document.getElementById('docs-loading').style.display = 'block';
+    document.getElementById('docs-grid').style.display = 'none';
+    try {
+      const { data: docs, error } = await sb
+        .from('partner_docs')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      renderDocs(docs || []);
+    } catch(e) {
+      document.getElementById('docs-loading').innerHTML =
+        '<div style="color:#fca5a5;font-size:13px;">⚠ partner_docs テーブルが未作成です。下記SQLをSupabaseで実行してください：<br><code style="font-size:11px;color:#86efac;">CREATE TABLE partner_docs (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), title text NOT NULL, url text NOT NULL, category text DEFAULT \'その他\', description text, created_at timestamptz DEFAULT now());</code></div>';
+    }
+  }
+
+  function renderDocs(docs) {
+    document.getElementById('docs-loading').style.display = 'none';
+    const grid = document.getElementById('docs-grid');
+    grid.style.display = 'grid';
+    document.getElementById('docs-count').textContent = `全${docs.length}件`;
+    if (docs.length === 0) {
+      grid.innerHTML = '<div style="color:#475569;font-size:13px;grid-column:1/-1;">資料がまだ登録されていません。上のフォームから追加してください。</div>';
+      return;
+    }
+    const catColors = { '説明資料':'#93c5fd', '料金表':'#86efac', '契約書':'#fde047', 'マニュアル':'#d8b4fe', 'その他':'#94a3b8' };
+    grid.innerHTML = docs.map(doc => `
+      <div style="background:#0f172a;border:1px solid #334155;border-radius:10px;padding:18px;position:relative;">
+        <div style="font-size:10px;font-weight:700;color:${catColors[doc.category]||'#94a3b8'};margin-bottom:8px;letter-spacing:0.5px;">${escapeHtml(doc.category||'その他')}</div>
+        <div style="font-size:14px;font-weight:700;color:#f8fafc;margin-bottom:6px;line-height:1.4;">${escapeHtml(doc.title)}</div>
+        ${doc.description ? `<div style="font-size:12px;color:#64748b;margin-bottom:12px;">${escapeHtml(doc.description)}</div>` : '<div style="margin-bottom:12px;"></div>'}
+        <div style="display:flex;gap:8px;align-items:center;">
+          <a href="${escapeHtml(doc.url)}" target="_blank" style="font-size:12px;color:#60a5fa;text-decoration:none;padding:6px 14px;border:1px solid rgba(96,165,250,0.4);border-radius:6px;background:rgba(96,165,250,0.08);">📥 開く</a>
+          <button onclick="deleteDoc('${doc.id}')" style="font-size:11px;color:#fca5a5;background:none;border:none;cursor:pointer;padding:6px 10px;">削除</button>
+        </div>
+        <div style="font-size:10px;color:#475569;margin-top:10px;">${new Date(doc.created_at).toLocaleDateString('ja-JP')} 登録</div>
+      </div>
+    `).join('');
+  }
+
+  window.deleteDoc = async function(id) {
+    if (!confirm('この資料を削除しますか？')) return;
+    const { error } = await sb.from('partner_docs').delete().eq('id', id);
+    if (error) { alert('削除に失敗しました: ' + error.message); return; }
+    loadDocs();
+  };
+
+  document.getElementById('doc-submit-btn').addEventListener('click', async () => {
+    const title = document.getElementById('doc-title').value.trim();
+    const url   = document.getElementById('doc-url').value.trim();
+    const cat   = document.getElementById('doc-category').value;
+    const desc  = document.getElementById('doc-desc').value.trim();
+    const err   = document.getElementById('doc-error');
+    const suc   = document.getElementById('doc-success');
+    err.style.display = 'none'; suc.style.display = 'none';
+
+    if (!title) { err.textContent = '⚠ タイトルを入力してください'; err.style.display='block'; return; }
+    if (!url)   { err.textContent = '⚠ URLを入力してください';       err.style.display='block'; return; }
+
+    const btn = document.getElementById('doc-submit-btn');
+    btn.disabled = true; btn.textContent = '追加中...';
+    const { error } = await sb.from('partner_docs').insert({ title, url, category: cat, description: desc||null });
+    btn.disabled = false; btn.textContent = '資料を追加する';
+
+    if (error) { err.textContent = '⚠ 失敗しました: ' + error.message; err.style.display='block'; return; }
+    suc.textContent = '✓ 資料を追加しました';  suc.style.display='block';
+    document.getElementById('doc-title').value = '';
+    document.getElementById('doc-url').value = '';
+    document.getElementById('doc-desc').value = '';
+    loadDocs();
+  });
+
+  // =====================================================
+  // おしらせ管理
+  // =====================================================
+  async function loadNewsPreview() {
+    try {
+      const { data: items, error } = await sb
+        .from('news_items')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(5);
+      if (error) throw error;
+      const wrap = document.getElementById('news-preview-list');
+      if (!items || items.length === 0) {
+        wrap.innerHTML = '<div style="color:#475569;font-size:13px;">おしらせはまだありません</div>';
+        return;
+      }
+      const tagLabel = { update:'システム更新', data:'データ更新', feature:'機能追加', notice:'お知らせ' };
+      wrap.innerHTML = items.map(item => `
+        <div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:14px;position:relative;">
+          <div style="font-size:10px;color:#64748b;margin-bottom:4px;">${new Date(item.created_at).toLocaleDateString('ja-JP')} | ${tagLabel[item.tag]||item.tag}</div>
+          <div style="font-size:13px;font-weight:700;color:#f8fafc;margin-bottom:6px;">${escapeHtml(item.title)}</div>
+          <button onclick="deleteNews('${item.id}')" style="font-size:10px;color:#fca5a5;background:none;border:none;cursor:pointer;">削除</button>
+        </div>
+      `).join('');
+    } catch(e) {
+      document.getElementById('news-preview-list').innerHTML =
+        '<div style="color:#fca5a5;font-size:12px;">⚠ news_items テーブルが未作成です。<br><code style="font-size:10px;color:#86efac;">CREATE TABLE news_items (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), title text NOT NULL, body text NOT NULL, tag text DEFAULT \'update\', created_at timestamptz DEFAULT now());</code></div>';
+    }
+  }
+
+  window.deleteNews = async function(id) {
+    if (!confirm('このおしらせを削除しますか？')) return;
+    const { error } = await sb.from('news_items').delete().eq('id', id);
+    if (error) { alert('削除に失敗: ' + error.message); return; }
+    loadNewsPreview();
+  };
+
+  document.getElementById('news-submit-btn').addEventListener('click', async () => {
+    const title = document.getElementById('news-title').value.trim();
+    const body  = document.getElementById('news-body').value.trim();
+    const tag   = document.getElementById('news-tag').value;
+    const err   = document.getElementById('news-error');
+    const suc   = document.getElementById('news-success');
+    err.style.display='none'; suc.style.display='none';
+
+    if (!title) { err.textContent='⚠ タイトルを入力してください'; err.style.display='block'; return; }
+    if (!body)  { err.textContent='⚠ 本文を入力してください';     err.style.display='block'; return; }
+
+    const btn = document.getElementById('news-submit-btn');
+    btn.disabled=true; btn.textContent='投稿中...';
+    const { error } = await sb.from('news_items').insert({ title, body, tag });
+    btn.disabled=false; btn.textContent='おしらせを投稿する';
+
+    if (error) { err.textContent='⚠ 失敗しました: '+error.message; err.style.display='block'; return; }
+    suc.textContent='✓ 投稿しました'; suc.style.display='block';
+    document.getElementById('news-title').value='';
+    document.getElementById('news-body').value='';
+    loadNewsPreview();
+  });
 
   // =====================================================
   // 初期データ読み込み（ユーザー一覧）
