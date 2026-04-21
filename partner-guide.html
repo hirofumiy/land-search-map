@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BatteryLand 代理店向け説明資料</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+@media print {
+  .no-print { display: none !important; }
+  .page-break { page-break-before: always; }
+  body { background: #fff; }
+}
+body {
+  font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+  background: #f0f4f8;
+  color: #1a202c;
+  line-height: 1.7;
+}
+
+/* 印刷ボタン */
+.print-bar {
+  background: #1e293b;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.print-bar-left { color: #94a3b8; font-size: 13px; }
+.btn-print {
+  padding: 8px 20px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-print:hover { background: #2563eb; }
+
+/* ページ */
+.doc {
+  max-width: 860px;
+  margin: 24px auto;
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+}
+@media print { .doc { max-width: 100%; margin: 0; box-shadow: none; } }
+
+/* 表紙 */
+.cover {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #0f172a 100%);
+  padding: 80px 60px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cover-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cover-logo-icon { font-size: 36px; }
+.cover-logo-text {
+  font-size: 22px;
+  font-weight: 900;
+  color: #f8fafc;
+  letter-spacing: 3px;
+}
+.cover-body { text-align: center; padding: 40px 0; }
+.cover-eyecatch {
+  font-size: 13px;
+  color: #60a5fa;
+  letter-spacing: 3px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.cover-title {
+  font-size: 32px;
+  font-weight: 900;
+  color: #f8fafc;
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+.cover-title span { color: #60a5fa; }
+.cover-sub {
+  font-size: 15px;
+  color: #94a3b8;
+  line-height: 1.8;
+}
+.cover-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.cover-date { font-size: 12px; color: #64748b; }
+.cover-company { font-size: 14px; color: #94a3b8; font-weight: 600; }
+
+/* セクション */
+.section {
+  padding: 48px 60px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.section-number {
+  font-size: 11px;
+  font-weight: 700;
+  color: #3b82f6;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.section-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 28px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #3b82f6;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* サービス概要 */
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+.overview-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+.overview-card-icon { font-size: 24px; margin-bottom: 8px; }
+.overview-card-title { font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
+.overview-card-text { font-size: 13px; color: #475569; line-height: 1.7; }
+
+/* 特徴リスト */
+.feature-list { list-style: none; margin-top: 16px; }
+.feature-list li {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px dashed #e2e8f0;
+  font-size: 14px;
+  color: #334155;
+}
+.feature-list li:last-child { border-bottom: none; }
+.feature-list .icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.feature-list .feat-title { font-weight: 700; color: #0f172a; display: block; margin-bottom: 2px; }
+
+/* 料金プラン */
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 8px;
+}
+.plan-card {
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+}
+.plan-card.recommend { border-color: #3b82f6; }
+.plan-header {
+  background: #f8fafc;
+  padding: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.plan-card.recommend .plan-header { background: #eff6ff; border-color: #bfdbfe; }
+.plan-name { font-size: 16px; font-weight: 800; color: #0f172a; }
+.plan-badge {
+  display: inline-block;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-top: 4px;
+}
+.plan-body { padding: 20px 16px; }
+.plan-price {
+  font-size: 28px;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1.2;
+}
+.plan-price-unit { font-size: 13px; color: #64748b; margin-top: 2px; }
+.plan-features { text-align: left; margin-top: 16px; }
+.plan-feature {
+  font-size: 12px;
+  color: #475569;
+  padding: 4px 0;
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+.plan-feature .chk { color: #16a34a; font-weight: 700; flex-shrink: 0; }
+
+/* コミッション */
+.commission-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-size: 14px;
+}
+.commission-table th {
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+.commission-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
+}
+.commission-table tr:nth-child(even) td { background: #f8fafc; }
+.commission-table tr:last-child td { border-bottom: none; }
+.tier-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 12px;
+}
+.tier1 { background: #f1f5f9; color: #475569; }
+.tier2 { background: #dbeafe; color: #1e40af; }
+.tier3 { background: #f3e8ff; color: #6b21a8; }
+.commission-note {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: #fef9c3;
+  border-radius: 6px;
+  border-left: 3px solid #d97706;
+}
+
+/* フロー */
+.flow-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 8px;
+}
+.flow-step {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 20px 0;
+  border-bottom: 1px dashed #e2e8f0;
+  position: relative;
+}
+.flow-step:last-child { border-bottom: none; }
+.step-num {
+  width: 36px;
+  height: 36px;
+  background: #3b82f6;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 15px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.step-content {}
+.step-title { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
+.step-text { font-size: 13px; color: #475569; line-height: 1.7; }
+
+/* Q&A */
+.qa-list { margin-top: 8px; }
+.qa-item {
+  margin-bottom: 20px;
+  padding: 20px 22px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+.qa-q { font-size: 14px; font-weight: 700; color: #1e40af; margin-bottom: 8px; }
+.qa-q::before { content: 'Q.  '; }
+.qa-a { font-size: 13px; color: #334155; line-height: 1.8; }
+.qa-a::before { content: 'A.  '; font-weight: 700; color: #16a34a; }
+
+/* 問い合わせ */
+.contact-box {
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 32px 36px;
+  color: #f8fafc;
+  margin-top: 8px;
+}
+.contact-title { font-size: 18px; font-weight: 800; margin-bottom: 20px; color: #f8fafc; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.contact-item { }
+.contact-label { font-size: 11px; color: #64748b; margin-bottom: 4px; letter-spacing: 1px; }
+.contact-value { font-size: 14px; color: #e2e8f0; font-weight: 600; }
+.contact-note { margin-top: 20px; font-size: 12px; color: #64748b; line-height: 1.8; border-top: 1px solid #334155; padding-top: 16px; }
+</style>
+</head>
+<body>
+
+<!-- 印刷バー -->
+<div class="print-bar no-print">
+  <div class="print-bar-left">BatteryLand 代理店向け説明資料 | 合同会社440</div>
+  <button class="btn-print" onclick="window.print()">🖨 PDF保存 / 印刷</button>
+</div>
+
+<div class="doc">
+
+  <!-- 表紙 -->
+  <div class="cover">
+    <div class="cover-logo">
+      <span class="cover-logo-icon">⚡</span>
+      <span class="cover-logo-text">BatteryLand</span>
+    </div>
+    <div class="cover-body">
+      <div class="cover-eyecatch">Partner Guide 2026</div>
+      <div class="cover-title">
+        蓄電所用地探索システム<br>
+        <span>代理店向け説明資料</span>
+      </div>
+      <div class="cover-sub">
+        BatteryLandは、系統用蓄電池（2MW/8MWh）の接続候補となる<br>
+        変電所をリアルタイムで探索できる専用SaaSプラットフォームです。<br>
+        代理店様を通じ、再エネ事業者・投資家・土地オーナーへご紹介ください。
+      </div>
+    </div>
+    <div class="cover-footer">
+      <div class="cover-date">2026年4月 発行</div>
+      <div class="cover-company">合同会社440</div>
+    </div>
+  </div>
+
+  <!-- 1. サービス概要 -->
+  <div class="section">
+    <div class="section-number">SECTION 01</div>
+    <div class="section-title">🗺 サービス概要</div>
+
+    <div class="overview-grid">
+      <div class="overview-card">
+        <div class="overview-card-icon">⚡</div>
+        <div class="overview-card-title">サービスの目的</div>
+        <div class="overview-card-text">系統用蓄電池（2MW/8MWh）を接続できる変電所を日本全国から探索。空き容量ランク・コスト・距離で絞り込みができる専用マップです。</div>
+      </div>
+      <div class="overview-card">
+        <div class="overview-card-icon">🏭</div>
+        <div class="overview-card-title">対象ユーザー</div>
+        <div class="overview-card-text">再エネ事業者・蓄電池デベロッパー・投資ファンド・土地オーナー・地域金融機関など、蓄電所事業に関わる全ての事業者。</div>
+      </div>
+      <div class="overview-card">
+        <div class="overview-card-icon">📊</div>
+        <div class="overview-card-title">データソース</div>
+        <div class="overview-card-text">各電力会社が公式公開する「系統空き容量マップ」を解析・整理。関西・中部・九州・中国・東北電力の変電所データを搭載（計2,800件超）。</div>
+      </div>
+      <div class="overview-card">
+        <div class="overview-card-icon">🔄</div>
+        <div class="overview-card-title">更新頻度</div>
+        <div class="overview-card-text">電力会社の公式データ更新に合わせ、月2回以上の定期更新を予定。常に最新の空き容量情報を提供します。</div>
+      </div>
+    </div>
+
+    <ul class="feature-list">
+      <li>
+        <span class="icon">🗺</span>
+        <div><span class="feat-title">全国変電所マップ（2,800件超）</span>関西・中部・九州・中国・東北電力の変電所データをリアルタイム表示。S〜Dのランクでフィルタリング可能。</div>
+      </li>
+      <li>
+        <span class="icon">📍</span>
+        <div><span class="feat-title">半径検索・距離測定</span>任意の地点から指定半径内の候補変電所を一覧表示。土地との距離も即座に確認できます。</div>
+      </li>
+      <li>
+        <span class="icon">🚫</span>
+        <div><span class="feat-title">ハザードマップ除外フィルタ</span>国土地理院のハザードマップと連携。洪水・土石流・急傾斜地・地すべりリスクのある物件を自動除外します。</div>
+      </li>
+      <li>
+        <span class="icon">🏘</span>
+        <div><span class="feat-title">売出物件・地上げ対象の表示</span>変電所周辺の候補地情報（売出物件・地上げ対象）をマップ上に重ねて表示。</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 2. ランク説明 -->
+  <div class="section">
+    <div class="section-number">SECTION 02</div>
+    <div class="section-title">🏆 変電所ランク基準</div>
+    <p style="font-size:14px;color:#475569;margin-bottom:20px;">各変電所は系統空き容量（MW）に基づき5段階でランク付けされています。</p>
+    <table class="commission-table">
+      <thead>
+        <tr>
+          <th>ランク</th>
+          <th>空き容量の目安</th>
+          <th>蓄電池接続のしやすさ</th>
+          <th>推定初期コスト</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:#f59e0b;font-size:16px;">★ S</strong></td>
+          <td>20MW以上</td>
+          <td>◎ 接続工事なしで即時申込可能な可能性が高い</td>
+          <td>100〜500万円程度</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#3b82f6;font-size:16px;">A</strong></td>
+          <td>10〜20MW未満</td>
+          <td>○ 軽微な工事のみで接続可能な可能性あり</td>
+          <td>100〜300万円程度</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#8b5cf6;font-size:16px;">B</strong></td>
+          <td>5〜10MW未満</td>
+          <td>△ 一部工事が必要な場合あり</td>
+          <td>300〜1,000万円程度</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#64748b;font-size:16px;">C</strong></td>
+          <td>2〜5MW未満</td>
+          <td>△ 系統補強が必要な場合が多い</td>
+          <td>500〜2,000万円程度</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#ef4444;font-size:16px;">D</strong></td>
+          <td>2MW未満</td>
+          <td>✕ 系統補強工事が必要・接続困難な場合あり</td>
+          <td>1,000万円以上</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="commission-note">
+      ※ 上記はあくまで目安です。実際の接続可否・工事費用は各電力会社との事前相談が必要です。BatteryLandは意思決定支援ツールであり、接続を保証するものではありません。
+    </div>
+  </div>
+
+  <!-- 3. 料金プラン -->
+  <div class="section page-break">
+    <div class="section-number">SECTION 03</div>
+    <div class="section-title">💴 料金プラン</div>
+
+    <div class="plan-grid">
+      <div class="plan-card">
+        <div class="plan-header">
+          <div class="plan-name">Lite</div>
+        </div>
+        <div class="plan-body">
+          <div class="plan-price">¥98,000</div>
+          <div class="plan-price-unit">/ 月（税別）</div>
+          <div class="plan-features">
+            <div class="plan-feature"><span class="chk">✓</span><span>全国変電所マップ閲覧</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>ランク別フィルタ</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>半径検索</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>1ユーザーアカウント</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="plan-card recommend">
+        <div class="plan-header">
+          <div class="plan-name">Standard</div>
+          <div class="plan-badge">人気</div>
+        </div>
+        <div class="plan-body">
+          <div class="plan-price">¥198,000</div>
+          <div class="plan-price-unit">/ 月（税別）</div>
+          <div class="plan-features">
+            <div class="plan-feature"><span class="chk">✓</span><span>Liteの全機能</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>売出物件・地上げ候補表示</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>ハザードマップ除外フィルタ</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>3ユーザーアカウント</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>月次データ更新通知</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-header">
+          <div class="plan-name">Enterprise</div>
+        </div>
+        <div class="plan-body">
+          <div class="plan-price">¥500,000</div>
+          <div class="plan-price-unit">/ 月（税別）〜</div>
+          <div class="plan-features">
+            <div class="plan-feature"><span class="chk">✓</span><span>Standardの全機能</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>APIアクセス</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>無制限ユーザー</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>専任サポート</span></div>
+            <div class="plan-feature"><span class="chk">✓</span><span>カスタマイズ対応</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="commission-note" style="margin-top:16px;">
+      ※ 初回3日間の無料トライアルあり。クレジットカード不要でお試しいただけます。
+    </div>
+  </div>
+
+  <!-- 4. コミッション体系 -->
+  <div class="section">
+    <div class="section-number">SECTION 04</div>
+    <div class="section-title">💰 代理店コミッション体系</div>
+
+    <table class="commission-table">
+      <thead>
+        <tr>
+          <th>Tier</th>
+          <th>紹介社数</th>
+          <th>コミッション率</th>
+          <th>月収例（Standard 3社紹介）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tier-badge tier1">Tier 1</span></td>
+          <td>1〜30社</td>
+          <td><strong>月額の 20%</strong></td>
+          <td>¥198,000 × 3社 × 20% = <strong>¥118,800</strong></td>
+        </tr>
+        <tr>
+          <td><span class="tier-badge tier2">Tier 2</span></td>
+          <td>31〜50社</td>
+          <td><strong>月額の 25%</strong></td>
+          <td>¥198,000 × 3社 × 25% = <strong>¥148,500</strong></td>
+        </tr>
+        <tr>
+          <td><span class="tier-badge tier3">Tier 3</span></td>
+          <td>51社以上</td>
+          <td><strong>月額の 30%</strong></td>
+          <td>¥198,000 × 3社 × 30% = <strong>¥178,200</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="commission-note">
+      ● コミッションは紹介先のご利用継続中に毎月発生します。<br>
+      ● 振込は翌月末払い。紹介コードを用いたユーザー登録を確認後、管理者が手動で処理いたします。<br>
+      ● Tierは有効な契約社数に応じて自動昇格・降格します。
+    </div>
+  </div>
+
+  <!-- 5. 紹介フロー -->
+  <div class="section">
+    <div class="section-number">SECTION 05</div>
+    <div class="section-title">📋 紹介フロー</div>
+
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">代理店登録・紹介コード取得</div>
+          <div class="step-text">合同会社440の管理者に代理店登録を申請。8文字の専用紹介コードが発行されます。</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">顧客へご紹介</div>
+          <div class="step-text">紹介コードをご紹介先に共有。URLと合わせてご案内ください。<br>
+          <code style="font-size:12px;background:#f1f5f9;padding:2px 6px;border-radius:3px;">https://batteryland.440marketing.biz/signup.html?ref=XXXXXXXX</code></div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">顧客が無料トライアル開始</div>
+          <div class="step-text">紹介コード付きURLからサインアップ → 3日間無料トライアル開始。</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">有料プランへの移行・コミッション発生</div>
+          <div class="step-text">トライアル終了後に有料プランへ移行した時点でコミッションが発生。毎月継続します。</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">翌月末に振込</div>
+          <div class="step-text">紹介実績・コミッション額を毎月確認の上、翌月末に指定口座へお振込みします。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. よくある質問 -->
+  <div class="section">
+    <div class="section-number">SECTION 06</div>
+    <div class="section-title">❓ よくある質問</div>
+
+    <div class="qa-list">
+      <div class="qa-item">
+        <div class="qa-q">紹介コードはどこで確認できますか？</div>
+        <div class="qa-a">代理店登録後、合同会社440の管理者よりメールにてお知らせします。管理ダッシュボードでもいつでも確認できます。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">変電所のデータはどこから取得していますか？</div>
+        <div class="qa-a">各電力会社（関西電力送配電・中部電力パワーグリッド・九州電力送配電・中国電力ネットワーク・東北電力ネットワーク等）が公式に公開している「系統空き容量」データを解析・整理しています。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">BatteryLandで見つけた変電所に実際に接続できますか？</div>
+        <div class="qa-a">BatteryLandは意思決定支援ツールです。実際の接続可否・工事費用については、各電力会社への事前相談（接続検討申込）が必要です。ランクはあくまで空き容量に基づく目安となります。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">東京電力エリアのデータはありますか？</div>
+        <div class="qa-a">東京電力パワーグリッドは現在データメンテナンス中のため、一部データのみ掲載しています。2026年4月以降に公式データが復旧次第、順次追加予定です。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">紹介した顧客がトライアル終了後に契約しなかった場合は？</div>
+        <div class="qa-a">コミッションは有料プランへの移行後に発生します。トライアルのみで終了した場合は発生しません。ただし、顧客の再登録時に紹介コードを使用いただければコミッション対象となります。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. お問い合わせ -->
+  <div class="section">
+    <div class="section-number">SECTION 07</div>
+    <div class="section-title">📬 お問い合わせ</div>
+    <div class="contact-box">
+      <div class="contact-title">合同会社440 BatteryLand事業部</div>
+      <div class="contact-grid">
+        <div class="contact-item">
+          <div class="contact-label">代理店登録・お問い合わせ</div>
+          <div class="contact-value">info@440marketing.biz</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">サービスURL</div>
+          <div class="contact-value">batteryland.440marketing.biz</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">対応時間</div>
+          <div class="contact-value">平日 9:00〜18:00</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">発行日</div>
+          <div class="contact-value">2026年4月</div>
+        </div>
+      </div>
+      <div class="contact-note">
+        本資料に記載の内容は2026年4月時点のものです。料金・仕様は予告なく変更される場合があります。<br>
+        本資料は代理店様向けの参考資料です。第三者への無断転載はご遠慮ください。<br>
+        © 2026 合同会社440 All rights reserved.
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
