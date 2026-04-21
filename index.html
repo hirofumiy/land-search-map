@@ -388,8 +388,26 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
             <div id="offset-status" style="font-size:8.5px; color:#94a3b8; margin-top:4px;"></div>
           </div>
         </div>
-        <div id="powerline-hint" class="powerline-hint">
-          ⚡ 現在 Lv<span id="zoom-level">6</span> ／ Lv12以上で送電線（推定）表示
+        <div id="powerline-hint" class="powerline-hint" style="display:flex;align-items:center;justify-content:space-between;">
+          <span>⚡ 現在 Lv<span id="zoom-level">6</span> ／ Lv12以上で送電線（推定）表示</span>
+          <label class="hazard-switch" title="送電線の表示/非表示">
+            <input type="checkbox" id="powerline-toggle" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <!-- 物件ハザード除外フィルター -->
+        <div style="margin-top:6px; padding:6px 8px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:5px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;">
+            <div>
+              <div style="font-size:11px;font-weight:600;color:#fca5a5;">🚫 物件ハザード除外</div>
+              <div style="font-size:9px;color:#94a3b8;margin-top:1px;">洪水3m以上・土石流・急傾斜・地すべりをNG判定</div>
+            </div>
+            <label class="hazard-switch">
+              <input type="checkbox" id="hazard-filter-toggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div id="hazard-filter-status" style="display:none;font-size:9px;color:#94a3b8;margin-top:4px;"></div>
         </div>
       </div>
 
@@ -472,6 +490,9 @@ let propertyMarkers = [];
 let activeCircles = [];
 let selectedCompanies = new Set(COMPANIES);
 let selectedRanks = new Set(RANKS);
+let powerlineEnabled = true;
+let hazardFilterEnabled = false;
+let hazardCheckCache = {}; // lat_lng → {ok: bool, reason: string}
 let measureMode = false;
 let measurePoints = [];
 let measureLine = null;
@@ -1258,7 +1279,7 @@ updateZoomDisplay();
 
 function buildPowerLines() {
   powerLineGroup.clearLayers();
-  if (!substationsData || map.getZoom() < 12) {
+  if (!substationsData || map.getZoom() < 12 || !powerlineEnabled) {
     map.removeLayer(powerLineGroup);
     return;
   }
@@ -1315,6 +1336,156 @@ function buildPowerLines() {
 
 map.on('zoomend', buildPowerLines);
 map.on('moveend', buildPowerLines);
+
+// ===== 送電線トグル =====
+document.getElementById('powerline-toggle').addEventListener('change', function() {
+  powerlineEnabled = this.checked;
+  buildPowerLines();
+});
+
+// ===== ハザードフィルタリング =====
+// タイル座標変換ユーティリティ
+function latLngToTile(lat, lng, z) {
+  const n = Math.pow(2, z);
+  const x = Math.floor((lng + 180) / 360 * n);
+  const latRad = lat * Math.PI / 180;
+  const y = Math.floor((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2 * n);
+  const px = Math.floor(((lng + 180) / 360 * n - x) * 256);
+  const latRad2 = lat * Math.PI / 180;
+  const py = Math.floor(((1 - Math.log(Math.tan(latRad2) + 1 / Math.cos(latRad2)) / Math.PI) / 2 * n - y) * 256);
+  return { x, y, px, py };
+}
+
+function getTilePixel(url, px, py) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = 256; canvas.height = 256;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const d = ctx.getImageData(px, py, 1, 1).data;
+        resolve({ r: d[0], g: d[1], b: d[2], a: d[3] });
+      } catch(e) { resolve(null); }
+    };
+    img.onerror = () => resolve(null);
+    img.src = url;
+  });
+}
+
+// 洪水深さ判定（GSI disaportal 色テーブル）
+// 0.5m未満:薄青 0.5-3m:中青(OK) 3m+:濃青(NG)
+function floodDepthFromPixel(r, g, b, a) {
+  if (a < 10) return 0; // 透明=安全
+  // 深い洪水（3m超）: 濃い青系 r<100, b>120, g<140
+  if (r < 120 && b > 100 && g < 160 && b > g) {
+    const darkness = (255 - r + 255 - g) / 2;
+    if (darkness > 130) return 5;  // 5m+
+    if (darkness > 100) return 3;  // 3-5m
+    return 1.5; // 0.5-3m
+  }
+  return 0.1; // 0.5m未満
+}
+
+async function checkPropertyHazard(lat, lng) {
+  const key = `${lat.toFixed(5)}_${lng.toFixed(5)}`;
+  if (hazardCheckCache[key] !== undefined) return hazardCheckCache[key];
+
+  const z = 14;
+  const tile = latLngToTile(lat, lng, z);
+
+  try {
+    // 1. 土石流・急傾斜・地すべり（いずれか1ピクセルでもNG）
+    const hazardUrls = [
+      { url: `https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/${z}/${tile.x}/${tile.y}.png`, label: '土石流' },
+      { url: `https://disaportaldata.gsi.go.jp/raster/05_kyukeishachihousaigai/${z}/${tile.x}/${tile.y}.png`, label: '急傾斜地崩壊' },
+      { url: `https://disaportaldata.gsi.go.jp/raster/05_jisuberikeikaikuiki/${z}/${tile.x}/${tile.y}.png`, label: '地すべり' },
+    ];
+    for (const { url, label } of hazardUrls) {
+      const px = await getTilePixel(url, tile.px, tile.py);
+      if (px && px.a > 20) {
+        hazardCheckCache[key] = { ok: false, reason: label + 'エリア内' };
+        return hazardCheckCache[key];
+      }
+    }
+
+    // 2. 洪水（3m以上はNG）
+    const floodUrl = `https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/${z}/${tile.x}/${tile.y}.png`;
+    const fpx = await getTilePixel(floodUrl, tile.px, tile.py);
+    if (fpx && fpx.a > 20) {
+      const depth = floodDepthFromPixel(fpx.r, fpx.g, fpx.b, fpx.a);
+      if (depth >= 3) {
+        hazardCheckCache[key] = { ok: false, reason: `洪水${depth}m以上エリア` };
+        return hazardCheckCache[key];
+      }
+    }
+
+    hazardCheckCache[key] = { ok: true, reason: '' };
+    return hazardCheckCache[key];
+  } catch(e) {
+    hazardCheckCache[key] = { ok: true, reason: '' }; // エラー時は表示
+    return hazardCheckCache[key];
+  }
+}
+
+// ハザードフィルタートグル
+document.getElementById('hazard-filter-toggle').addEventListener('change', async function() {
+  hazardFilterEnabled = this.checked;
+  const statusEl = document.getElementById('hazard-filter-status');
+  if (hazardFilterEnabled) {
+    hazardCheckCache = {}; // キャッシュリセット
+    statusEl.style.display = 'block';
+    statusEl.textContent = '⏳ ハザードデータ確認中...';
+    await renderPropertiesWithHazardFilter();
+    statusEl.textContent = '✅ フィルタ適用中（洪水3m超・土石流・急傾斜・地すべり除外）';
+  } else {
+    statusEl.style.display = 'none';
+    renderProperties();
+  }
+});
+
+async function renderPropertiesWithHazardFilter() {
+  propertyMarkers.forEach(m => map.removeLayer(m));
+  propertyMarkers = [];
+  if (!propertiesData) return;
+  let saleCount = 0, jiageCount = 0;
+
+  for (const f of propertiesData.features) {
+    const p = f.properties;
+    const [lng, lat] = f.geometry.coordinates;
+
+    if (hazardFilterEnabled) {
+      const check = await checkPropertyHazard(lat, lng);
+      if (!check.ok) continue; // ハザードNGは非表示
+    }
+
+    if (p.status === 'sale') saleCount++; else jiageCount++;
+    const coords = [lat, lng];
+    const priceStr = p.price_man ? p.price_man.toLocaleString() + '万円' : '価格未定';
+    const urlLink = p.url ? `<div class="popup-row"><a href="${p.url}" target="_blank">物件ページを開く</a></div>` : '';
+    const agentInfo = p.agent ? `<div class="popup-row"><b>不動産会社:</b> ${p.agent}</div>` : '';
+    const marker = L.marker(coords, { icon: createPropertyIcon(p.status) })
+      .bindPopup(`
+        <div class="popup-title">${p.status === 'sale' ? '🏠' : '🎯'} ${p.address}</div>
+        <div class="popup-row" style="margin-bottom:4px;"><span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;background:${p.status==='sale'?'#dcfce7':'#fef3c7'};color:${p.status==='sale'?'#166534':'#92400e'};">${STATUS_LABELS[p.status]}</span></div>
+        <div class="popup-row"><b>面積:</b> ${p.area_sqm ? p.area_sqm.toLocaleString() : '?'} m²</div>
+        <div class="popup-row"><b>価格:</b> ${priceStr}</div>
+        <div class="popup-row"><b>地目:</b> ${p.land_category || '不明'}</div>
+        <div class="popup-row"><b>最寄変電所:</b> ${p.nearest_substation || ''}（${p.distance_km || '?'} km）</div>
+        <div class="popup-row"><b>推定負担金:</b> ${p.estimated_burden || '不明'}</div>
+        <div class="popup-row"><b>接道:</b> ${p.road_access || '不明'}</div>
+        ${agentInfo}
+        <div class="popup-row"><b>備考:</b> ${p.notes || ''}</div>
+        ${urlLink}
+      `, { maxWidth: 320 })
+      .addTo(map);
+    propertyMarkers.push(marker);
+  }
+  document.getElementById('stat-sale').textContent = saleCount;
+  document.getElementById('stat-jiage').textContent = jiageCount;
+}
 
 // ===== Data Loading =====
 async function loadData() {
