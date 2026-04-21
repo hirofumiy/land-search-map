@@ -1506,7 +1506,7 @@ async function loadData() {
       const updatesEl = document.getElementById('company-updates');
       const companyUpdates = substationsData.metadata.company_data_updates;
       if (updatesEl && companyUpdates) {
-        const SHORT = {'東京電力パワーグリッド':'TEPCO','中部電力パワーグリッド':'中部電力','関西電力送配電':'関西電力','九州電力送配電':'九州電力','中国電力ネットワーク':'中国電力','東北電力ネットワーク':'東北電力'};
+        const SHORT = {'東京電力パワーグリッド':'TEPCO','中部電力パワーグリッド':'中部電力','関西電力送配電':'関西電力','九州電力送配電':'九州電力','中国電力ネットワーク':'中国電力','東北電力ネットワーク':'東北電力','北陸電力送配電':'北陸電力','北海道電力ネットワーク':'北海道電力'};
         let html = '<div style="font-weight:600; color:#60a5fa; margin-bottom:2px;">電力会社別 空き容量 最終更新日</div>';
         for (const [company, info] of Object.entries(companyUpdates)) {
           const name = SHORT[company] || company;
