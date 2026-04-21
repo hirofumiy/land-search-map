@@ -382,7 +382,7 @@
         "available_capacity_mw": 10,
         "can_connect_2mw": true,
         "reinforcement_needed": "軽微",
-        "estimated_cost_rank": "B",
+        "estimated_cost_rank": "A",
         "estimated_cost_yen_min": 3000000,
         "estimated_cost_yen_max": 5000000,
         "area": "相模原西部",
@@ -478,7 +478,7 @@
         "available_capacity_mw": 10,
         "can_connect_2mw": true,
         "reinforcement_needed": "軽微",
-        "estimated_cost_rank": "B",
+        "estimated_cost_rank": "A",
         "estimated_cost_yen_min": 3000000,
         "estimated_cost_yen_max": 5000000,
         "area": "三重県北部",
@@ -1030,7 +1030,7 @@
         "available_capacity_mw": 10,
         "can_connect_2mw": true,
         "reinforcement_needed": "軽微",
-        "estimated_cost_rank": "B",
+        "estimated_cost_rank": "A",
         "estimated_cost_yen_min": 3000000,
         "estimated_cost_yen_max": 5000000,
         "area": "門司地区",
@@ -1198,7 +1198,7 @@
         "available_capacity_mw": 10,
         "can_connect_2mw": true,
         "reinforcement_needed": "軽微",
-        "estimated_cost_rank": "B",
+        "estimated_cost_rank": "A",
         "estimated_cost_yen_min": 3000000,
         "estimated_cost_yen_max": 5000000,
         "area": "久留米地区",
@@ -1366,7 +1366,7 @@
         "available_capacity_mw": 10,
         "can_connect_2mw": true,
         "reinforcement_needed": "軽微",
-        "estimated_cost_rank": "B",
+        "estimated_cost_rank": "A",
         "estimated_cost_yen_min": 3000000,
         "estimated_cost_yen_max": 5000000,
         "area": "熊本地区",
@@ -1414,7 +1414,7 @@
         "available_capacity_mw": 6,
         "can_connect_2mw": true,
         "reinforcement_needed": "中規模",
-        "estimated_cost_rank": "C",
+        "estimated_cost_rank": "B",
         "estimated_cost_yen_min": 5000000,
         "estimated_cost_yen_max": 10000000,
         "area": "熊本地区",
@@ -1486,7 +1486,7 @@
         "available_capacity_mw": 10,
         "can_connect_2mw": true,
         "reinforcement_needed": "軽微",
-        "estimated_cost_rank": "B",
+        "estimated_cost_rank": "A",
         "estimated_cost_yen_min": 3000000,
         "estimated_cost_yen_max": 5000000,
         "area": "宮崎地区",
@@ -22052,11 +22052,12 @@
       },
       "properties": {
         "name": "西名古屋変電所(1)",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 427.0
       }
     },
     {
@@ -22070,11 +22071,12 @@
       },
       "properties": {
         "name": "西名古屋変電所(2)",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 57.0
       }
     },
     {
@@ -22088,11 +22090,12 @@
       },
       "properties": {
         "name": "四日市火力変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 93.0
       }
     },
     {
@@ -22106,11 +22109,12 @@
       },
       "properties": {
         "name": "北勢変電所(1)",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 57.0
       }
     },
     {
@@ -22124,11 +22128,12 @@
       },
       "properties": {
         "name": "亀山変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 119.0
       }
     },
     {
@@ -22142,11 +22147,12 @@
       },
       "properties": {
         "name": "新鈴鹿変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 68.0
       }
     },
     {
@@ -22160,11 +22166,12 @@
       },
       "properties": {
         "name": "南勢変電所(1)",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 83.0
       }
     },
     {
@@ -22178,11 +22185,12 @@
       },
       "properties": {
         "name": "川越変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 119.0
       }
     },
     {
@@ -22196,11 +22204,12 @@
       },
       "properties": {
         "name": "南勢変電所(2)",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 93.0
       }
     },
     {
@@ -22214,11 +22223,12 @@
       },
       "properties": {
         "name": "津変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 14.0
       }
     },
     {
@@ -22232,11 +22242,12 @@
       },
       "properties": {
         "name": "四港変電所(1)",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 14.0
       }
     },
     {
@@ -22250,11 +22261,12 @@
       },
       "properties": {
         "name": "末広変電所(1)",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 14.0
       }
     },
     {
@@ -22268,11 +22280,12 @@
       },
       "properties": {
         "name": "滝原変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 2.0
       }
     },
     {
@@ -22286,11 +22299,12 @@
       },
       "properties": {
         "name": "南島変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 4.0
       }
     },
     {
@@ -22304,11 +22318,12 @@
       },
       "properties": {
         "name": "紀勢変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "D",
+        "available_capacity_mw": 1.0
       }
     },
     {
@@ -22322,11 +22337,12 @@
       },
       "properties": {
         "name": "天花寺変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 14.0
       }
     },
     {
@@ -22340,11 +22356,12 @@
       },
       "properties": {
         "name": "瀬古口変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 17.0
       }
     },
     {
@@ -22358,11 +22375,12 @@
       },
       "properties": {
         "name": "名張変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 47.0
       }
     },
     {
@@ -22376,11 +22394,12 @@
       },
       "properties": {
         "name": "夏秋変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 16.0
       }
     },
     {
@@ -22394,11 +22413,12 @@
       },
       "properties": {
         "name": "上小波田変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 28.0
       }
     },
     {
@@ -22412,7 +22432,7 @@
       },
       "properties": {
         "name": "上野変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
@@ -22431,11 +22451,12 @@
       },
       "properties": {
         "name": "四十九変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 23.0
       }
     },
     {
@@ -22449,7 +22470,7 @@
       },
       "properties": {
         "name": "荒木変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
@@ -22468,11 +22489,12 @@
       },
       "properties": {
         "name": "美里変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 2.0
       }
     },
     {
@@ -22486,11 +22508,12 @@
       },
       "properties": {
         "name": "川原変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "D",
+        "available_capacity_mw": 1.0
       }
     },
     {
@@ -22504,11 +22527,12 @@
       },
       "properties": {
         "name": "佐那具変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 22.0
       }
     },
     {
@@ -22522,11 +22546,12 @@
       },
       "properties": {
         "name": "古里変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 19.0
       }
     },
     {
@@ -22540,11 +22565,12 @@
       },
       "properties": {
         "name": "三雲変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 10.0
       }
     },
     {
@@ -22558,11 +22584,12 @@
       },
       "properties": {
         "name": "古河変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 43.0
       }
     },
     {
@@ -22576,11 +22603,12 @@
       },
       "properties": {
         "name": "藤方変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 35.0
       }
     },
     {
@@ -22594,11 +22622,12 @@
       },
       "properties": {
         "name": "雲出変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 2.0
       }
     },
     {
@@ -22612,11 +22641,12 @@
       },
       "properties": {
         "name": "東丸之内変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 49.0
       }
     },
     {
@@ -22630,11 +22660,12 @@
       },
       "properties": {
         "name": "鎌田変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 27.0
       }
     },
     {
@@ -22648,11 +22679,12 @@
       },
       "properties": {
         "name": "東沢変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "B",
+        "available_capacity_mw": 8.0
       }
     },
     {
@@ -22666,11 +22698,12 @@
       },
       "properties": {
         "name": "久居変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 30.0
       }
     },
     {
@@ -22684,11 +22717,12 @@
       },
       "properties": {
         "name": "五曲変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 34.0
       }
     },
     {
@@ -22702,11 +22736,12 @@
       },
       "properties": {
         "name": "羽野変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 32.0
       }
     },
     {
@@ -22720,11 +22755,12 @@
       },
       "properties": {
         "name": "広陽変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 4.0
       }
     },
     {
@@ -22738,7 +22774,7 @@
       },
       "properties": {
         "name": "橋北変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
@@ -22757,11 +22793,12 @@
       },
       "properties": {
         "name": "河芸変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 4.0
       }
     },
     {
@@ -22775,11 +22812,12 @@
       },
       "properties": {
         "name": "渋見変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 30.0
       }
     },
     {
@@ -22793,11 +22831,12 @@
       },
       "properties": {
         "name": "一身田変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 11.0
       }
     },
     {
@@ -22811,11 +22850,12 @@
       },
       "properties": {
         "name": "末広変電所(2)",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 22.0
       }
     },
     {
@@ -22829,11 +22869,12 @@
       },
       "properties": {
         "name": "庄野変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 39.0
       }
     },
     {
@@ -22847,11 +22888,12 @@
       },
       "properties": {
         "name": "玉垣変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 14.0
       }
     },
     {
@@ -22865,7 +22907,7 @@
       },
       "properties": {
         "name": "川合変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
@@ -22884,11 +22926,12 @@
       },
       "properties": {
         "name": "岸田変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 3.0
       }
     },
     {
@@ -22902,7 +22945,7 @@
       },
       "properties": {
         "name": "神戸変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
@@ -22921,11 +22964,12 @@
       },
       "properties": {
         "name": "大治田町変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 14.0
       }
     },
     {
@@ -22939,11 +22983,12 @@
       },
       "properties": {
         "name": "楠変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 37.0
       }
     },
     {
@@ -22957,11 +23002,12 @@
       },
       "properties": {
         "name": "常磐変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 47.0
       }
     },
     {
@@ -22975,11 +23021,12 @@
       },
       "properties": {
         "name": "北勢変電所(2)",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 32.0
       }
     },
     {
@@ -22993,11 +23040,12 @@
       },
       "properties": {
         "name": "潤田変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "B",
+        "available_capacity_mw": 7.0
       }
     },
     {
@@ -23011,11 +23059,12 @@
       },
       "properties": {
         "name": "生桑変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "B",
+        "available_capacity_mw": 6.0
       }
     },
     {
@@ -23029,11 +23078,12 @@
       },
       "properties": {
         "name": "東員変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 4.0
       }
     },
     {
@@ -23047,11 +23097,12 @@
       },
       "properties": {
         "name": "昌栄変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 49.0
       }
     },
     {
@@ -23065,7 +23116,7 @@
       },
       "properties": {
         "name": "富田変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
@@ -23084,11 +23135,12 @@
       },
       "properties": {
         "name": "垂坂変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 14.0
       }
     },
     {
@@ -23102,11 +23154,12 @@
       },
       "properties": {
         "name": "羽津変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 27.0
       }
     },
     {
@@ -23120,11 +23173,12 @@
       },
       "properties": {
         "name": "高松変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 48.0
       }
     },
     {
@@ -23138,11 +23192,12 @@
       },
       "properties": {
         "name": "霞変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 16.0
       }
     },
     {
@@ -23156,11 +23211,12 @@
       },
       "properties": {
         "name": "能部変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 16.0
       }
     },
     {
@@ -23174,11 +23230,12 @@
       },
       "properties": {
         "name": "町屋変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 44.0
       }
     },
     {
@@ -23192,7 +23249,7 @@
       },
       "properties": {
         "name": "城南変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
@@ -23211,11 +23268,12 @@
       },
       "properties": {
         "name": "多度変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 20.0
       }
     },
     {
@@ -23229,11 +23287,12 @@
       },
       "properties": {
         "name": "大山田変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 33.0
       }
     },
     {
@@ -23247,7 +23306,7 @@
       },
       "properties": {
         "name": "神田変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
@@ -23266,11 +23325,12 @@
       },
       "properties": {
         "name": "員弁変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 3.0
       }
     },
     {
@@ -23284,11 +23344,12 @@
       },
       "properties": {
         "name": "六石変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 2.0
       }
     },
     {
@@ -23302,11 +23363,12 @@
       },
       "properties": {
         "name": "播磨変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 46.0
       }
     },
     {
@@ -23320,11 +23382,12 @@
       },
       "properties": {
         "name": "桑名変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 49.0
       }
     },
     {
@@ -23338,11 +23401,12 @@
       },
       "properties": {
         "name": "福豊変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 15.0
       }
     },
     {
@@ -23356,11 +23420,12 @@
       },
       "properties": {
         "name": "山田変電所(2)",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 38.0
       }
     },
     {
@@ -23374,11 +23439,12 @@
       },
       "properties": {
         "name": "湯田野変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 43.0
       }
     },
     {
@@ -23392,11 +23458,12 @@
       },
       "properties": {
         "name": "西豊浜変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 2.0
       }
     },
     {
@@ -23410,11 +23477,12 @@
       },
       "properties": {
         "name": "度会橋変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 38.0
       }
     },
     {
@@ -23428,11 +23496,12 @@
       },
       "properties": {
         "name": "鳥羽変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 10.0
       }
     },
     {
@@ -23446,11 +23515,12 @@
       },
       "properties": {
         "name": "堅神変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 11.0
       }
     },
     {
@@ -23464,11 +23534,12 @@
       },
       "properties": {
         "name": "塩江変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 49.0
       }
     },
     {
@@ -23482,11 +23553,12 @@
       },
       "properties": {
         "name": "通町変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 3.0
       }
     },
     {
@@ -23500,11 +23572,12 @@
       },
       "properties": {
         "name": "片田変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 13.0
       }
     },
     {
@@ -23518,11 +23591,12 @@
       },
       "properties": {
         "name": "賀田変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "B",
+        "available_capacity_mw": 9.0
       }
     },
     {
@@ -23536,11 +23610,12 @@
       },
       "properties": {
         "name": "矢の浜変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 17.0
       }
     },
     {
@@ -23554,11 +23629,12 @@
       },
       "properties": {
         "name": "宮ノ上変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 19.0
       }
     },
     {
@@ -23572,11 +23648,12 @@
       },
       "properties": {
         "name": "長島変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "B",
+        "available_capacity_mw": 7.0
       }
     },
     {
@@ -23590,11 +23667,12 @@
       },
       "properties": {
         "name": "赤堀変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 49.0
       }
     },
     {
@@ -23608,11 +23686,12 @@
       },
       "properties": {
         "name": "当新田変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 43.0
       }
     },
     {
@@ -23626,11 +23705,12 @@
       },
       "properties": {
         "name": "外宮前変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 49.0
       }
     },
     {
@@ -23644,11 +23724,12 @@
       },
       "properties": {
         "name": "桜変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 2.0
       }
     },
     {
@@ -23662,11 +23743,12 @@
       },
       "properties": {
         "name": "予野変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 3.0
       }
     },
     {
@@ -23680,11 +23762,12 @@
       },
       "properties": {
         "name": "白子変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 23.0
       }
     },
     {
@@ -23698,11 +23781,12 @@
       },
       "properties": {
         "name": "竹成変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "B",
+        "available_capacity_mw": 5.0
       }
     },
     {
@@ -23716,11 +23800,12 @@
       },
       "properties": {
         "name": "浜島変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 12.0
       }
     },
     {
@@ -23734,11 +23819,12 @@
       },
       "properties": {
         "name": "押淵変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 2.0
       }
     },
     {
@@ -23752,11 +23838,12 @@
       },
       "properties": {
         "name": "五ヶ所変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 13.0
       }
     },
     {
@@ -23770,11 +23857,12 @@
       },
       "properties": {
         "name": "中央町変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 49.0
       }
     },
     {
@@ -23788,11 +23876,12 @@
       },
       "properties": {
         "name": "ゆめが丘変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 20.0
       }
     },
     {
@@ -23806,11 +23895,12 @@
       },
       "properties": {
         "name": "あのつ台変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "C",
+        "available_capacity_mw": 3.0
       }
     },
     {
@@ -23824,7 +23914,7 @@
       },
       "properties": {
         "name": "北条変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
@@ -23843,11 +23933,12 @@
       },
       "properties": {
         "name": "堀木変電所",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "A",
+        "available_capacity_mw": 19.0
       }
     },
     {
@@ -23861,11 +23952,12 @@
       },
       "properties": {
         "name": "鵜方変電所(1)",
-        "company": "関西電力送配電",
+        "company": "中部電力パワーグリッド",
         "prefecture": "三重県",
         "geocode_validated": true,
         "geocode_source": "Google Maps API",
-        "estimated_cost_rank": "D"
+        "estimated_cost_rank": "S",
+        "available_capacity_mw": 28.0
       }
     },
     {
