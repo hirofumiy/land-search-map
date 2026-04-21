@@ -1036,8 +1036,9 @@ function renderSubstations() {
   let count = 0;
   substationsData.features.forEach(f => {
     const p = f.properties;
-    const hasCapacityData = p.rank !== null && p.rank !== undefined;
-    const rank = p.estimated_cost_rank || p.rank || 'D';
+    const effectiveRank = p.estimated_cost_rank || p.rank;
+    const hasCapacityData = effectiveRank !== null && effectiveRank !== undefined;
+    const rank = effectiveRank || 'D';
     const displayRank = hasCapacityData ? rank : 'N';
     // rank=NはRANKS配列にないので、フィルタではDと同様に扱う（D選択中なら表示）
     const filterRank = hasCapacityData ? rank : 'D';
@@ -1124,15 +1125,16 @@ function renderSubstationList() {
     .filter(f => {
       const p = f.properties;
       if (!selectedCompanies.has(p.company)) return false;
-      const hasData = p.rank !== null && p.rank !== undefined;
-      const filterRank = hasData ? (p.estimated_cost_rank || p.rank) : 'D';
+      const effRank = p.estimated_cost_rank || p.rank;
+      const filterRank = (effRank !== null && effRank !== undefined) ? effRank : 'D';
       return selectedRanks.has(filterRank);
     })
     .sort((a, b) => (b.properties.available_capacity_mw||0) - (a.properties.available_capacity_mw||0));
   el.innerHTML = filtered.map(f => {
     const p = f.properties;
-    const hasData = p.rank !== null && p.rank !== undefined;
-    const rank = p.estimated_cost_rank || p.rank || 'D';
+    const effRank = p.estimated_cost_rank || p.rank;
+    const hasData = effRank !== null && effRank !== undefined;
+    const rank = effRank || 'D';
     const displayRank = hasData ? rank : 'N';
     const availMW = p.available_capacity_mw != null ? p.available_capacity_mw : null;
     const availStr = availMW != null ? `空き ${availMW} MW` : '空き容量データなし';
