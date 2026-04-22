@@ -933,6 +933,33 @@ map.on('click', async function(e) {
       const areaM2 = estimateAreaM2(matchedGeom, tileX, tileY, z, extent, center.lat);
       const areaTsubo = areaM2 / 3.305785;
 
+      // ── 逆ジオコーディング: 都道府県・市区町村・字を取得 ──
+      let prefName = '', cityName = '', townName = '';
+      try {
+        // HeartRails Geo API（字レベルまで対応）
+        const hrRes = await fetch(
+          `https://geoapi.heartrails.com/api/json?method=searchByGeoLocation&x=${center.lng.toFixed(6)}&y=${center.lat.toFixed(6)}`
+        ).then(r => r.json());
+        const loc = hrRes?.response?.location?.[0];
+        if (loc) {
+          prefName = loc.prefecture || '';
+          cityName = loc.city || '';
+          townName = loc.town || '';
+        }
+      } catch(e) {}
+      // フォールバック: 国土地理院 逆ジオコーダー（市区町村まで）
+      if (!prefName) {
+        try {
+          const gsiRes = await fetch(
+            `https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat=${center.lat}&lon=${center.lng}`
+          ).then(r => r.json());
+          const nm = gsiRes?.results?.lv01Nm || '';
+          const m = nm.match(/^(.*?[都道府県])(.*?[市区町村郡])(.*?)$/);
+          if (m) { prefName = m[1]; cityName = m[2]; townName = m[3] || ''; }
+          else if (nm) { prefName = nm; }
+        } catch(e) {}
+      }
+
       // 地図種別バッジ
       let mapTypeBadge = '';
       if (isOfficial) {
@@ -949,15 +976,20 @@ map.on('click', async function(e) {
       const sv = 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=' + center.lat + ',' + center.lng;
       const touri = 'https://www1.touki.or.jp/gateway.html';
 
-      // ポップアップに表示される地番をクリップボードコピー用に整形
-      const safeChiban = String(chiban).replace(/'/g, '&#39;');
+      // 登記情報提供サービス用コピー文字列（所在＋地番）
+      const fullAddr = `${prefName}${cityName}${townName}`;
+      const copyText = fullAddr ? `${fullAddr} ${chiban}` : chiban;
+      const safeCopy = copyText.replace(/'/g, '&#39;');
 
       const html = `
-        <div style="min-width:240px;">
+        <div style="min-width:260px;">
           <div style="font-size:14px; font-weight:700; color:#1e2761; margin-bottom:6px; padding-bottom:4px; border-bottom:1px solid #e5e7eb;">
             📋 地番情報
           </div>
-          <div style="font-size:12px; line-height:1.7;">
+          <div style="font-size:12px; line-height:1.8;">
+            ${prefName ? `<div style="margin-bottom:4px; padding:3px 7px; background:#f0f4ff; border-radius:4px; font-size:11px; color:#374151;">
+              📍 <b>${prefName}</b>${cityName}<span style="color:#6b7280;">${townName ? '　' + townName : ''}</span>
+            </div>` : ''}
             <div><b>地番：</b><span style="font-size:14px; color:#a22; font-weight:600;">${chiban}</span></div>
             ${chimoku ? '<div><b>地目：</b>' + chimoku + '</div>' : ''}
             <div><b>推定面積：</b>${Math.round(areaM2).toLocaleString()} m² <span style="color:#64748b;">(約${areaTsubo.toFixed(1)} 坪)</span></div>
@@ -967,11 +999,11 @@ map.on('click', async function(e) {
           ${isLegacy ? '<div style="margin-top:6px; padding:4px 6px; background:#fef3c7; color:#92400e; font-size:10px; border-radius:3px;">⚠️ 旧公図区域のため航空写真とズレている可能性があります。左のズレ補正で調整できます。</div>' : ''}
           <div style="margin-top:8px; display:flex; flex-direction:column; gap:4px;">
             <a href="${sv}" target="_blank" rel="noopener" style="display:block; padding:6px 8px; background:#3b82f6; color:white; text-decoration:none; font-size:11px; border-radius:3px; text-align:center;">🗺️ ストリートビューを開く</a>
-            <button onclick="navigator.clipboard.writeText('${safeChiban}'); window.open('${touri}', '_blank');" style="padding:6px 8px; background:#059669; color:white; border:none; font-size:11px; border-radius:3px; cursor:pointer;">📄 登記情報提供サービス<br><span style="font-size:9px; opacity:0.9;">(地番をコピー＆サイトを開く)</span></button>
+            <button onclick="navigator.clipboard.writeText('${safeCopy}'); window.open('${touri}', '_blank');" style="padding:6px 8px; background:#059669; color:white; border:none; font-size:11px; border-radius:3px; cursor:pointer;">📄 登記情報提供サービス<br><span style="font-size:9px; opacity:0.9;">(所在＋地番をコピー＆サイトを開く)</span></button>
           </div>
         </div>`;
 
-      L.popup({ maxWidth: 300 }).setLatLng(e.latlng).setContent(html).openOn(map);
+      L.popup({ maxWidth: 320 }).setLatLng(e.latlng).setContent(html).openOn(map);
     }
   } catch (err) {
     console.error('Cadastral click error:', err);
