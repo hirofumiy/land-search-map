@@ -370,8 +370,8 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
             <label class="hazard-switch"><input type="checkbox" id="cadastral-cb"><span class="slider"></span></label>
           </div>
           <div id="cadastral-hint" style="font-size:9px; color:#64748b; margin-top:3px; padding-left:4px;">
-            Lv14+で筆界線 / Lv15+で地番表示（法務省オープンデータ 2024年版）<br>
-            ⚠️ 全国約59%対応。山間部・離島・旧来の紙公図エリアはデータなし
+            Lv14+で筆界線 / Lv15+で地番表示（法務省 2024年版）<br>
+            ✅ 14条地図（GPS測量・高精度）のみ表示。旧公図はズレの原因となるため非表示
           </div>
           <div id="cadastral-zoom-hint" style="display:none; margin-top:4px; padding:5px 7px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.35); border-radius:4px; font-size:9px; color:#fbbf24;">
             📍 表示にはズームLv14以上が必要です。<br>
@@ -764,6 +764,17 @@ function estimateAreaM2(ring, tileX, tileY, z, extent, centerLat) {
   return areaInUnits * mPerUnit * mPerUnit;
 }
 
+// 旧公図判定：精度が保証されない地図はズレるので非表示にする
+function isLegacyCadastral(feat) {
+  var p = feat.properties || {};
+  var mt = (p['gotType'] || p['座標値種別'] || p['map_type'] || p['精度区分'] || p['seido'] || '').toString();
+  if (!mt) return false;
+  // 14条地図（高精度・GPS測量）のみ許可。旧公図・公図・14条地図以外は除外
+  if (/14条地図(?!以外)|高精度|甲[一二三]|乙一/.test(mt)) return false;
+  if (/旧公図|14条地図以外|^公図$|地図に準ずる|乙[二三]/.test(mt)) return true;
+  return false;
+}
+
 function createCadastralLayer() {
   if (typeof Pbf === 'undefined' || typeof VectorTile === 'undefined') {
     console.warn('Pbf or VectorTile not loaded yet');
@@ -826,6 +837,7 @@ function createCadastralLayer() {
         for (var i = 0; i < fudeLayer.length; i++) {
           var feat = fudeLayer.feature(i);
           if (feat.type !== 3) continue;
+          if (isLegacyCadastral(feat)) continue; // 旧公図は非表示
           var geom = feat.loadGeometry();
           for (var r = 0; r < geom.length; r++) {
             var ring = geom[r];
@@ -852,6 +864,7 @@ function createCadastralLayer() {
 
           for (var i = 0; i < fudeLayer.length; i++) {
             var feat = fudeLayer.feature(i);
+            if (isLegacyCadastral(feat)) continue; // 旧公図は非表示
             var label = feat.properties['地番'];
             if (!label) continue;
             var geom = feat.loadGeometry();
@@ -1081,6 +1094,7 @@ map.on('click', async function(e) {
     for (let i = 0; i < fudeLayer.length; i++) {
       const feat = fudeLayer.feature(i);
       if (feat.type !== 3) continue;
+      if (isLegacyCadastral(feat)) continue; // 旧公図は対象外
       const geom = feat.loadGeometry();
       for (let r = 0; r < geom.length; r++) {
         if (pointInRing(px, py, geom[r])) {
