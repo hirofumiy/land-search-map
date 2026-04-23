@@ -103,6 +103,7 @@
 <!-- PMTiles + Pbf + VectorTile for 登記所備付地図（公図）表示 -->
 <script src="https://unpkg.com/pmtiles@3.2.0/dist/pmtiles.js"></script>
 <script src="https://unpkg.com/pbf@3.2.1/dist/pbf.js"></script>
+<script src="https://unpkg.com/flatgeobuf@3.22.0/dist/flatgeobuf-geojson.min.js"></script>
 <script type="module">
 import {VectorTile} from 'https://esm.sh/@mapbox/vector-tile@1.3.1';
 window.VectorTile = VectorTile;
@@ -369,8 +370,8 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
             <label class="hazard-switch"><input type="checkbox" id="cadastral-cb"><span class="slider"></span></label>
           </div>
           <div id="cadastral-hint" style="font-size:9px; color:#64748b; margin-top:3px; padding-left:4px;">
-            Lv14+で筆界線 / Lv15+で地番表示（法務省オープンデータ 2024年版）<br>
-            ⚠️ 全国約60〜70%対応。山間部・離島・旧来の紙公図エリアはデータなし
+            Lv14+で筆界線 / Lv15+で地番表示（法務省オープンデータ 2025年版）<br>
+            ⚠️ 全国約59%対応。山間部・離島・旧来の紙公図エリアはデータなし
           </div>
           <div id="cadastral-zoom-hint" style="display:none; margin-top:4px; padding:5px 7px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.35); border-radius:4px; font-size:9px; color:#fbbf24;">
             📍 表示にはズームLv14以上が必要です。<br>
@@ -397,6 +398,26 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
             <div id="offset-status" style="font-size:8.5px; color:#94a3b8; margin-top:4px;"></div>
           </div>
         </div>
+        <!-- 農地区画（筆ポリゴン）トグル -->
+        <div style="margin-top:8px; padding-top:8px; border-top:1px solid #334155;">
+          <div class="section-title" style="margin-bottom:6px;">農地区画</div>
+          <div class="hazard-toggle" id="fude-toggle">
+            <div class="hazard-dot" style="background:#16a34a;"></div>
+            <span style="flex:1;">農地区画（農水省）</span>
+            <label class="hazard-switch"><input type="checkbox" id="fude-cb"><span class="slider"></span></label>
+          </div>
+          <div id="fude-hint" style="font-size:9px; color:#64748b; margin-top:3px; padding-left:4px;">
+            Lv13+で農地区画表示（筆ポリゴン 2022年版）<br>
+            農水省オープンデータ（CC-BY）｜法務省公図の未整備エリアを補完
+          </div>
+          <div id="fude-loading" style="display:none; margin-top:4px; padding:4px 6px; background:rgba(22,163,74,0.10); border:1px solid rgba(22,163,74,0.3); border-radius:4px; font-size:9px; color:#86efac;">
+            🌾 農地区画を読み込み中…
+          </div>
+          <div id="fude-zoom-hint" style="display:none; margin-top:4px; padding:5px 7px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.35); border-radius:4px; font-size:9px; color:#fbbf24;">
+            📍 表示にはズームLv13以上が必要です。
+          </div>
+        </div>
+
         <div id="powerline-hint" class="powerline-hint" style="display:flex;align-items:center;justify-content:space-between;">
           <span>⚡ 現在 Lv<span id="zoom-level">6</span> ／ Lv12以上で送電線（推定）表示</span>
           <label class="hazard-switch" title="送電線の表示/非表示">
@@ -537,10 +558,135 @@ const hazardLayers = {
 };
 const hazardActive = { flood: false, sediment: false, landslide: false, jisuberi: false, tsunami: false };
 
+// ===== 農地区画（筆ポリゴン）レイヤー =====
+let fudePolyLayer = null;
+let fudeActive = false;
+let fudeLoadTimer = null;
+let fudeAbortController = null;
+
+// 都道府県別FGBファイルベースURL（農林水産省筆ポリゴン 2022年版、CORS:*）
+const FGB_BASE = 'https://habs.rad.naro.go.jp/spatial_data/fudepoly47/fude_2022_';
+
+// 都道府県バウンディングボックス [minLng, minLat, maxLng, maxLat]（農地がある都道府県）
+const PREF_BBOX_FGB = {
+  '01':[139.34,41.35,145.82,45.52], '02':[139.72,40.20,141.68,41.56],
+  '03':[140.63,38.74,141.77,40.46], '04':[140.27,37.77,141.68,38.97],
+  '05':[139.70,39.01,140.93,40.48], '06':[139.52,37.74,140.77,38.99],
+  '07':[139.18,36.78,141.04,37.97], '08':[139.69,35.73,140.82,36.95],
+  '09':[139.33,36.20,140.29,37.16], '10':[138.41,36.08,139.69,37.00],
+  '11':[138.72,35.79,139.92,36.28], '12':[139.73,34.89,140.92,35.93],
+  '13':[138.94,35.46,139.91,35.89], '14':[138.93,35.10,139.78,35.68],
+  '15':[137.61,36.68,139.59,38.58], '16':[136.77,36.38,137.72,36.96],
+  '17':[136.20,36.11,137.35,37.55], '18':[135.43,35.41,136.78,36.30],
+  '19':[138.18,35.22,139.15,35.92], '20':[137.29,35.17,138.57,36.89],
+  '21':[135.75,35.09,137.74,36.47], '22':[137.47,34.59,138.86,35.66],
+  '23':[136.67,34.58,137.71,35.44], '24':[135.86,33.73,136.97,35.01],
+  '25':[135.72,34.83,136.32,35.68], '26':[134.93,34.74,136.07,35.76],
+  '27':[135.20,34.28,135.82,34.98], '28':[134.25,34.10,135.42,35.31],
+  '29':[135.60,33.86,136.25,34.79], '30':[135.09,33.43,136.09,34.36],
+  '31':[133.31,35.07,134.62,35.60], '32':[131.67,34.35,133.35,35.47],
+  '33':[133.21,34.30,134.38,35.29], '34':[131.94,33.84,133.34,35.01],
+  '35':[130.77,33.80,132.10,34.74], '36':[133.66,33.57,134.78,34.42],
+  '37':[133.42,34.01,134.47,34.48], '38':[132.01,32.91,133.72,33.97],
+  '39':[132.63,32.71,134.34,33.89], '40':[130.11,33.08,131.12,34.24],
+  '41':[129.71,32.89,130.63,33.66], '42':[128.62,32.38,130.41,34.10],
+  '43':[130.08,32.07,131.37,33.23], '44':[130.64,32.79,131.82,33.80],
+  '45':[130.68,31.35,131.88,32.84], '46':[129.27,30.21,131.30,32.20],
+  '47':[122.94,24.05,128.44,27.05]
+};
+
+// 現在のビューポートに重なる都道府県コードを返す
+function getVisiblePrefs(bounds) {
+  const w = bounds.getWest(), e = bounds.getEast();
+  const s = bounds.getSouth(), n = bounds.getNorth();
+  return Object.entries(PREF_BBOX_FGB).filter(([, bb]) =>
+    bb[0] <= e && bb[2] >= w && bb[1] <= n && bb[3] >= s
+  ).map(([code]) => code);
+}
+
+async function loadFudePolygons() {
+  if (!fudeActive) return;
+  const z = map.getZoom();
+  const zoomHint = document.getElementById('fude-zoom-hint');
+  const loading   = document.getElementById('fude-loading');
+  if (z < 13) {
+    if (zoomHint) zoomHint.style.display = 'block';
+    if (loading)   loading.style.display  = 'none';
+    if (fudePolyLayer) { map.removeLayer(fudePolyLayer); fudePolyLayer = null; }
+    return;
+  }
+  if (zoomHint) zoomHint.style.display = 'none';
+  if (loading)   loading.style.display  = 'block';
+
+  // 前回のリクエストをキャンセル
+  if (fudeAbortController) fudeAbortController.abort();
+  fudeAbortController = new AbortController();
+
+  const bounds = map.getBounds();
+  const rect = {
+    minX: bounds.getWest(),  minY: bounds.getSouth(),
+    maxX: bounds.getEast(),  maxY: bounds.getNorth()
+  };
+  const prefs = getVisiblePrefs(bounds);
+
+  try {
+    const features = [];
+    const FEAT_LIMIT = 5000; // 表示上限（パフォーマンス保護）
+    outer:
+    for (const code of prefs) {
+      const url = FGB_BASE + code + '.fgb';
+      const iter = flatgeobuf.geojson.deserialize(url, rect);
+      for await (const feature of iter) {
+        if (fudeAbortController.signal.aborted) return;
+        features.push(feature);
+        if (features.length >= FEAT_LIMIT) break outer;
+      }
+    }
+
+    if (fudePolyLayer) { map.removeLayer(fudePolyLayer); fudePolyLayer = null; }
+    if (!fudeActive) return;
+
+    fudePolyLayer = L.geoJSON({ type: 'FeatureCollection', features }, {
+      style: {
+        color: '#15803d',
+        weight: 0.7,
+        fillColor: '#86efac',
+        fillOpacity: 0.25,
+        dashArray: '2,2'
+      },
+      onEachFeature: (feature, layer) => {
+        const p = feature.properties || {};
+        const landUse = p['land_use_code'] || p['地目'] || p['LAND_USE'] || '';
+        const area = p['shape_area'] || p['AREA'] || p['面積'] || '';
+        const areaStr = area ? (parseFloat(area) > 0 ? `${Math.round(parseFloat(area)).toLocaleString()} m²` : '') : '';
+        const html = `<div style="font-size:12px; min-width:180px;">
+          <div style="font-weight:700; color:#15803d; margin-bottom:4px;">🌾 農地区画（農水省）</div>
+          ${landUse ? `<div><b>地目：</b>${landUse}</div>` : ''}
+          ${areaStr  ? `<div><b>面積：</b>${areaStr}</div>` : ''}
+          <div style="font-size:10px; color:#6b7280; margin-top:4px;">筆ポリゴン 2022年版（農林水産省・CC-BY）</div>
+        </div>`;
+        layer.bindPopup(html);
+      }
+    }).addTo(map);
+
+    if (loading) loading.style.display = 'none';
+  } catch(e) {
+    if (e.name !== 'AbortError') {
+      console.warn('筆ポリゴン取得エラー:', e);
+      if (loading) loading.style.display = 'none';
+    }
+  }
+}
+
+function scheduleFudeLoad() {
+  clearTimeout(fudeLoadTimer);
+  fudeLoadTimer = setTimeout(loadFudePolygons, 400);
+}
+
 // ===== 登記所備付地図（公図）レイヤー =====
 let cadastralLayer = null;
 let cadastralActive = false;
-const cadastralPMTiles = new pmtiles.PMTiles('https://data.source.coop/smartmaps/amx-2024-04/MojMap_amx_2024.pmtiles');
+const cadastralPMTiles = new pmtiles.PMTiles('https://kenzkenz.net/pmtiles/2025final3.pmtiles');
 
 // 公図ズレ補正（オフセット）：メートル単位 → 経度緯度換算
 let cadastralOffset = { x: 0, y: 0 }; // メートル（東西, 南北）
@@ -818,6 +964,31 @@ map.on('zoomend', function() {
   }
 });
 
+// ===== 農地区画（筆ポリゴン）トグルイベント =====
+document.getElementById('fude-cb').addEventListener('change', function() {
+  const toggle  = document.getElementById('fude-toggle');
+  const zoomHint = document.getElementById('fude-zoom-hint');
+  if (this.checked) {
+    fudeActive = true;
+    toggle.classList.add('active');
+    scheduleFudeLoad();
+  } else {
+    fudeActive = false;
+    toggle.classList.remove('active');
+    clearTimeout(fudeLoadTimer);
+    if (fudeAbortController) fudeAbortController.abort();
+    if (fudePolyLayer) { map.removeLayer(fudePolyLayer); fudePolyLayer = null; }
+    if (zoomHint) zoomHint.style.display = 'none';
+    const loading = document.getElementById('fude-loading');
+    if (loading) loading.style.display = 'none';
+  }
+});
+
+// マップ移動・ズーム時に農地区画を再読み込み
+map.on('moveend zoomend', function() {
+  if (fudeActive) scheduleFudeLoad();
+});
+
 // オフセット UI 連動
 function applyOffsetToUI() {
   document.getElementById('offset-x').value = cadastralOffset.x;
@@ -933,31 +1104,55 @@ map.on('click', async function(e) {
       const areaM2 = estimateAreaM2(matchedGeom, tileX, tileY, z, extent, center.lat);
       const areaTsubo = areaM2 / 3.305785;
 
-      // ── 逆ジオコーディング: 都道府県・市区町村・字を取得 ──
+      // ── 住所取得: 2025年版タイル内蔵データ優先 → API フォールバック ──
+      // 都道府県コード→名前マッピング（JIS X 0401）
+      const PREF_MAP = {
+        '01':'北海道','02':'青森県','03':'岩手県','04':'宮城県','05':'秋田県',
+        '06':'山形県','07':'福島県','08':'茨城県','09':'栃木県','10':'群馬県',
+        '11':'埼玉県','12':'千葉県','13':'東京都','14':'神奈川県','15':'新潟県',
+        '16':'富山県','17':'石川県','18':'福井県','19':'山梨県','20':'長野県',
+        '21':'岐阜県','22':'静岡県','23':'愛知県','24':'三重県','25':'滋賀県',
+        '26':'京都府','27':'大阪府','28':'兵庫県','29':'奈良県','30':'和歌山県',
+        '31':'鳥取県','32':'島根県','33':'岡山県','34':'広島県','35':'山口県',
+        '36':'徳島県','37':'香川県','38':'愛媛県','39':'高知県','40':'福岡県',
+        '41':'佐賀県','42':'長崎県','43':'熊本県','44':'大分県','45':'宮崎県',
+        '46':'鹿児島県','47':'沖縄県'
+      };
       let prefName = '', cityName = '', townName = '';
-      try {
-        // HeartRails Geo API（字レベルまで対応）
-        const hrRes = await fetch(
-          `https://geoapi.heartrails.com/api/json?method=searchByGeoLocation&x=${center.lng.toFixed(6)}&y=${center.lat.toFixed(6)}`
-        ).then(r => r.json());
-        const loc = hrRes?.response?.location?.[0];
-        if (loc) {
-          prefName = loc.prefecture || '';
-          cityName = loc.city || '';
-          townName = loc.town || '';
-        }
-      } catch(e) {}
-      // フォールバック: 国土地理院 逆ジオコーダー（市区町村まで）
-      if (!prefName) {
+      const tileCity = props['市区町村名'] || '';
+      const tileDaiji = props['大字名'] || '';
+      const tileKoji  = props['小字名']  || '';
+      const muniCode  = props['市区町村コード'] ? String(props['市区町村コード']).padStart(5, '0') : '';
+      if (tileCity) {
+        // タイル内蔵アドレス（2025年版で利用可能・API呼び出し不要）
+        prefName = PREF_MAP[muniCode.slice(0, 2)] || '';
+        cityName = tileCity;
+        townName = tileDaiji + (tileKoji ? ' ' + tileKoji : '');
+      } else {
+        // フォールバック: HeartRails Geo API（字レベルまで対応）
         try {
-          const gsiRes = await fetch(
-            `https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat=${center.lat}&lon=${center.lng}`
+          const hrRes = await fetch(
+            `https://geoapi.heartrails.com/api/json?method=searchByGeoLocation&x=${center.lng.toFixed(6)}&y=${center.lat.toFixed(6)}`
           ).then(r => r.json());
-          const nm = gsiRes?.results?.lv01Nm || '';
-          const m = nm.match(/^(.*?[都道府県])(.*?[市区町村郡])(.*?)$/);
-          if (m) { prefName = m[1]; cityName = m[2]; townName = m[3] || ''; }
-          else if (nm) { prefName = nm; }
+          const loc = hrRes?.response?.location?.[0];
+          if (loc) {
+            prefName = loc.prefecture || '';
+            cityName = loc.city || '';
+            townName = loc.town || '';
+          }
         } catch(e) {}
+        // フォールバック2: 国土地理院 逆ジオコーダー（市区町村まで）
+        if (!prefName) {
+          try {
+            const gsiRes = await fetch(
+              `https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat=${center.lat}&lon=${center.lng}`
+            ).then(r => r.json());
+            const nm = gsiRes?.results?.lv01Nm || '';
+            const m = nm.match(/^(.*?[都道府県])(.*?[市区町村郡])(.*?)$/);
+            if (m) { prefName = m[1]; cityName = m[2]; townName = m[3] || ''; }
+            else if (nm) { prefName = nm; }
+          } catch(e) {}
+        }
       }
 
       // 地図種別バッジ
