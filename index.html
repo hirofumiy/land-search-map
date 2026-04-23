@@ -371,7 +371,7 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
           </div>
           <div id="cadastral-hint" style="font-size:9px; color:#64748b; margin-top:3px; padding-left:4px;">
             Lv14+で筆界線 / Lv15+で地番表示（法務省 2024年版）<br>
-            ✅ 14条地図（GPS測量・高精度）のみ表示。旧公図はズレの原因となるため非表示
+            <span style="color:#c2410c;">■ オレンジ=14条地図（高精度）</span> / <span style="color:#6b7280;">┅ グレー破線=旧公図（ズレあり）</span>
           </div>
           <div id="cadastral-zoom-hint" style="display:none; margin-top:4px; padding:5px 7px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.35); border-radius:4px; font-size:9px; color:#fbbf24;">
             📍 表示にはズームLv14以上が必要です。<br>
@@ -829,15 +829,22 @@ function createCadastralLayer() {
           pxOffsetY = -cadastralOffset.y / mPerPx; // 南北は画面座標で反転
         }
 
-        // 筆界線（ポリゴン）描画
-        ctx.fillStyle = 'rgba(255,140,0,0.12)';
-        ctx.strokeStyle = 'rgba(200,50,0,0.8)';
-        ctx.lineWidth = 1.2;
-
+        // 筆界線（ポリゴン）描画：14条=オレンジ、旧公図=グレー（ズレあり警告）
         for (var i = 0; i < fudeLayer.length; i++) {
           var feat = fudeLayer.feature(i);
           if (feat.type !== 3) continue;
-          if (isLegacyCadastral(feat)) continue; // 旧公図は非表示
+          var legacy = isLegacyCadastral(feat);
+          if (legacy) {
+            ctx.fillStyle = 'rgba(120,120,120,0.10)';
+            ctx.strokeStyle = 'rgba(90,90,90,0.65)';
+            ctx.lineWidth = 1.0;
+            ctx.setLineDash([4, 3]); // 旧公図は破線でズレあり表示
+          } else {
+            ctx.fillStyle = 'rgba(255,140,0,0.12)';
+            ctx.strokeStyle = 'rgba(200,50,0,0.85)';
+            ctx.lineWidth = 1.2;
+            ctx.setLineDash([]);
+          }
           var geom = feat.loadGeometry();
           for (var r = 0; r < geom.length; r++) {
             var ring = geom[r];
@@ -852,11 +859,11 @@ function createCadastralLayer() {
             ctx.stroke();
           }
         }
+        ctx.setLineDash([]); // リセット
 
-        // 地番ラベル描画（z15+）
+        // 地番ラベル描画（z15+）：14条=赤、旧公図=グレー
         if (coords.z >= 15) {
           ctx.font = '700 11px "Hiragino Sans", "Meiryo", sans-serif';
-          ctx.fillStyle = '#a22';
           ctx.strokeStyle = 'rgba(255,255,255,0.9)';
           ctx.lineWidth = 3;
           ctx.textAlign = 'center';
@@ -864,9 +871,9 @@ function createCadastralLayer() {
 
           for (var i = 0; i < fudeLayer.length; i++) {
             var feat = fudeLayer.feature(i);
-            if (isLegacyCadastral(feat)) continue; // 旧公図は非表示
             var label = feat.properties['地番'];
             if (!label) continue;
+            ctx.fillStyle = isLegacyCadastral(feat) ? '#6b7280' : '#a22';
             var geom = feat.loadGeometry();
             var cx = 0, cy = 0, n = 0;
             for (var r = 0; r < geom.length; r++) {
@@ -1094,7 +1101,6 @@ map.on('click', async function(e) {
     for (let i = 0; i < fudeLayer.length; i++) {
       const feat = fudeLayer.feature(i);
       if (feat.type !== 3) continue;
-      if (isLegacyCadastral(feat)) continue; // 旧公図は対象外
       const geom = feat.loadGeometry();
       for (let r = 0; r < geom.length; r++) {
         if (pointInRing(px, py, geom[r])) {
