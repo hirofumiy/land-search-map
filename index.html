@@ -370,7 +370,7 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
             <label class="hazard-switch"><input type="checkbox" id="cadastral-cb"><span class="slider"></span></label>
           </div>
           <div id="cadastral-hint" style="font-size:9px; color:#64748b; margin-top:3px; padding-left:4px;">
-            Lv14+で筆界線 / Lv15+で地番表示（法務省オープンデータ 2025年版）<br>
+            Lv14+で筆界線 / Lv15+で地番表示（法務省オープンデータ 2024年版）<br>
             ⚠️ 全国約59%対応。山間部・離島・旧来の紙公図エリアはデータなし
           </div>
           <div id="cadastral-zoom-hint" style="display:none; margin-top:4px; padding:5px 7px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.35); border-radius:4px; font-size:9px; color:#fbbf24;">
@@ -686,7 +686,9 @@ function scheduleFudeLoad() {
 // ===== 登記所備付地図（公図）レイヤー =====
 let cadastralLayer = null;
 let cadastralActive = false;
-const cadastralPMTiles = new pmtiles.PMTiles('https://kenzkenz.net/pmtiles/2025final3.pmtiles');
+// 2024年版（AMX・source.coop）と2025年版（kenzkenz.net）を両方試みる
+// 2025年版はカバレッジが地域によって異なるため2024年版をデフォルトとして維持
+const cadastralPMTiles = new pmtiles.PMTiles('https://data.source.coop/smartmaps/amx-2024-04/MojMap_amx_2024.pmtiles');
 
 // 公図ズレ補正（オフセット）：メートル単位 → 経度緯度換算
 let cadastralOffset = { x: 0, y: 0 }; // メートル（東西, 南北）
