@@ -151,6 +151,97 @@ body {
   line-height: 1.6;
 }
 
+/* ── 電力会社セレクター ── */
+.company-selector {
+  background: rgba(15,23,42,0.5);
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 18px;
+}
+.company-selector-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #cbd5e1;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.company-selector-note {
+  font-size: 11px;
+  color: #64748b;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.company-group-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 10px 0 6px;
+}
+.company-group-label:first-child { margin-top: 0; }
+.company-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.company-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 9px;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #cbd5e1;
+  transition: all 0.15s;
+  user-select: none;
+}
+.company-option:hover { border-color: #475569; background: #1e293b; }
+.company-option input { accent-color: #6366f1; cursor: pointer; }
+.company-option.selected {
+  border-color: #6366f1;
+  background: rgba(99,102,241,0.12);
+  color: #e0e7ff;
+}
+.company-option .addon-price {
+  font-size: 10px;
+  color: #60a5fa;
+  margin-left: auto;
+  font-weight: 600;
+}
+.company-option.primary .addon-price { color: #34d399; }
+
+.price-summary {
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.3);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  font-size: 13px;
+}
+.price-summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+  color: #cbd5e1;
+}
+.price-summary-row.total {
+  border-top: 1px dashed #475569;
+  margin-top: 6px;
+  padding-top: 8px;
+  font-weight: 700;
+  color: #f8fafc;
+  font-size: 14px;
+}
+.price-summary-row .val { color: #e0e7ff; font-variant-numeric: tabular-nums; }
+.price-summary-row.total .val { color: #a5b4fc; font-size: 18px; }
+
 .plan-desc { font-size: 14px; color: #94a3b8; margin-bottom: 24px; line-height: 1.6; }
 
 .plan-features { list-style: none; margin-bottom: 32px; }
@@ -362,15 +453,33 @@ body {
     <div class="plan-name">Standard</div>
     <div class="plan-price">
       <span class="amount">¥150,000</span>
-      <span class="unit">/ 月</span>
+      <span class="unit">〜 / 月</span>
     </div>
-    <div class="plan-tax">税別 / 税込 ¥165,000</div>
+    <div class="plan-tax">税別（1社付属） / 追加 +¥50,000/社</div>
     <div class="plan-init-fee">初回登録料 ¥50,000（税別）</div>
-    <div class="plan-option-note">
-      📌 1電力会社エリアの変電所マップが付属<br>
-      ＋ 追加エリアは1社につき <strong>¥50,000/月</strong>（税別）
+
+    <!-- 電力会社セレクター -->
+    <div class="company-selector">
+      <div class="company-selector-title">⚡ 見たい電力会社を選択</div>
+      <div class="company-selector-note">
+        基本料金に <strong style="color:#34d399;">1社</strong> 含まれます。2社目以降は +¥50,000/月（税別）
+      </div>
+
+      <div class="company-group-label">必須：メインの電力会社（1社・料金に含む）</div>
+      <div class="company-list" id="primary-company-list"></div>
+
+      <div class="company-group-label">追加：見たい電力会社があれば選択（+¥50,000/月ずつ）</div>
+      <div class="company-list" id="addon-company-list"></div>
     </div>
-    <p class="plan-desc">特定エリアに絞った用地調査・事業開発チーム向けプランです。</p>
+
+    <!-- 料金サマリー -->
+    <div class="price-summary" id="price-summary">
+      <div class="price-summary-row"><span>基本料金（1社付属）</span><span class="val">¥150,000</span></div>
+      <div class="price-summary-row" id="addon-row" style="display:none;"><span id="addon-label">追加 0社</span><span class="val" id="addon-amount">¥0</span></div>
+      <div class="price-summary-row total"><span>月額（税別）</span><span class="val" id="total-amount">¥150,000</span></div>
+      <div class="price-summary-row" style="font-size:11px; color:#64748b;"><span>＋ 初回登録料</span><span>¥50,000</span></div>
+    </div>
+
     <ul class="plan-features">
       <li><span class="check">✓</span> 選択した電力会社の変電所マップ</li>
       <li><span class="check">✓</span> 空き容量ランク別フィルタ（S〜D）</li>
@@ -381,8 +490,8 @@ body {
       <li><span class="cross">✗</span> <span style="color:#64748b">専任サポート</span></li>
       <li><span class="cross">✗</span> <span style="color:#64748b">請求書払い</span></li>
     </ul>
-    <button class="btn-plan btn-plan-standard" onclick="selectPlan('standard')">
-      Standardプランを選択
+    <button class="btn-plan btn-plan-standard" id="btn-standard" onclick="selectPlan('standard')">
+      このプランに申し込む（¥150,000/月）
     </button>
   </div>
 
@@ -628,6 +737,88 @@ body {
   }
 })();
 
+// ── 電力会社セレクター ──
+const POWER_COMPANIES = [
+  { code: 'tepco',    name: '東京電力パワーグリッド' },
+  { code: 'chubu',    name: '中部電力パワーグリッド' },
+  { code: 'kepco',    name: '関西電力送配電' },
+  { code: 'kyuden',   name: '九州電力送配電' },
+  { code: 'energia',  name: '中国電力ネットワーク' },
+  { code: 'tohoku',   name: '東北電力ネットワーク' },
+  { code: 'rikuden',  name: '北陸電力送配電' },
+  { code: 'hepco',    name: '北海道電力ネットワーク' },
+];
+
+let primaryCompany = 'tepco'; // デフォルト
+let addonCompanies = new Set();
+
+function renderCompanySelectors() {
+  const cfg = window.BATTERYLAND_CONFIG;
+  const primaryEl = document.getElementById('primary-company-list');
+  const addonEl = document.getElementById('addon-company-list');
+
+  primaryEl.innerHTML = POWER_COMPANIES.map(c => `
+    <label class="company-option primary ${c.code === primaryCompany ? 'selected' : ''}" data-code="${c.code}">
+      <input type="radio" name="primary-company" value="${c.code}" ${c.code === primaryCompany ? 'checked' : ''}>
+      <span>${c.name}</span>
+      <span class="addon-price">含む</span>
+    </label>
+  `).join('');
+
+  addonEl.innerHTML = POWER_COMPANIES.map(c => {
+    const disabled = c.code === primaryCompany;
+    const checked = addonCompanies.has(c.code) && !disabled;
+    return `
+      <label class="company-option ${checked ? 'selected' : ''}" data-code="${c.code}" style="${disabled ? 'opacity:0.3;pointer-events:none;' : ''}">
+        <input type="checkbox" value="${c.code}" ${checked ? 'checked' : ''} ${disabled ? 'disabled' : ''}>
+        <span>${c.name}</span>
+        <span class="addon-price">+¥${cfg.ADDON_COMPANY_PRICE.toLocaleString()}</span>
+      </label>
+    `;
+  }).join('');
+
+  // イベント
+  primaryEl.querySelectorAll('input').forEach(r => r.addEventListener('change', () => {
+    primaryCompany = r.value;
+    addonCompanies.delete(primaryCompany); // 付属社はアドオンから除外
+    renderCompanySelectors();
+    updatePriceSummary();
+  }));
+  addonEl.querySelectorAll('input').forEach(cb => cb.addEventListener('change', () => {
+    if (cb.checked) addonCompanies.add(cb.value); else addonCompanies.delete(cb.value);
+    renderCompanySelectors();
+    updatePriceSummary();
+  }));
+}
+
+function updatePriceSummary() {
+  const cfg = window.BATTERYLAND_CONFIG;
+  const base = cfg.STANDARD_BASE_PRICE;
+  const addon = cfg.ADDON_COMPANY_PRICE;
+  const addonCount = addonCompanies.size;
+  const addonTotal = addonCount * addon;
+  const total = base + addonTotal;
+
+  const addonRow = document.getElementById('addon-row');
+  if (addonCount > 0) {
+    addonRow.style.display = '';
+    document.getElementById('addon-label').textContent = `追加 ${addonCount}社 (+¥${addon.toLocaleString()} × ${addonCount})`;
+    document.getElementById('addon-amount').textContent = `¥${addonTotal.toLocaleString()}`;
+  } else {
+    addonRow.style.display = 'none';
+  }
+  document.getElementById('total-amount').textContent = `¥${total.toLocaleString()}`;
+
+  const btn = document.getElementById('btn-standard');
+  if (btn) btn.textContent = `このプランに申し込む（¥${total.toLocaleString()}/月）`;
+}
+
+// 初期描画（スクリプトはbody末尾なのでDOMは既に存在）
+if (document.getElementById('primary-company-list')) {
+  renderCompanySelectors();
+  updatePriceSummary();
+}
+
 function selectPlan(plan) {
   const cfg = window.BATTERYLAND_CONFIG;
 
@@ -643,8 +834,26 @@ function selectPlan(plan) {
       alert('現在、オンライン決済の準備中です。\nお申し込みはメールにてお問い合わせください。\n\ninfo@440marketing.biz');
       return;
     }
-    const returnUrl = encodeURIComponent(location.origin + '/expired.html?success=1');
-    location.href = url + '?return_url=' + returnUrl;
+
+    // 選択された電力会社を Stripe に渡す
+    const selected = [primaryCompany, ...addonCompanies];
+    const addonCount = addonCompanies.size;
+    const params = new URLSearchParams();
+
+    // 返却URL
+    params.set('return_url', location.origin + '/expired.html?success=1');
+
+    // client_reference_id: 管理者が選択内容を Stripe Dashboard で確認できるようにする
+    //   例: tepco+chubu+kepco
+    params.set('client_reference_id', selected.join('+'));
+
+    // 追加社数を Stripe 側の数量に反映（STRIPE_ADDON_PRICE_ID を設定している場合のみ）
+    if (cfg.STRIPE_ADDON_PRICE_ID && addonCount > 0) {
+      // Stripe Payment Link の数量事前入力パラメータ
+      params.append(`prefilled_quantity[${cfg.STRIPE_ADDON_PRICE_ID}]`, String(addonCount));
+    }
+
+    location.href = url + '?' + params.toString();
   }
 }
 

@@ -14,10 +14,24 @@ const BATTERYLAND_CONFIG = {
   STRIPE_PUBLISHABLE_KEY: 'pk_test_YOUR_KEY',
 
   // Stripe Payment Links (Stripe Dashboard → Payment Links で作成)
-  // Liteプラン: ¥98,000/月（税別）
-  // Standardプラン: ¥150,000/月（税別）
+  // Standardプラン: ¥150,000/月（税別） = 基本料金 + 電力会社1社付属
+  //   追加電力会社: +¥50,000/月（税別）/ 社
+  //
+  // ⚠️ Stripe側の設定（ひろさん作業）:
+  //   Payment Link には以下2つの商品（Price）を紐付けてください:
+  //     1. 「Standard基本料金」 ¥150,000/月（数量固定=1、電力会社1社付属）
+  //     2. 「追加電力会社」    ¥50,000/月（"Let customers adjust quantity" ON）
+  //   Payment Link URL を STRIPE_STANDARD_PAYMENT_LINK にセット。
+  //   商品2の Price ID (price_xxx) を STRIPE_ADDON_PRICE_ID にセット。
+  //   → フロント側で追加社数を URL param (prefilled_promo_code不可のためadjustable_quantity初期値経由) で渡します。
   STRIPE_STANDARD_PAYMENT_LINK: 'https://buy.stripe.com/3cI8wJa6Raf6e5B6Ka63K01',
+  STRIPE_ADDON_PRICE_ID: '', // 例: 'price_1XYZ...'（空の場合は基本料金のみ送信）
   // Enterpriseプラン: ¥500,000/月（税別）→ メール問い合わせ対応のためStripeリンク不要
+
+  // 料金設定（税別）
+  STANDARD_BASE_PRICE: 150000,   // 基本料金（1社付属）
+  ADDON_COMPANY_PRICE: 50000,    // 追加電力会社1社あたり
+  STANDARD_INIT_FEE: 50000,      // 初回登録料
 
   // 試用期間 (時間) ※7日間 = 168時間
   TRIAL_HOURS: 168,
