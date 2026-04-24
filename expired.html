@@ -822,7 +822,15 @@ function selectPlan(plan) {
   }
 
   if (plan === 'standard') {
-    const url = cfg.STRIPE_STANDARD_PAYMENT_LINK;
+    const addonCount = addonCompanies.size;
+
+    // 追加社数で Payment Link を切替（Stripe数量最小=1制限の回避策）
+    //   0社 → リンクA（基本料金＋初回登録料のみ）
+    //   1社以上 → リンクB（追加電力会社の数量をセット）
+    const url = addonCount === 0
+      ? (cfg.STRIPE_STANDARD_LINK_BASE || cfg.STRIPE_STANDARD_PAYMENT_LINK)
+      : cfg.STRIPE_STANDARD_LINK_ADDON;
+
     if (!url || url.includes('YOUR')) {
       alert('現在、オンライン決済の準備中です。\nお申し込みはメールにてお問い合わせください。\n\ninfo@440marketing.biz');
       return;
@@ -830,7 +838,6 @@ function selectPlan(plan) {
 
     // 選択された電力会社を Stripe に渡す
     const selected = [primaryCompany, ...addonCompanies];
-    const addonCount = addonCompanies.size;
     const params = new URLSearchParams();
 
     // 返却URL
@@ -840,9 +847,8 @@ function selectPlan(plan) {
     //   例: tepco+chubu+kepco
     params.set('client_reference_id', selected.join('+'));
 
-    // 追加社数を Stripe 側の数量に反映（STRIPE_ADDON_PRICE_ID を設定している場合のみ）
-    if (cfg.STRIPE_ADDON_PRICE_ID && addonCount > 0) {
-      // Stripe Payment Link の数量事前入力パラメータ
+    // 追加社数を Stripe 側の数量に反映（リンクB利用時のみ）
+    if (addonCount > 0 && cfg.STRIPE_ADDON_PRICE_ID) {
       params.append(`prefilled_quantity[${cfg.STRIPE_ADDON_PRICE_ID}]`, String(addonCount));
     }
 
