@@ -697,6 +697,9 @@ body {
     return;
   }
 
+  // ユーザーID を selectPlan() で参照できるようグローバル化
+  window.__userId = session.user.id;
+
   // ユーザー名を表示
   const { data: demoUser } = await sb
     .from('demo_users')
@@ -843,9 +846,13 @@ function selectPlan(plan) {
     // 返却URL
     params.set('return_url', location.origin + '/expired.html?success=1');
 
-    // client_reference_id: 管理者が選択内容を Stripe Dashboard で確認できるようにする
-    //   例: tepco+chubu+kepco
-    params.set('client_reference_id', selected.join('+'));
+    // client_reference_id: Webhookが「誰がどの電力会社を選んだか」を判別するためのキー
+    //   フォーマット: {userUUID}__{code1}_{code2}_{code3}
+    //   例: a1b2c3d4-...-xxxx__tepco_chubu_kepco
+    //   制約: 英数字・"-"・"_" のみ、最大200文字
+    const userId = window.__userId || '';
+    const refId = userId + '__' + selected.join('_');
+    params.set('client_reference_id', refId);
 
     // 追加社数を Stripe 側の数量に反映（リンクB利用時のみ）
     if (addonCount > 0 && cfg.STRIPE_ADDON_PRICE_ID) {
