@@ -505,8 +505,45 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
 
 <script>
 // ===== Config =====
-const COMPANIES = ['東京電力パワーグリッド', '中部電力パワーグリッド', '関西電力送配電', '九州電力送配電', '中国電力ネットワーク', '東北電力ネットワーク', '北陸電力送配電', '北海道電力ネットワーク'];
+const ALL_COMPANIES = ['東京電力パワーグリッド', '中部電力パワーグリッド', '関西電力送配電', '九州電力送配電', '中国電力ネットワーク', '東北電力ネットワーク', '北陸電力送配電', '北海道電力ネットワーク'];
 const COMPANY_SHORT = {'東京電力パワーグリッド':'東電PG','中部電力パワーグリッド':'中部電力PG','関西電力送配電':'関西電力','九州電力送配電':'九州電力','中国電力ネットワーク':'中国電力NW','東北電力ネットワーク':'東北電力NW','北陸電力送配電':'北陸電力','北海道電力ネットワーク':'北海道電力NW'};
+
+// 電力会社コード → 正式名称マッピング（決済画面と統一）
+const COMPANY_CODE_TO_NAME = {
+  tepco:   '東京電力パワーグリッド',
+  chubu:   '中部電力パワーグリッド',
+  kepco:   '関西電力送配電',
+  kyuden:  '九州電力送配電',
+  energia: '中国電力ネットワーク',
+  tohoku:  '東北電力ネットワーク',
+  rikuden: '北陸電力送配電',
+  hepco:   '北海道電力ネットワーク',
+};
+
+// 契約電力会社の取得（テストモード対応）
+//   優先順位: URLパラメータ ?test_sub=tepco,chubu
+//             → localStorage 'batteryland_test_sub'
+//             → null（=全社表示／トライアルや全社契約）
+function getSubscribedCompanies() {
+  const params = new URLSearchParams(location.search);
+  const fromUrl = params.get('test_sub');
+  if (fromUrl !== null) {
+    if (fromUrl === '' || fromUrl === 'all') {
+      localStorage.removeItem('batteryland_test_sub');
+      return null;
+    }
+    localStorage.setItem('batteryland_test_sub', fromUrl);
+    return fromUrl.split(',').map(c => COMPANY_CODE_TO_NAME[c.trim()]).filter(Boolean);
+  }
+  const fromStorage = localStorage.getItem('batteryland_test_sub');
+  if (fromStorage) {
+    return fromStorage.split(',').map(c => COMPANY_CODE_TO_NAME[c.trim()]).filter(Boolean);
+  }
+  return null;
+}
+
+const SUBSCRIBED_COMPANIES = getSubscribedCompanies();
+const COMPANIES = SUBSCRIBED_COMPANIES || ALL_COMPANIES; // 表示・操作対象
 const RANKS = ['S', 'A', 'B', 'C', 'D'];
 const RANK_COLORS = { S: '#22c55e', A: '#3b82f6', B: '#eab308', C: '#f97316', D: '#ef4444', N: '#64748b' };
 const STATUS_LABELS = { sale: '売出中', jiage: '地上げ対象', negotiating: '交渉中', done: '成約済' };
@@ -1813,6 +1850,19 @@ async function loadData() {
 // ===== Init =====
 buildFilters();
 loadData();
+
+// ===== テストモード表示バナー =====
+if (SUBSCRIBED_COMPANIES) {
+  const banner = document.createElement('div');
+  banner.style.cssText = 'position:fixed; top:8px; left:50%; transform:translateX(-50%); z-index:9999; background:rgba(99,102,241,0.95); color:#fff; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; box-shadow:0 4px 12px rgba(0,0,0,0.3); display:flex; gap:10px; align-items:center;';
+  const names = SUBSCRIBED_COMPANIES.map(n => COMPANY_SHORT[n] || n).join(' / ');
+  banner.innerHTML = `🧪 テストモード｜契約エリア: <b>${names}</b> <span style="cursor:pointer; opacity:0.7; margin-left:6px;" title="解除" id="test-mode-clear">✕</span>`;
+  document.body.appendChild(banner);
+  document.getElementById('test-mode-clear').addEventListener('click', () => {
+    localStorage.removeItem('batteryland_test_sub');
+    location.href = location.pathname; // クエリ削除して再読込
+  });
+}
 
 // ===== Auth / ユーザー情報表示 =====
 (function initAuthUI() {
