@@ -19,11 +19,11 @@ const BATTERYLAND_CONFIG = {
   //
   // リンクA (追加なし): 基本料金 + 初回登録料 の2商品
   // リンクB (追加あり): 基本料金 + 追加電力会社(数量調整可) + 初回登録料 の3商品
-  STRIPE_STANDARD_LINK_BASE: 'https://buy.stripe.com/4gM9ANgvfaf67Hd8Si63K06',   // リンクA
-  STRIPE_STANDARD_LINK_ADDON: 'https://buy.stripe.com/9B628lbaV86Y2mT1pQ63K05',  // リンクB
-  STRIPE_ADDON_PRICE_ID: 'price_1TPkUL9NAOR2l1VNyvmAdm65',                       // 追加電力会社エリア Price ID
+  STRIPE_STANDARD_LINK_BASE: 'https://buy.stripe.com/test_bJebIVceZ4UM9PlfgG63K02',   // リンクA（追加なし・¥200,000）
+  STRIPE_STANDARD_LINK_ADDON: 'https://buy.stripe.com/test_5kQ14hdj3evm5z5d8y63K03',  // リンクB（追加あり・¥250,000〜）
+  STRIPE_ADDON_PRICE_ID: 'price_1TPkUL9NAOR2l1VNyvmAdm65',                            // 追加電力会社エリア Price ID
   // 旧パラメータ互換（後方互換のため残置）
-  STRIPE_STANDARD_PAYMENT_LINK: 'https://buy.stripe.com/4gM9ANgvfaf67Hd8Si63K06',
+  STRIPE_STANDARD_PAYMENT_LINK: 'https://buy.stripe.com/test_bJebIVceZ4UM9PlfgG63K02',
   // Enterpriseプラン: ¥500,000/月（税別）→ メール問い合わせ対応のためStripeリンク不要
 
   // 料金設定（税別）
