@@ -520,30 +520,57 @@ const COMPANY_CODE_TO_NAME = {
   hepco:   '北海道電力ネットワーク',
 };
 
-// 契約電力会社の取得（テストモード対応）
-//   優先順位: URLパラメータ ?test_sub=tepco,chubu
-//             → localStorage 'batteryland_test_sub'
-//             → null（=全社表示／トライアルや全社契約）
-function getSubscribedCompanies() {
+// 契約電力会社の取得
+//   優先順位:
+//   1. URLパラメータ ?test_sub=tepco,chubu  （開発テスト用・最優先）
+//   2. Supabase demo_users.subscribed_companies （本番）
+//   3. null = 全社表示（trial / enterprise）
+
+// URLパラメータのみ同期で処理（1番の優先順位）
+function getSubscribedCompaniesFromUrl() {
   const params = new URLSearchParams(location.search);
   const fromUrl = params.get('test_sub');
-  if (fromUrl !== null) {
-    if (fromUrl === '' || fromUrl === 'all') {
-      localStorage.removeItem('batteryland_test_sub');
-      return null;
-    }
-    localStorage.setItem('batteryland_test_sub', fromUrl);
-    return fromUrl.split(',').map(c => COMPANY_CODE_TO_NAME[c.trim()]).filter(Boolean);
+  if (fromUrl === null) return undefined; // パラメータなし → undefined（未決定）
+  if (fromUrl === '' || fromUrl === 'all') {
+    localStorage.removeItem('batteryland_test_sub');
+    return null; // 全社表示に強制
   }
-  const fromStorage = localStorage.getItem('batteryland_test_sub');
-  if (fromStorage) {
-    return fromStorage.split(',').map(c => COMPANY_CODE_TO_NAME[c.trim()]).filter(Boolean);
-  }
-  return null;
+  localStorage.setItem('batteryland_test_sub', fromUrl);
+  return fromUrl.split(',').map(c => COMPANY_CODE_TO_NAME[c.trim()]).filter(Boolean);
 }
 
-const SUBSCRIBED_COMPANIES = getSubscribedCompanies();
-const COMPANIES = SUBSCRIBED_COMPANIES || ALL_COMPANIES; // 表示・操作対象
+// Supabaseから契約電力会社を非同期取得
+async function fetchSubscribedCompaniesFromSupabase() {
+  try {
+    const user = window.__currentUser;
+    if (!user || !user.demoUser) return null; // 認証前 or 開発モード → 全社表示
+
+    const demoUser = user.demoUser;
+    const plan = demoUser.plan;
+
+    // expired プランはリダイレクト済みのはずだが念のためガード
+    if (plan === 'expired') return null;
+
+    // trial / enterprise → 全社表示
+    if (!plan || plan === 'trial' || plan === 'enterprise') return null;
+
+    // standard → subscribed_companies カラムを参照
+    if (plan === 'standard') {
+      const codes = demoUser.subscribed_companies; // text[] 例: ['tepco','chubu']
+      if (!codes || codes.length === 0) return null;
+      return codes.map(c => COMPANY_CODE_TO_NAME[c.trim()]).filter(Boolean);
+    }
+
+    return null; // 未知のプランは全社表示
+  } catch (e) {
+    console.warn('subscribed_companies 取得エラー:', e);
+    return null; // エラー時は全社表示にフォールバック
+  }
+}
+
+// mutable な状態として保持（非同期初期化後に書き換える）
+let SUBSCRIBED_COMPANIES = null;
+let COMPANIES = ALL_COMPANIES; // 初期値は全社（ローディング中）
 const RANKS = ['S', 'A', 'B', 'C', 'D'];
 const RANK_COLORS = { S: '#22c55e', A: '#3b82f6', B: '#eab308', C: '#f97316', D: '#ef4444', N: '#64748b' };
 const STATUS_LABELS = { sale: '売出中', jiage: '地上げ対象', negotiating: '交渉中', done: '成約済' };
@@ -1848,21 +1875,59 @@ async function loadData() {
 }
 
 // ===== Init =====
-buildFilters();
-loadData();
+(async function initApp() {
+  // 1. URLパラメータを最優先で確認
+  const fromUrl = getSubscribedCompaniesFromUrl();
 
-// ===== テストモード表示バナー =====
-if (SUBSCRIBED_COMPANIES) {
-  const banner = document.createElement('div');
-  banner.style.cssText = 'position:fixed; top:8px; left:50%; transform:translateX(-50%); z-index:9999; background:rgba(99,102,241,0.95); color:#fff; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; box-shadow:0 4px 12px rgba(0,0,0,0.3); display:flex; gap:10px; align-items:center;';
-  const names = SUBSCRIBED_COMPANIES.map(n => COMPANY_SHORT[n] || n).join(' / ');
-  banner.innerHTML = `🧪 テストモード｜契約エリア: <b>${names}</b> <span style="cursor:pointer; opacity:0.7; margin-left:6px;" title="解除" id="test-mode-clear">✕</span>`;
-  document.body.appendChild(banner);
-  document.getElementById('test-mode-clear').addEventListener('click', () => {
-    localStorage.removeItem('batteryland_test_sub');
-    location.href = location.pathname; // クエリ削除して再読込
-  });
-}
+  if (fromUrl !== undefined) {
+    // URLパラメータあり → 即時適用（同期）
+    SUBSCRIBED_COMPANIES = fromUrl;
+    COMPANIES = SUBSCRIBED_COMPANIES || ALL_COMPANIES;
+    selectedCompanies = new Set(COMPANIES);
+    buildFilters();
+    loadData();
+  } else {
+    // URLパラメータなし → Supabaseから非同期取得
+    // ローディング中は全社表示でフィルタUIを構築
+    buildFilters();
+    loadData();
+
+    // Supabaseから取得（認証ガードの完了を待つ）
+    // window.__currentUser はページ上部の認証スクリプトが設定する
+    // 認証スクリプトは同期的に実行されているので、ここに来た時点で設定済みのはず
+    const supabaseCompanies = await fetchSubscribedCompaniesFromSupabase();
+
+    if (supabaseCompanies !== null) {
+      // 特定の会社のみ契約している場合 → フィルタを更新して再レンダリング
+      SUBSCRIBED_COMPANIES = supabaseCompanies;
+      COMPANIES = SUBSCRIBED_COMPANIES;
+      selectedCompanies = new Set(COMPANIES);
+      buildFilters(); // フィルタUIを再構築
+      applyFilters(); // マップを再レンダリング
+    }
+    // supabaseCompanies === null の場合は全社表示のまま（変更不要）
+  }
+
+  // ===== テストモード表示バナー =====
+  if (SUBSCRIBED_COMPANIES) {
+    const banner = document.createElement('div');
+    banner.style.cssText = 'position:fixed; top:8px; left:50%; transform:translateX(-50%); z-index:9999; background:rgba(99,102,241,0.95); color:#fff; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; box-shadow:0 4px 12px rgba(0,0,0,0.3); display:flex; gap:10px; align-items:center;';
+    const isTestMode = getSubscribedCompaniesFromUrl() !== undefined;
+    const names = SUBSCRIBED_COMPANIES.map(n => COMPANY_SHORT[n] || n).join(' / ');
+    if (isTestMode) {
+      banner.innerHTML = `🧪 テストモード｜契約エリア: <b>${names}</b> <span style="cursor:pointer; opacity:0.7; margin-left:6px;" title="解除" id="test-mode-clear">✕</span>`;
+      document.body.appendChild(banner);
+      document.getElementById('test-mode-clear').addEventListener('click', () => {
+        localStorage.removeItem('batteryland_test_sub');
+        location.href = location.pathname;
+      });
+    } else {
+      banner.style.background = 'rgba(30,41,59,0.92)';
+      banner.innerHTML = `📋 契約エリア: <b>${names}</b>`;
+      document.body.appendChild(banner);
+    }
+  }
+})();
 
 // ===== Auth / ユーザー情報表示 =====
 (function initAuthUI() {
