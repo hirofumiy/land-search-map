@@ -697,8 +697,9 @@ body {
     return;
   }
 
-  // ユーザーID を selectPlan() で参照できるようグローバル化
+  // selectPlan() で参照できるようグローバル化
   window.__userId = session.user.id;
+  window.__accessToken = session.access_token;
 
   // ユーザー名を表示
   const { data: demoUser } = await sb
@@ -782,7 +783,8 @@ function renderCompanySelectors() {
   }));
   addonEl.querySelectorAll('input').forEach(cb => cb.addEventListener('change', () => {
     if (cb.checked) addonCompanies.add(cb.value); else addonCompanies.delete(cb.value);
-    renderCompanySelectors();
+    const lbl = cb.closest('.company-option');
+    if (lbl) lbl.classList.toggle('selected', cb.checked);
     updatePriceSummary();
   }));
 }
@@ -815,7 +817,7 @@ if (document.getElementById('primary-company-list')) {
   updatePriceSummary();
 }
 
-function selectPlan(plan) {
+async function selectPlan(plan) {
   const cfg = window.BATTERYLAND_CONFIG;
 
   // Enterpriseはお問い合わせへ
@@ -825,41 +827,41 @@ function selectPlan(plan) {
   }
 
   if (plan === 'standard') {
-    const addonCount = addonCompanies.size;
+    const btn = document.getElementById('btn-standard');
+    const origText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '決済ページを準備中...';
 
-    // 追加社数で Payment Link を切替（Stripe数量最小=1制限の回避策）
-    //   0社 → リンクA（基本料金＋初回登録料のみ）
-    //   1社以上 → リンクB（追加電力会社の数量をセット）
-    const url = addonCount === 0
-      ? (cfg.STRIPE_STANDARD_LINK_BASE || cfg.STRIPE_STANDARD_PAYMENT_LINK)
-      : cfg.STRIPE_STANDARD_LINK_ADDON;
+    try {
+      const token = window.__accessToken;
+      if (!token) throw new Error('セッションが切れています。ページを再読み込みしてください。');
 
-    if (!url || url.includes('YOUR')) {
-      alert('現在、オンライン決済の準備中です。\nお申し込みはメールにてお問い合わせください。\n\ninfo@440marketing.biz');
-      return;
+      const edgeUrl = cfg.SUPABASE_URL + '/functions/v1/create-checkout';
+      const res = await fetch(edgeUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+        body: JSON.stringify({
+          primaryCompany,
+          addonCompanies: [...addonCompanies],
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.url) {
+        throw new Error(data.error || '決済ページの作成に失敗しました');
+      }
+
+      location.href = data.url;
+
+    } catch (err) {
+      console.error('selectPlan error:', err);
+      alert('エラーが発生しました。\n' + err.message);
+      btn.disabled = false;
+      btn.textContent = origText;
     }
-
-    // 選択された電力会社を Stripe に渡す
-    const selected = [primaryCompany, ...addonCompanies];
-    const params = new URLSearchParams();
-
-    // 返却URL
-    params.set('return_url', location.origin + '/expired.html?success=1');
-
-    // client_reference_id: Webhookが「誰がどの電力会社を選んだか」を判別するためのキー
-    //   フォーマット: {userUUID}__{code1}_{code2}_{code3}
-    //   例: a1b2c3d4-...-xxxx__tepco_chubu_kepco
-    //   制約: 英数字・"-"・"_" のみ、最大200文字
-    const userId = window.__userId || '';
-    const refId = userId + '__' + selected.join('_');
-    params.set('client_reference_id', refId);
-
-    // 追加社数を Stripe 側の数量に反映（リンクB利用時のみ）
-    if (addonCount > 0 && cfg.STRIPE_ADDON_PRICE_ID) {
-      params.append(`prefilled_quantity[${cfg.STRIPE_ADDON_PRICE_ID}]`, String(addonCount));
-    }
-
-    location.href = url + '?' + params.toString();
   }
 }
 
