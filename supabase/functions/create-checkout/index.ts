@@ -84,16 +84,12 @@ Deno.serve(async (req: Request) => {
     if (addonCount > 0) {
       lineItems.push({ price: PRICE_ADDON, quantity: addonCount })
     }
+    // 初回登録料（一回限り）: subscription mode の line_items に直接追加すると初回請求にのみ含まれる
+    lineItems.push({ price: PRICE_INIT_FEE, quantity: 1 })
 
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       line_items: lineItems,
-      subscription_data: {
-        // 初回登録料（一回限り）をサブスク初回請求に追加
-        add_invoice_items: [
-          { price: PRICE_INIT_FEE, quantity: 1 },
-        ],
-      },
       success_url: SUCCESS_URL,
       cancel_url:  CANCEL_URL,
       client_reference_id: clientRefId,
