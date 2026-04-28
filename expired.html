@@ -476,8 +476,9 @@ body {
     <div class="price-summary" id="price-summary">
       <div class="price-summary-row"><span>基本料金（1社付属）</span><span class="val">¥150,000</span></div>
       <div class="price-summary-row" id="addon-row" style="display:none;"><span id="addon-label">追加 0社</span><span class="val" id="addon-amount">¥0</span></div>
-      <div class="price-summary-row total"><span>月額（税別）</span><span class="val" id="total-amount">¥150,000</span></div>
-      <div class="price-summary-row" style="font-size:11px; color:#64748b;"><span>＋ 初回登録料</span><span>¥50,000</span></div>
+      <div class="price-summary-row"><span>初回登録料</span><span class="val">¥50,000</span></div>
+      <div class="price-summary-row total"><span>ご請求額<span style="font-size:11px;font-weight:400;color:#94a3b8;margin-left:6px;">初回・税別</span></span><span class="val" id="total-amount">¥200,000</span></div>
+      <div class="price-summary-row" style="font-size:11px;color:#64748b;"><span>翌月以降</span><span id="monthly-amount">¥150,000/月（税別）</span></div>
     </div>
 
     <ul class="plan-features">
@@ -793,9 +794,11 @@ function updatePriceSummary() {
   const cfg = window.BATTERYLAND_CONFIG;
   const base = cfg.STANDARD_BASE_PRICE;
   const addon = cfg.ADDON_COMPANY_PRICE;
+  const initFee = cfg.STANDARD_INIT_FEE;
   const addonCount = addonCompanies.size;
   const addonTotal = addonCount * addon;
-  const total = base + addonTotal;
+  const monthly = base + addonTotal;
+  const firstPayment = monthly + initFee;
 
   const addonRow = document.getElementById('addon-row');
   if (addonCount > 0) {
@@ -805,10 +808,11 @@ function updatePriceSummary() {
   } else {
     addonRow.style.display = 'none';
   }
-  document.getElementById('total-amount').textContent = `¥${total.toLocaleString()}`;
+  document.getElementById('total-amount').textContent = `¥${firstPayment.toLocaleString()}`;
+  document.getElementById('monthly-amount').textContent = `¥${monthly.toLocaleString()}/月（税別）`;
 
   const btn = document.getElementById('btn-standard');
-  if (btn) btn.textContent = `このプランに申し込む（¥${total.toLocaleString()}/月）`;
+  if (btn) btn.textContent = `このプランに申し込む（¥${firstPayment.toLocaleString()}）`;
 }
 
 // 初期描画（スクリプトはbody末尾なのでDOMは既に存在）
