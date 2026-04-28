@@ -13,9 +13,9 @@ import Stripe from 'npm:stripe@14.21.0'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 
 // 商品 Price ID（テスト環境）
-const PRICE_BASE     = 'price_1TPzLa9NAOR2l1VNI2w3ao9P'  // 基本料金 ¥150,000/月
-const PRICE_ADDON    = 'price_1TPzLt9NAOR2l1VN6oRnebnT'  // 追加電力会社 ¥50,000/月
-const PRICE_INIT_FEE = 'price_1TQUQw9NAOR2l1VNRpnypbQS'  // 初回登録料 ¥50,000（一回限り）
+const PRICE_BASE     = 'price_1TPkTM9NAOR2l1VNpEmDR70k'  // 基本料金 ¥150,000/月
+const PRICE_ADDON    = 'price_1TPkUL9NAOR2l1VNyvmAdm65'  // 追加電力会社 ¥50,000/月
+const PRICE_INIT_FEE = 'price_1TPkZA9NAOR2l1VNPMhdhheY'  // 初回登録料 ¥50,000（一回限り）
 
 const SUCCESS_URL = 'https://batteryland.440marketing.biz/expired.html?success=1'
 const CANCEL_URL  = 'https://batteryland.440marketing.biz/expired.html'

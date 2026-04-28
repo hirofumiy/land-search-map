@@ -11,7 +11,7 @@ const BATTERYLAND_CONFIG = {
 
   // Stripe (試用期間終了後の決済)
   // Stripe Dashboard → 開発者 → API Keys → 公開可能キー (pk_test_...)
-  STRIPE_PUBLISHABLE_KEY: 'pk_test_51TKK2p9NAOR2l1VNKH5Fiwr94bAZEtGrHhPkLqUF2TQQqS4BVkSYemmR6cATXXscnqrlZqpRZ8DIxAd3B5uA5rSj005GenEMBH',
+  STRIPE_PUBLISHABLE_KEY: 'pk_live_51TKK2p9NAOR2l1VNd02UwiKBK8Vl8eykqYaz24CXX5Toyw8yc4sLPRCjNtMfzd3gxwTEEHsiEZvxZj1z2eUS279100sNOnp5Y7',
 
   // Stripe Payment Links
   // Standardプラン: ¥150,000/月（税別・1社付属） + 初回登録料 ¥50,000
