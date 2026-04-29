@@ -1384,7 +1384,6 @@ function renderSubstations() {
         <div class="popup-row"><b>電圧:</b> ${voltage}</div>
         <div class="popup-row"><b>増強要否:</b> ${hasCapacityData ? (p.reinforcement_needed || '不明') : 'データなし'}</div>
         <div class="popup-row"><b>ランク:</b> ${rankBadge}</div>
-        <div class="popup-row"><b>推定負担金:</b> ${costStr}</div>
         <div class="popup-row"><b>空き容量更新日:</b> ${hasCapacityData ? updateDateStr : 'データなし'}</div>
         ${dataNoteRow}
         <div class="popup-row"><b>備考:</b> ${p.notes || ''}</div>
@@ -1417,7 +1416,6 @@ function renderProperties() {
         <div class="popup-row"><b>価格:</b> ${priceStr}</div>
         <div class="popup-row"><b>地目:</b> ${p.land_category || '不明'}</div>
         <div class="popup-row"><b>最寄変電所:</b> ${p.nearest_substation || ''}（${p.distance_km || '?'} km）</div>
-        <div class="popup-row"><b>推定負担金:</b> ${p.estimated_burden || '不明'}</div>
         <div class="popup-row"><b>接道:</b> ${p.road_access || '不明'}</div>
         ${agentInfo}
         <div class="popup-row"><b>備考:</b> ${p.notes || ''}</div>
@@ -1817,7 +1815,6 @@ async function renderPropertiesWithHazardFilter() {
         <div class="popup-row"><b>価格:</b> ${priceStr}</div>
         <div class="popup-row"><b>地目:</b> ${p.land_category || '不明'}</div>
         <div class="popup-row"><b>最寄変電所:</b> ${p.nearest_substation || ''}（${p.distance_km || '?'} km）</div>
-        <div class="popup-row"><b>推定負担金:</b> ${p.estimated_burden || '不明'}</div>
         <div class="popup-row"><b>接道:</b> ${p.road_access || '不明'}</div>
         ${agentInfo}
         <div class="popup-row"><b>備考:</b> ${p.notes || ''}</div>
