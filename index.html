@@ -387,8 +387,8 @@ body.rotate-bypassed #app { visibility: visible !important; }
   background: #1e293b; border: 1px solid #475569;
   color: #94a3b8; width: 20px; height: 56px;
   align-items: center; justify-content: center;
-  cursor: pointer; border-radius: 0 6px 6px 0;
-  font-size: 12px; transition: left 0.25s;
+  cursor: pointer; border-radius: 6px 0 0 6px;
+  font-size: 12px; transition: right 0.25s;
 }
 </style>
 </head>
@@ -2570,7 +2570,7 @@ function toggleMobilePanel() {
   __panelCollapsed = !__panelCollapsed;
   panel.classList.toggle('collapsed', __panelCollapsed);
   btn.textContent = __panelCollapsed ? '‹' : '›';
-  btn.style.left  = __panelCollapsed ? '0' : '240px';
+  btn.style.right = __panelCollapsed ? '0' : '240px';
   // 地図サイズ更新
   setTimeout(() => { if (window.map) window.map.invalidateSize(); }, 260);
 }
@@ -2581,10 +2581,12 @@ function toggleMobilePanel() {
   function updateBtn() {
     const isLandscapeMobile =
       window.innerWidth <= 1024 &&
-      window.innerHeight <= 620 &&
+      window.innerHeight <= 680 &&
       window.innerWidth > window.innerHeight;
     if (isLandscapeMobile) {
-      btn.style.left = __panelCollapsed ? '0' : '240px';
+      btn.style.right = __panelCollapsed ? '0' : '240px';
+    } else {
+      btn.style.right = '';
     }
   }
   updateBtn();
