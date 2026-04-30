@@ -1340,19 +1340,29 @@ map.on('click', async function(e) {
           if (loc) {
             prefName = loc.prefecture || '';
             cityName = loc.city || '';
-            townName = loc.town || '';
+            // 「（その他）」は意味がないので除去
+            const rawTown = loc.town || '';
+            townName = rawTown.includes('その他') ? '' : rawTown;
           }
         } catch(e) {}
-        // フォールバック2: 国土地理院 逆ジオコーダー（市区町村まで）
-        if (!prefName) {
+
+        // 国土地理院 逆ジオコーダー:
+        //  ① prefName が取れなかった場合、② townName が空の場合（大字を補完）
+        if (!prefName || !townName) {
           try {
             const gsiRes = await fetch(
               `https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat=${center.lat}&lon=${center.lng}`
             ).then(r => r.json());
             const nm = gsiRes?.results?.lv01Nm || '';
             const m = nm.match(/^(.*?[都道府県])(.*?[市区町村郡])(.*?)$/);
-            if (m) { prefName = m[1]; cityName = m[2]; townName = m[3] || ''; }
-            else if (nm) { prefName = nm; }
+            if (m) {
+              if (!prefName) prefName = m[1];
+              if (!cityName) cityName = m[2];
+              // GSI の大字が取れ、かつ HeartRails で取れなかった場合のみ上書き
+              if (!townName && m[3]) townName = m[3].trim();
+            } else if (nm && !prefName) {
+              prefName = nm;
+            }
           } catch(e) {}
         }
       }
@@ -1378,6 +1388,12 @@ map.on('click', async function(e) {
       const copyText = fullAddr ? `${fullAddr} ${chiban}` : chiban;
       const safeCopy = copyText.replace(/'/g, '&#39;');
 
+      // 謄本依頼用: 住所＋座標を付加（所在が不確かな場合でも管理者が特定できるように）
+      const coordNote = `（座標: ${center.lat.toFixed(5)},${center.lng.toFixed(5)}）`;
+      const svcAddress = fullAddr
+        ? `${fullAddr} ${chiban}番 ${coordNote}`
+        : `地番:${chiban} ${coordNote}`;
+
       const html = `
         <div style="min-width:260px;">
           <div style="font-size:14px; font-weight:700; color:#1e2761; margin-bottom:6px; padding-bottom:4px; border-bottom:1px solid #e5e7eb;">
@@ -1398,7 +1414,7 @@ map.on('click', async function(e) {
             <a href="${sv}" target="_blank" rel="noopener" style="display:block; padding:6px 8px; background:#3b82f6; color:white; text-decoration:none; font-size:11px; border-radius:3px; text-align:center;">🗺️ ストリートビューを開く</a>
             <button onclick="navigator.clipboard.writeText('${safeCopy}'); window.open('${touri}', '_blank');" style="padding:6px 8px; background:#059669; color:white; border:none; font-size:11px; border-radius:3px; cursor:pointer;">📄 登記情報提供サービス<br><span style="font-size:9px; opacity:0.9;">(所在＋地番をコピー＆サイトを開く)</span></button>
           </div>
-          ${typeof svcButtons === 'function' ? svcButtons(copyText, center.lat, center.lng) : ''}
+          ${typeof svcButtons === 'function' ? svcButtons(svcAddress, center.lat, center.lng) : ''}
         </div>`;
 
       L.popup({ maxWidth: 320 }).setLatLng(e.latlng).setContent(html).openOn(map);
