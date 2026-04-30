@@ -328,15 +328,70 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
 #svc-modal .btn-submit:hover { background: #2563eb; }
 #svc-modal .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* Responsive */
-@media (max-width: 768px) {
-  #app { flex-direction: column-reverse; }
-  #panel { width: 100%; min-width: unset; height: 50vh; }
-  #map { height: 50vh; }
+/* ── モバイル 縦向き: 横向き誘導オーバーレイ ── */
+#rotate-prompt {
+  display: none;
+  position: fixed; inset: 0; z-index: 99999;
+  background: #0f172a;
+  flex-direction: column; align-items: center; justify-content: center;
+  color: #e2e8f0; text-align: center; padding: 32px;
+}
+@keyframes rotate-hint {
+  0%   { transform: rotate(0deg); }
+  35%  { transform: rotate(90deg); }
+  65%  { transform: rotate(90deg); }
+  100% { transform: rotate(0deg); }
+}
+.rotate-icon { font-size: 72px; display: inline-block; animation: rotate-hint 2.8s ease-in-out infinite; }
+
+@media (max-width: 900px) and (orientation: portrait) {
+  #rotate-prompt { display: flex; }
+  #app { visibility: hidden; }
+}
+
+/* ── モバイル 横向き: コンパクトレイアウト ── */
+@media (max-width: 1024px) and (orientation: landscape) and (max-height: 620px) {
+  #panel { width: 240px; min-width: 240px; transition: width 0.25s; }
+  #panel.collapsed { width: 0; min-width: 0; overflow: hidden; }
+  #panel-header { padding: 8px 10px; }
+  #panel-header h1 { font-size: 13px; }
+  #panel-header p { display: none; }
+  #company-updates { display: none !important; }
+  #user-info-bar { display: none; }
+  .section { padding: 8px 10px; }
+  .section-title { font-size: 10px; margin-bottom: 5px; }
+  .stat-value { font-size: 15px; }
+  .stat-label { font-size: 9px; }
+  .filter-group label { font-size: 10px; padding: 2px 5px; }
+  #panel-collapse-btn { display: flex !important; }
+}
+
+/* パネル折りたたみボタン（横向きモバイル専用） */
+#panel-collapse-btn {
+  display: none;
+  position: fixed; top: 50%; z-index: 500;
+  transform: translateY(-50%);
+  background: #1e293b; border: 1px solid #475569;
+  color: #94a3b8; width: 20px; height: 56px;
+  align-items: center; justify-content: center;
+  cursor: pointer; border-radius: 0 6px 6px 0;
+  font-size: 12px; transition: left 0.25s;
 }
 </style>
 </head>
 <body>
+<!-- 縦向き時: 横向き誘導 -->
+<div id="rotate-prompt">
+  <div class="rotate-icon">📱</div>
+  <div style="font-size:20px; font-weight:700; margin-top:24px; letter-spacing:0.5px;">横向きでお使いください</div>
+  <div style="font-size:13px; color:#94a3b8; margin-top:10px; line-height:1.8;">
+    スマートフォンを横向きにすると<br>地図が見やすくなります
+  </div>
+</div>
+
+<!-- パネル折りたたみボタン（横向きモバイル専用） -->
+<div id="panel-collapse-btn" onclick="toggleMobilePanel()" title="パネルを開閉">›</div>
+
 <div id="app">
   <div id="map"></div>
   <div id="panel">
@@ -2483,6 +2538,37 @@ async function submitSvcRequest() {
 document.getElementById('svc-modal-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeSvcModal();
 });
+
+// ===== モバイル横向き: パネル折りたたみ =====
+let __panelCollapsed = false;
+
+function toggleMobilePanel() {
+  const panel = document.getElementById('panel');
+  const btn   = document.getElementById('panel-collapse-btn');
+  __panelCollapsed = !__panelCollapsed;
+  panel.classList.toggle('collapsed', __panelCollapsed);
+  btn.textContent = __panelCollapsed ? '‹' : '›';
+  btn.style.left  = __panelCollapsed ? '0' : '240px';
+  // 地図サイズ更新
+  setTimeout(() => { if (window.map) window.map.invalidateSize(); }, 260);
+}
+
+// ボタン初期位置
+(function initCollapseBtn() {
+  const btn = document.getElementById('panel-collapse-btn');
+  function updateBtn() {
+    const isLandscapeMobile =
+      window.innerWidth <= 1024 &&
+      window.innerHeight <= 620 &&
+      window.innerWidth > window.innerHeight;
+    if (isLandscapeMobile) {
+      btn.style.left = __panelCollapsed ? '0' : '240px';
+    }
+  }
+  updateBtn();
+  window.addEventListener('resize', updateBtn);
+  window.addEventListener('orientationchange', () => setTimeout(updateBtn, 300));
+})();
 </script>
 </body>
 </html>
