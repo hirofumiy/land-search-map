@@ -283,6 +283,51 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
 .popup-row b { color: #1e293b; }
 .popup-row a { color: #2563eb; }
 
+/* Service buttons in popup */
+.svc-btn {
+  padding: 5px 10px; border: 1px solid #3b82f6; border-radius: 5px;
+  background: #eff6ff; color: #1d4ed8; font-size: 11px; cursor: pointer;
+  white-space: nowrap;
+}
+.svc-btn:hover { background: #dbeafe; }
+.svc-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Service Modal */
+#svc-modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 9999; align-items: center; justify-content: center;
+}
+#svc-modal-overlay.active { display: flex; }
+#svc-modal {
+  background: #1e293b; color: #e2e8f0; border-radius: 12px;
+  padding: 24px; width: 420px; max-width: 90vw; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+#svc-modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: #f8fafc; }
+#svc-modal .svc-info { font-size: 13px; color: #94a3b8; margin-bottom: 16px; line-height: 1.6; }
+#svc-modal .svc-address {
+  background: #0f172a; border-radius: 6px; padding: 10px 12px;
+  font-size: 12px; color: #cbd5e1; margin-bottom: 16px; word-break: break-all;
+}
+#svc-modal .svc-price {
+  font-size: 18px; font-weight: 700; color: #f59e0b; margin-bottom: 8px;
+}
+#svc-modal .svc-credit-badge {
+  display: inline-block; padding: 3px 10px; border-radius: 12px;
+  background: #064e3b; color: #34d399; font-size: 12px; font-weight: 600;
+  margin-bottom: 16px;
+}
+#svc-modal .svc-btn-row { display: flex; gap: 10px; justify-content: flex-end; }
+#svc-modal .btn-cancel {
+  padding: 9px 18px; border: 1px solid #475569; border-radius: 6px;
+  background: transparent; color: #94a3b8; font-size: 13px; cursor: pointer;
+}
+#svc-modal .btn-submit {
+  padding: 9px 20px; border: none; border-radius: 6px;
+  background: #3b82f6; color: white; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+#svc-modal .btn-submit:hover { background: #2563eb; }
+#svc-modal .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
 /* Responsive */
 @media (max-width: 768px) {
   #app { flex-direction: column-reverse; }
@@ -1420,6 +1465,7 @@ function renderProperties() {
         ${agentInfo}
         <div class="popup-row"><b>備考:</b> ${p.notes || ''}</div>
         ${urlLink}
+        ${svcButtons(p.address, coords[0], coords[1])}
       `, { maxWidth: 320 })
       .addTo(map);
     propertyMarkers.push(marker);
@@ -1819,6 +1865,7 @@ async function renderPropertiesWithHazardFilter() {
         ${agentInfo}
         <div class="popup-row"><b>備考:</b> ${p.notes || ''}</div>
         ${urlLink}
+        ${svcButtons(p.address, coords[0], coords[1])}
       `, { maxWidth: 320 })
       .addTo(map);
     propertyMarkers.push(marker);
@@ -2317,6 +2364,125 @@ async function doLogout() {
     window.addEventListener('load', function() { setTimeout(startTutorial, 600); });
   }
 })();
+</script>
+
+<!-- サービス依頼モーダル -->
+<div id="svc-modal-overlay">
+  <div id="svc-modal">
+    <h3 id="svc-modal-title"></h3>
+    <div class="svc-info" id="svc-modal-desc"></div>
+    <div class="svc-address" id="svc-modal-address"></div>
+    <div id="svc-modal-pricing"></div>
+    <div class="svc-btn-row">
+      <button class="btn-cancel" onclick="closeSvcModal()">キャンセル</button>
+      <button class="btn-submit" id="svc-modal-submit" onclick="submitSvcRequest()">依頼する</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== サービス依頼（登記簿謄本取得・DM送付）=====
+let __svcPending = null; // { type, address, lat, lng }
+
+function svcButtons(address, lat, lng) {
+  const user = window.__currentUser;
+  if (!user) return '';
+  const demoUser = user.demoUser;
+  const isEnterprise = demoUser?.plan === 'enterprise';
+  const regCredits = demoUser?.registry_credits ?? 0;
+  const dmCredits  = demoUser?.dm_credits ?? 0;
+
+  const regLabel = isEnterprise
+    ? `📄 謄本取得（あと${regCredits}件）`
+    : '📄 謄本取得（¥500）';
+  const dmLabel = isEnterprise
+    ? `✉️ DM送付（あと${dmCredits}通）`
+    : '✉️ DM送付（¥300）';
+
+  const escapedAddr = address.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  return `<div style="margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;display:flex;gap:6px;flex-wrap:wrap;">
+    <button class="svc-btn" onclick="openSvcModal('registry','${escapedAddr}',${lat},${lng})">${regLabel}</button>
+    <button class="svc-btn" onclick="openSvcModal('dm','${escapedAddr}',${lat},${lng})">${dmLabel}</button>
+  </div>`;
+}
+
+function openSvcModal(type, address, lat, lng) {
+  __svcPending = { type, address, lat, lng };
+  const user = window.__currentUser;
+  const demoUser = user?.demoUser;
+  const isEnterprise = demoUser?.plan === 'enterprise';
+
+  const isRegistry = type === 'registry';
+  document.getElementById('svc-modal-title').textContent =
+    isRegistry ? '📄 登記簿謄本取得依頼' : '✉️ DM送付依頼';
+  document.getElementById('svc-modal-desc').textContent = isRegistry
+    ? '対象地の登記簿謄本（全部事項証明書）を取得します。取得後、メールにてPDFをお送りします。通常2〜3営業日。'
+    : '対象地の地権者宛にDMを送付します。送付後、ご報告いたします。通常3〜5営業日。';
+  document.getElementById('svc-modal-address').textContent = '📍 ' + address;
+
+  const pricingEl = document.getElementById('svc-modal-pricing');
+  if (isEnterprise) {
+    const credits = isRegistry ? (demoUser?.registry_credits ?? 0) : (demoUser?.dm_credits ?? 0);
+    pricingEl.innerHTML = `<div class="svc-credit-badge">クレジット利用 — あと ${credits} 件</div>`;
+  } else {
+    const price = isRegistry ? '¥500（税別）' : '¥300（税別）';
+    pricingEl.innerHTML = `<div class="svc-price">${price}</div><div style="font-size:11px;color:#94a3b8;margin-bottom:16px;">Stripeの決済ページへ移動します</div>`;
+  }
+
+  document.getElementById('svc-modal-overlay').classList.add('active');
+}
+
+function closeSvcModal() {
+  document.getElementById('svc-modal-overlay').classList.remove('active');
+  __svcPending = null;
+}
+
+async function submitSvcRequest() {
+  if (!__svcPending) return;
+  const { type, address, lat, lng } = __svcPending;
+  const user = window.__currentUser;
+  if (!user) { alert('ログインが必要です'); return; }
+
+  const btn = document.getElementById('svc-modal-submit');
+  btn.disabled = true;
+  btn.textContent = '送信中...';
+
+  try {
+    const cfg = window.BATTERYLAND_CONFIG;
+    const token = user.session.access_token;
+    const res = await fetch(cfg.SUPABASE_URL + '/functions/v1/create-service-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ type, address, lat, lng }),
+    });
+    const data = await res.json();
+
+    if (data.url) {
+      // Standard: Stripe 決済ページへ
+      closeSvcModal();
+      location.href = data.url;
+    } else if (data.success) {
+      // Enterprise: クレジット消費完了
+      closeSvcModal();
+      // ローカルのクレジットを更新
+      const field = type === 'registry' ? 'registry_credits' : 'dm_credits';
+      if (user.demoUser) user.demoUser[field] = data.remaining;
+      alert(`✅ 依頼を受け付けました！\nクレジット残数: あと ${data.remaining} 件\n\n担当者より2〜3営業日以内にご連絡いたします。`);
+    } else {
+      alert('エラーが発生しました: ' + (data.error || '不明なエラー'));
+    }
+  } catch (err) {
+    alert('通信エラーが発生しました: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '依頼する';
+  }
+}
+
+// モーダル外クリックで閉じる
+document.getElementById('svc-modal-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeSvcModal();
+});
 </script>
 </body>
 </html>

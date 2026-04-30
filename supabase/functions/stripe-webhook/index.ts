@@ -92,7 +92,7 @@ serve(async (req: Request) => {
 })
 
 // ───────────────────────────────────────────
-// 決済完了時の処理
+// 決済完了時の処理（サブスク・サービス共通）
 // ───────────────────────────────────────────
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const refId = session.client_reference_id
@@ -101,7 +101,13 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     return
   }
 
-  // {userUUID}__{code1}_{code2}_{code3} をパース
+  // サービス決済: svc_registry__{requestId} or svc_dm__{requestId}
+  if (refId.startsWith('svc_')) {
+    await handleServicePaymentCompleted(session, refId)
+    return
+  }
+
+  // サブスク決済: {userUUID}__{code1}_{code2}_{code3}
   const [userId, companiesStr] = refId.split('__')
   const companies = (companiesStr || '').split('_').filter(Boolean)
 
@@ -112,7 +118,6 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   console.log('📝 update demo_users:', { userId, companies })
 
-  // expires_at は1ヶ月後（サブスクの請求周期に合わせる場合は subscription を取得して period_end を使うこともできる）
   const expiresAt = new Date()
   expiresAt.setMonth(expiresAt.getMonth() + 1)
 
@@ -132,6 +137,36 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     throw error
   }
   console.log('✅ demo_users 更新完了:', userId)
+}
+
+// ───────────────────────────────────────────
+// サービス決済完了（謄本取得・DM送付）
+// ───────────────────────────────────────────
+async function handleServicePaymentCompleted(session: Stripe.Checkout.Session, refId: string) {
+  // svc_registry__{requestId} → type=registry, id=requestId
+  const [svcType, requestId] = refId.replace('svc_', '').split('__')
+  if (!svcType || !requestId) {
+    console.warn('⚠️ サービス決済 refId パース失敗:', refId)
+    return
+  }
+
+  const table = svcType === 'registry' ? 'registry_requests' : 'dm_requests'
+  console.log(`📝 ${table} 決済完了:`, requestId)
+
+  const { error } = await supabaseAdmin
+    .from(table)
+    .update({
+      paid: true,
+      status: 'pending',
+      stripe_session_id: session.id,
+    })
+    .eq('id', requestId)
+
+  if (error) {
+    console.error(`❌ ${table} update error:`, error)
+    throw error
+  }
+  console.log(`✅ ${table} 決済確認完了:`, requestId)
 }
 
 // ───────────────────────────────────────────
