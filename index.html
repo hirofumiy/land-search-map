@@ -344,13 +344,26 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
 }
 .rotate-icon { font-size: 72px; display: inline-block; animation: rotate-hint 2.8s ease-in-out infinite; }
 
+/* JS で .rotate-forced が付いたら非表示 */
+body.rotate-bypassed #rotate-prompt { display: none !important; }
+body.rotate-bypassed #app { visibility: visible !important; }
+
 @media (max-width: 900px) and (orientation: portrait) {
   #rotate-prompt { display: flex; }
   #app { visibility: hidden; }
 }
 
+/* ── モバイル 縦向き フォールバックレイアウト（そのまま使う 時） ── */
+@media (max-width: 900px) and (orientation: portrait) {
+  body.rotate-bypassed #app {
+    flex-direction: column;
+  }
+  body.rotate-bypassed #map { height: 65vh; width: 100%; }
+  body.rotate-bypassed #panel { width: 100%; min-width: unset; height: 35vh; }
+}
+
 /* ── モバイル 横向き: コンパクトレイアウト ── */
-@media (max-width: 1024px) and (orientation: landscape) and (max-height: 620px) {
+@media (max-width: 1024px) and (orientation: landscape) and (max-height: 680px) {
   #panel { width: 240px; min-width: 240px; transition: width 0.25s; }
   #panel.collapsed { width: 0; min-width: 0; overflow: hidden; }
   #panel-header { padding: 8px 10px; }
@@ -387,6 +400,9 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
   <div style="font-size:13px; color:#94a3b8; margin-top:10px; line-height:1.8;">
     スマートフォンを横向きにすると<br>地図が見やすくなります
   </div>
+  <button onclick="bypassRotate()" style="margin-top:28px; padding:10px 24px; border:1px solid #475569; border-radius:8px; background:transparent; color:#64748b; font-size:12px; cursor:pointer;">
+    そのまま使う
+  </button>
 </div>
 
 <!-- パネル折りたたみボタン（横向きモバイル専用） -->
@@ -2538,6 +2554,12 @@ async function submitSvcRequest() {
 document.getElementById('svc-modal-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeSvcModal();
 });
+
+// ===== 縦向き: そのまま使うボタン =====
+function bypassRotate() {
+  document.body.classList.add('rotate-bypassed');
+  setTimeout(() => { if (window.map) window.map.invalidateSize(); }, 100);
+}
 
 // ===== モバイル横向き: パネル折りたたみ =====
 let __panelCollapsed = false;
