@@ -69,11 +69,6 @@ Deno.serve(async (req: Request) => {
     }
 
     // ── Standard: Stripe 都度決済 ──
-    const priceId = type === 'registry'
-      ? Deno.env.get('PRICE_REGISTRY')
-      : Deno.env.get('PRICE_DM')
-
-    if (!priceId) return json({ error: '決済設定が未完了です。管理者にお問い合わせください。' }, 500)
 
     // 先に pending レコードを作成
     const { data: reqRecord } = await sbAdmin.from(table)
@@ -85,12 +80,29 @@ Deno.serve(async (req: Request) => {
       httpClient: Stripe.createFetchHttpClient(),
     })
 
+    const serviceName = type === 'registry' ? '登記簿謄本取得' : 'DM送付'
+
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      line_items: [{ price: priceId, quantity: 1 }],
+      line_items: [{
+        price_data: {
+          currency: 'jpy',
+          unit_amount: amount,
+          product_data: {
+            name: `BatteryLand ${serviceName}`,
+            description: `対象地: ${address}`,
+          },
+        },
+        quantity: 1,
+      }],
       success_url: `${SITE_URL}/index.html?svc_success=${type}`,
       cancel_url:  `${SITE_URL}/index.html`,
       client_reference_id: `svc_${type}__${reqRecord!.id}`,
+      metadata: { type, address, request_id: reqRecord!.id, user_id: user.id },
+      payment_intent_data: {
+        description: `${serviceName}: ${address}`,
+        metadata: { type, address, request_id: reqRecord!.id },
+      },
     })
 
     console.log(`✅ Checkout session created: ${type} req=${reqRecord!.id}`)

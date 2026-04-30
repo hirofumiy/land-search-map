@@ -477,6 +477,13 @@ body.rotate-bypassed #app { visibility: visible !important; }
             <label class="hazard-switch"><input type="checkbox" data-hazard="tsunami"><span class="slider"></span></label>
           </div>
         </div>
+        <div id="powerline-hint" class="powerline-hint" style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
+          <span style="font-size:12px; font-weight:600; color:#e2e8f0;">⚡ 現在 Lv<span id="zoom-level">6</span> ／ Lv12以上で送電線（推定）表示</span>
+          <label class="hazard-switch" title="送電線の表示/非表示">
+            <input type="checkbox" id="powerline-toggle" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
         <!-- 公図（登記所備付地図）トグル -->
         <div style="margin-top:8px; padding-top:8px; border-top:1px solid #334155;">
           <div class="section-title" style="margin-bottom:6px;">公図・地番</div>
@@ -534,13 +541,6 @@ body.rotate-bypassed #app { visibility: visible !important; }
           </div>
         </div>
 
-        <div id="powerline-hint" class="powerline-hint" style="display:flex;align-items:center;justify-content:space-between;">
-          <span>⚡ 現在 Lv<span id="zoom-level">6</span> ／ Lv12以上で送電線（推定）表示</span>
-          <label class="hazard-switch" title="送電線の表示/非表示">
-            <input type="checkbox" id="powerline-toggle" checked>
-            <span class="slider"></span>
-          </label>
-        </div>
         <!-- 物件ハザード除外フィルター -->
         <div style="margin-top:6px; padding:6px 8px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:5px;">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;">
