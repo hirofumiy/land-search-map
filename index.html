@@ -474,6 +474,13 @@ body.rotate-bypassed #app { visibility: visible !important; }
 
         <div class="section-title" style="margin-top:10px;">ハザードマップ</div>
         <div style="font-size:9.5px; color:#64748b; margin-bottom:6px; line-height:1.5;">※ ハザード指定区域のみ色が表示されます。指定外エリアは透明です。河川・海岸付近で確認してください。</div>
+        <!-- 一括トグル -->
+        <div id="hazard-all-row" onclick="toggleAllHazards()" style="display:flex;align-items:center;justify-content:space-between;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:7px 10px;margin-bottom:6px;cursor:pointer;user-select:none;">
+          <span style="font-size:12px;font-weight:700;color:#e2e8f0;">🗂️ ハザード 一括 ON / OFF</span>
+          <label class="hazard-switch" style="pointer-events:none;">
+            <input type="checkbox" id="hazard-all-cb"><span class="slider"></span>
+          </label>
+        </div>
         <div class="hazard-controls">
           <div class="hazard-toggle" data-hazard="flood">
             <div class="hazard-dot" style="background:#4fc3f7;"></div>
@@ -1839,14 +1846,41 @@ map.on('click', function(e) {
 });
 
 // ===== Hazard Toggle (ON/OFF switches) =====
+const HAZARD_KEYS = ['flood', 'sediment', 'landslide', 'jisuberi', 'tsunami'];
+
+function syncHazardAllBtn() {
+  const allCb = document.getElementById('hazard-all-cb');
+  if (!allCb) return;
+  const anyOn = HAZARD_KEYS.some(k => hazardActive[k]);
+  allCb.checked = anyOn;
+}
+
+function toggleAllHazards() {
+  // いずれかONなら全OFF、全OFFなら全ON
+  const anyOn = HAZARD_KEYS.some(k => hazardActive[k]);
+  const nextState = !anyOn;
+  HAZARD_KEYS.forEach(key => {
+    hazardActive[key] = nextState;
+    const cb = document.querySelector(`.hazard-switch input[data-hazard="${key}"]`);
+    const row = document.querySelector(`.hazard-toggle[data-hazard="${key}"]`);
+    if (cb) cb.checked = nextState;
+    if (row) row.classList.toggle('active', nextState);
+    if (nextState) hazardLayers[key].addTo(map);
+    else map.removeLayer(hazardLayers[key]);
+  });
+  syncHazardAllBtn();
+}
+
 document.querySelectorAll('.hazard-switch input[type="checkbox"]').forEach(cb => {
   cb.addEventListener('change', function() {
     const key = this.dataset.hazard;
+    if (!key) return; // 一括ボタン自体のchangeは無視
     const toggle = this.closest('.hazard-toggle');
     hazardActive[key] = this.checked;
     toggle.classList.toggle('active', this.checked);
     if (this.checked) hazardLayers[key].addTo(map);
     else map.removeLayer(hazardLayers[key]);
+    syncHazardAllBtn();
   });
 });
 
