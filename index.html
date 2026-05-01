@@ -283,6 +283,30 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
 .popup-row b { color: #1e293b; }
 .popup-row a { color: #2563eb; }
 
+/* Context menu */
+.ctx-item {
+  padding: 10px 16px; font-size: 13px; color: #e2e8f0;
+  cursor: pointer; transition: background 0.1s;
+}
+.ctx-item:hover { background: #334155; }
+.ctx-item:not(:last-child) { border-bottom: 1px solid #334155; }
+
+/* Pin list */
+.pin-card {
+  background: #0f172a; border: 1px solid #334155; border-radius: 6px;
+  padding: 7px 10px; font-size: 11px; color: #cbd5e1;
+}
+.pin-card-addr { font-weight: 600; color: #f1f5f9; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pin-card-meta { color: #64748b; font-size: 10px; }
+.pin-card-btns { display: flex; gap: 4px; margin-top: 5px; }
+.pin-btn {
+  flex: 1; padding: 3px 6px; border: 1px solid #475569; border-radius: 4px;
+  background: transparent; color: #94a3b8; font-size: 10px; cursor: pointer;
+}
+.pin-btn:hover { background: #334155; color: #e2e8f0; }
+.pin-btn.danger { border-color: #ef4444; color: #f87171; }
+.pin-btn.danger:hover { background: rgba(239,68,68,0.15); }
+
 /* Service buttons in popup */
 .svc-btn {
   padding: 5px 10px; border: 1px solid #3b82f6; border-radius: 5px;
@@ -555,6 +579,16 @@ body.rotate-bypassed #app { visibility: visible !important; }
           </div>
           <div id="hazard-filter-status" style="display:none;font-size:9px;color:#94a3b8;margin-top:4px;"></div>
         </div>
+      </div>
+
+      <!-- 📍 ピンメモ -->
+      <div class="section" id="pin-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div class="section-title" style="margin-bottom:0;">📍 ピンメモ</div>
+          <span id="pin-count" style="font-size:10px;color:#64748b;">0 / 10件</span>
+        </div>
+        <div id="pin-list" style="display:flex;flex-direction:column;gap:4px;"></div>
+        <div id="pin-empty" style="font-size:11px;color:#475569;padding:4px 0;">地図を右クリックして地点を保存</div>
       </div>
 
       <!-- Filters -->
@@ -2525,6 +2559,19 @@ async function doLogout() {
 })();
 </script>
 
+<!-- 右クリックコンテキストメニュー -->
+<div id="map-ctx-menu" style="
+  display:none; position:fixed; z-index:9000;
+  background:#1e293b; border:1px solid #334155; border-radius:8px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.4); overflow:hidden; min-width:180px;">
+  <div class="ctx-item" id="ctx-save-pin" onclick="ctxSavePin()">
+    📍 メモリへ保存
+  </div>
+  <div class="ctx-item" id="ctx-find-sub" onclick="ctxFindSubstation()">
+    ⚡ 近くの変電所を探す
+  </div>
+</div>
+
 <!-- サービス依頼モーダル -->
 <div id="svc-modal-overlay">
   <div id="svc-modal">
@@ -2642,6 +2689,186 @@ async function submitSvcRequest() {
 document.getElementById('svc-modal-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeSvcModal();
 });
+
+// ===== ピンメモ機能 =====
+const PIN_KEY = 'bl_pins';
+let __ctxLatLng = null;  // 右クリックした座標
+let __nearestLine = null; // 最寄変電所の線
+
+// ── 距離計算（Haversine）km ──
+function haversineKm(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const toR = Math.PI / 180;
+  const dLat = (lat2 - lat1) * toR;
+  const dLng = (lng2 - lng1) * toR;
+  const a = Math.sin(dLat/2)**2 +
+    Math.cos(lat1*toR) * Math.cos(lat2*toR) * Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+// ── ピン一覧のロード・セーブ ──
+function loadPins() {
+  try { return JSON.parse(localStorage.getItem(PIN_KEY) || '[]'); } catch { return []; }
+}
+function savePins(pins) {
+  localStorage.setItem(PIN_KEY, JSON.stringify(pins));
+}
+
+// ── パネルのピン一覧を再描画 ──
+function renderPinList() {
+  const pins = loadPins();
+  const list = document.getElementById('pin-list');
+  const empty = document.getElementById('pin-empty');
+  const count = document.getElementById('pin-count');
+  count.textContent = `${pins.length} / 10件`;
+  if (pins.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+  list.innerHTML = pins.map(p => `
+    <div class="pin-card">
+      <div class="pin-card-addr" title="${p.address}">${p.address}</div>
+      <div class="pin-card-meta">${p.lat.toFixed(5)}, ${p.lng.toFixed(5)}</div>
+      <div class="pin-card-btns">
+        <button class="pin-btn" onclick="pinJump(${p.lat},${p.lng})">🗺 移動</button>
+        <button class="pin-btn" onclick="pinFindSub(${p.lat},${p.lng})">⚡ 変電所</button>
+        <button class="pin-btn danger" onclick="pinDelete('${p.id}')">✕ 削除</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── ピンを地図移動 ──
+function pinJump(lat, lng) {
+  map.setView([lat, lng], Math.max(map.getZoom(), 14));
+}
+
+// ── ピン削除 ──
+function pinDelete(id) {
+  const pins = loadPins().filter(p => p.id !== id);
+  savePins(pins);
+  renderPinList();
+}
+
+// ── 逆ジオコーディング（住所取得） ──
+async function reverseGeocode(lat, lng) {
+  try {
+    const res = await fetch(
+      `https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat=${lat}&lon=${lng}`
+    ).then(r => r.json());
+    const nm = res?.results?.lv01Nm || '';
+    return nm || `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+  } catch {
+    return `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+  }
+}
+
+// ── ピン保存 ──
+async function savePin(lat, lng) {
+  const pins = loadPins();
+  if (pins.length >= 10) {
+    alert('ピンメモは最大10件です。古いピンを削除してから追加してください。');
+    return;
+  }
+  const address = await reverseGeocode(lat, lng);
+  pins.push({ id: String(Date.now()), lat, lng, address });
+  savePins(pins);
+  renderPinList();
+  // 一時マーカー表示
+  L.popup().setLatLng([lat, lng])
+    .setContent(`<div class="popup-title">📍 保存しました</div><div class="popup-row">${address}</div>`)
+    .openOn(map);
+}
+
+// ── 最寄変電所を探す ──
+function pinFindSub(lat, lng) {
+  if (!substationsData || !substationsData.features.length) {
+    alert('変電所データが読み込まれていません。');
+    return;
+  }
+  // 前の線を削除
+  if (__nearestLine) { map.removeLayer(__nearestLine); __nearestLine = null; }
+
+  let nearest = null, minDist = Infinity;
+  substationsData.features.forEach(f => {
+    const [sLng, sLat] = f.geometry.coordinates;
+    const d = haversineKm(lat, lng, sLat, sLng);
+    if (d < minDist) { minDist = d; nearest = f; }
+  });
+  if (!nearest) return;
+
+  const [sLng, sLat] = nearest.geometry.coordinates;
+  const p = nearest.properties;
+  const distStr = minDist < 1
+    ? `${Math.round(minDist * 1000)} m`
+    : `${minDist.toFixed(2)} km`;
+
+  // 直線を描画
+  __nearestLine = L.layerGroup([
+    L.polyline([[lat, lng], [sLat, sLng]], {
+      color: '#f59e0b', weight: 2, dashArray: '6 4', opacity: 0.9
+    }),
+    L.circleMarker([lat, lng], { radius: 6, color: '#f59e0b', fillColor: '#fbbf24', fillOpacity: 1, weight: 2 }),
+  ]).addTo(map);
+
+  // 地図を両点が収まるよう調整
+  map.fitBounds([[lat, lng], [sLat, sLng]], { padding: [60, 60] });
+
+  // 変電所ポップアップ
+  const COMPANY_SHORT = { '東京電力パワーグリッド':'TEPCO','中部電力パワーグリッド':'中部電力','関西電力送配電':'関西電力','九州電力送配電':'九州電力','中国電力ネットワーク':'中国電力','東北電力ネットワーク':'東北電力','北陸電力送配電':'北陸電力','北海道電力ネットワーク':'北海道電力','四国電力送配電':'四国電力','沖縄電力':'沖縄電力' };
+  const shortName = COMPANY_SHORT[p.company] || p.company || '';
+  const availMW = p.available_capacity_mw != null ? `${p.available_capacity_mw} MW` : 'データなし';
+  L.popup({ maxWidth: 280 })
+    .setLatLng([sLat, sLng])
+    .setContent(`
+      <div class="popup-title">⚡ ${p.name}</div>
+      <div class="popup-row"><b>電力会社:</b> ${shortName}</div>
+      <div class="popup-row"><b>空き容量:</b> ${availMW}</div>
+      <div class="popup-row" style="color:#f59e0b;font-weight:600;font-size:13px;">
+        📏 直線距離: ${distStr}
+      </div>
+      <div class="popup-row" style="font-size:10px;color:#94a3b8;">※ 直線距離のため実際の電線ルートとは異なります</div>
+    `)
+    .openOn(map);
+}
+
+// ── 右クリックメニュー ──
+const ctxMenu = document.getElementById('map-ctx-menu');
+
+map.on('contextmenu', function(e) {
+  L.DomEvent.preventDefault(e.originalEvent);
+  __ctxLatLng = e.latlng;
+  const x = e.originalEvent.clientX;
+  const y = e.originalEvent.clientY;
+  // 画面端補正
+  const menuW = 190, menuH = 90;
+  ctxMenu.style.left = (x + menuW > window.innerWidth ? x - menuW : x) + 'px';
+  ctxMenu.style.top  = (y + menuH > window.innerHeight ? y - menuH : y) + 'px';
+  ctxMenu.style.display = 'block';
+});
+
+// メニューを閉じる
+map.on('click', () => { ctxMenu.style.display = 'none'; });
+map.on('movestart', () => { ctxMenu.style.display = 'none'; });
+document.addEventListener('click', e => {
+  if (!ctxMenu.contains(e.target)) ctxMenu.style.display = 'none';
+});
+
+function ctxSavePin() {
+  ctxMenu.style.display = 'none';
+  if (!__ctxLatLng) return;
+  savePin(__ctxLatLng.lat, __ctxLatLng.lng);
+}
+function ctxFindSubstation() {
+  ctxMenu.style.display = 'none';
+  if (!__ctxLatLng) return;
+  pinFindSub(__ctxLatLng.lat, __ctxLatLng.lng);
+}
+
+// 初期描画
+renderPinList();
 
 // ===== 縦向き: そのまま使うボタン =====
 function bypassRotate() {
