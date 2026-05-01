@@ -1693,6 +1693,26 @@ function applyFilters() {
 function searchAddress() {
   const q = document.getElementById('search-input').value.trim();
   if (!q) return;
+
+  // 座標入力チェック: "34.123456,135.123456" または "34.123456 135.123456"
+  const coordMatch = q.match(/^\s*(-?\d+\.?\d*)\s*[,\s]\s*(-?\d+\.?\d*)\s*$/);
+  if (coordMatch) {
+    const lat = parseFloat(coordMatch[1]);
+    const lng = parseFloat(coordMatch[2]);
+    if (lat >= 20 && lat <= 50 && lng >= 120 && lng <= 155) {
+      map.setView([lat, lng], 16);
+      L.popup({ autoClose: true })
+        .setLatLng([lat, lng])
+        .setContent(`<div class="popup-title">📍 指定座標</div><div class="popup-row">${lat.toFixed(6)}, ${lng.toFixed(6)}</div>`)
+        .openOn(map);
+      return;
+    } else {
+      alert('座標が日本の範囲外です。');
+      return;
+    }
+  }
+
+  // 通常の住所検索
   fetch(`https://msearch.gsi.go.jp/address-search/AddressSearch?q=${encodeURIComponent(q)}`)
     .then(r => r.json())
     .then(data => {
