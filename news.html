@@ -51,10 +51,7 @@ body {
   transition: all 0.2s;
   font-family: sans-serif;
 }
-.btn-back:hover {
-  background: #c8b89a;
-  color: #2c2c2c;
-}
+.btn-back:hover { background: #c8b89a; color: #2c2c2c; }
 
 .main {
   padding: 40px 28px;
@@ -109,7 +106,7 @@ body {
   background: #faf7f2;
   border: 1px solid #d8c8b0;
   border-radius: 0;
-  padding: 28px 32px;
+  padding: 26px 30px;
   border-bottom: none;
   position: relative;
 }
@@ -145,10 +142,11 @@ body {
   letter-spacing: 0.5px;
   font-family: sans-serif;
 }
-.tag-update { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
-.tag-data   { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-.tag-notice { background: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
-.tag-feature{ background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+.tag-update  { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+.tag-data    { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+.tag-notice  { background: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
+.tag-feature { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+.tag-fix     { background: #fff1f2; color: #9f1239; border: 1px solid #fecdd3; }
 .news-title {
   font-size: 15px;
   font-weight: 700;
@@ -167,10 +165,7 @@ body {
 .news-body li {
   margin-bottom: 5px;
 }
-.news-body strong {
-  color: #1a1a1a;
-  font-weight: 700;
-}
+.news-body strong { color: #1a1a1a; font-weight: 700; }
 .new-badge {
   position: absolute;
   top: 16px;
@@ -210,19 +205,123 @@ body {
 
   <div class="news-list">
 
+    <!-- 2026/05/01 -->
     <div class="news-card new-card">
       <span class="new-badge">NEW</span>
+      <div class="news-meta">
+        <span class="news-date">2026年5月1日</span>
+        <span class="news-tag tag-feature">機能追加</span>
+        <span class="news-tag tag-fix">改善</span>
+      </div>
+      <div class="news-title">ハザード一括ON/OFF・ピンメモ・最寄変電所検索・逆潮流注釈・マニュアル刷新</div>
+      <div class="news-body">
+        <ul>
+          <li><strong>ハザードマップ 一括ON/OFF</strong>：洪水・土石流・急傾斜・地すべり・津波の5レイヤーを1クリックでまとめてON/OFFできるボタンを追加。個別スイッチとの連動も自動で同期します。</li>
+          <li><strong>右クリックで地点をメモ保存</strong>：地図上で右クリック（スマホは長押し）→「📌 メモリへ保存」で最大10件を保存。逆ジオコードで住所も自動記録されます。</li>
+          <li><strong>最寄変電所を検索</strong>：右クリック→「⚡ 近くの変電所をさがす」で直線距離の最寄変電所をオレンジ破線で可視化・距離表示。</li>
+          <li><strong>座標検索対応</strong>：住所検索ボックスに「34.XXXXX,135.XXXXX」形式で入力するとズームLv16でその地点に直接ジャンプできます。</li>
+          <li><strong>ハザード・公図レイヤー安定化</strong>：ネットワーク障害時の自動リトライ、公図ライブラリ読み込み待機を強化し、表示ミスを大幅に削減しました。</li>
+          <li><strong>逆潮流注釈を追加</strong>：右パネルに「空き容量＝逆潮流（発電設備）の連系可能容量」および電力会社開示資料に基づく推測値である旨の注釈を追記しました。</li>
+          <li><strong>謄本・DM依頼 メール通知</strong>：謄本取得・DM送付の依頼が確定すると管理者に自動で通知メールが届くようになりました（Resend連携）。</li>
+          <li><strong>マニュアル全面刷新</strong>：全10セクション（ログイン/マップ/検索/フィルター/オーバーレイ/ピンメモ/謄本・DM/スマホ/FAQ）を刷新。目次バーも追加しました。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2026/04/30 -->
+    <div class="news-card new-card" style="border-left-color:#7c3aed; background:#fdf8ff;">
+      <div class="news-meta">
+        <span class="news-date">2026年4月30日</span>
+        <span class="news-tag tag-feature">機能追加</span>
+        <span class="news-tag tag-fix">バグ修正</span>
+      </div>
+      <div class="news-title">登記簿謄本取得・DM送付サービス開始、スマホ横向き対応、UI改善</div>
+      <div class="news-body">
+        <ul>
+          <li><strong>登記簿謄本取得（¥500）・DM送付（¥300）サービス</strong>を開始。公図の地番ポップアップまたは物件ポップアップから直接依頼できます。Stripe決済画面に住所・地番情報が引き継がれます（Enterprise プランはクレジット消費）。</li>
+          <li><strong>スマホ横向き（ランドスケープ）対応</strong>：縦向きアクセス時に横向きへの誘導を表示。横向き時は地図を広く使えるコンパクトレイアウトに自動切替。パネル折り畳みボタンも追加。</li>
+          <li><strong>ズームレベル表示を「公図・地番」の上に移動</strong>し、フォントを大きく視認性を向上。</li>
+          <li><strong>住所の「（その他）」問題を修正</strong>：地番取得時に「○○市（その他）」と表示される問題を解消。国土地理院APIとの組み合わせで正確な大字を補完するよう改善しました。</li>
+          <li>パネル折りたたみボタンが地図上に誤表示されていた不具合を修正。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2026/04/29 -->
+    <div class="news-card">
+      <div class="news-meta">
+        <span class="news-date">2026年4月29日</span>
+        <span class="news-tag tag-fix">改善</span>
+      </div>
+      <div class="news-title">変電所ポップアップから「推定負担金」の表示を削除</div>
+      <div class="news-body">
+        算出根拠が不明確な「推定負担金」の表示を変電所ポップアップから削除しました。空き容量・ランク・更新日など信頼性の高い情報に絞った表示に整理しています。
+      </div>
+    </div>
+
+    <!-- 2026/04/28 -->
+    <div class="news-card">
+      <div class="news-meta">
+        <span class="news-date">2026年4月28日</span>
+        <span class="news-tag tag-update">システム更新</span>
+      </div>
+      <div class="news-title">本番環境への切替・Stripe Checkout Session 方式に変更</div>
+      <div class="news-body">
+        <ul>
+          <li>Stripe 本番キー・Price ID への切替が完了しました。</li>
+          <li>決済方式を Stripe Checkout Session 方式に変更し、追加電力会社の数量を正確に反映するよう改善。</li>
+          <li>料金サマリーを「ご請求額」形式で分かりやすく表示するよう改善しました。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2026/04/25 -->
+    <div class="news-card">
+      <div class="news-meta">
+        <span class="news-date">2026年4月25日</span>
+        <span class="news-tag tag-update">システム更新</span>
+        <span class="news-tag tag-feature">機能追加</span>
+      </div>
+      <div class="news-title">Stripe Webhook 連携完成・契約電力会社エリアのみ表示モード追加</div>
+      <div class="news-body">
+        <ul>
+          <li>Stripe Webhook と Supabase の連携が完成し、決済完了と同時にアカウントのプランが自動更新されるようになりました。</li>
+          <li>ご契約の電力会社エリアのみ変電所ピンを表示するモードを追加しました（Standard プラン）。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2026/04/23 -->
+    <div class="news-card">
+      <div class="news-meta">
+        <span class="news-date">2026年4月23日</span>
+        <span class="news-tag tag-feature">機能追加</span>
+      </div>
+      <div class="news-title">公図を精度別に色分け表示（14条地図 / 旧公図）</div>
+      <div class="news-body">
+        公図レイヤーを精度別に色分けして表示するようになりました。<br>
+        <ul>
+          <li><strong style="color:#e65100;">オレンジ実線</strong>：14条地図（高精度・現行の地図）</li>
+          <li><strong style="color:#616161;">グレー破線</strong>：旧公図（精度低め・参考程度）</li>
+        </ul>
+        謄本取得の前に地図の信頼度を確認するのにご活用ください。
+      </div>
+    </div>
+
+    <!-- 2026/04/22 -->
+    <div class="news-card">
       <div class="news-meta">
         <span class="news-date">2026年4月22日</span>
         <span class="news-tag tag-notice">お知らせ</span>
       </div>
       <div class="news-title">【東京電力PG】系統空き容量マッピング メンテナンス中のため位置情報のみ掲載</div>
       <div class="news-body">
-        現在、東京電力PGが空き容量マッピング（都道府県別PDF）をメンテナンス中・公開停止中（4月中に復旧予定）のため、位置情報のみ掲載しています。<br>
+        現在、東京電力PGが空き容量マッピング（都道府県別PDF）をメンテナンス中・公開停止中のため、位置情報のみ掲載しています。<br>
         復旧次第、正式データへの切り替えを予定しています。ご不便をおかけして申し訳ございません。
       </div>
     </div>
 
+    <!-- 2026/04/21 -->
     <div class="news-card">
       <div class="news-meta">
         <span class="news-date">2026年4月21日</span>
@@ -238,7 +337,7 @@ body {
       </div>
     </div>
 
-    <div class="news-card new-card" style="border-left-color:#6366f1; background:#f8f8ff;">
+    <div class="news-card">
       <div class="news-meta">
         <span class="news-date">2026年4月21日</span>
         <span class="news-tag tag-data">データ更新</span>
@@ -250,11 +349,8 @@ body {
           <li><strong>北陸電力送配電</strong>：121件の変電所を新規追加（富山・石川）。</li>
           <li><strong>北海道電力ネットワーク</strong>：294件の変電所を新規追加（北海道全域）。</li>
           <li><strong>変電所データ合計：3,221件</strong>（8電力エリア対応：北海道・東北・中国・北陸・関西・中部・九州）</li>
-          <li><strong>座標精度向上</strong>：全3,221件を都道府県境界で検証し、誤ジオコーディング77件を修正。同一都道府県内での座標クラスターも46件を精密化。</li>
-          <li>フィルターに「北陸電力」「北海道電力NW」のチェックボックスが表示されるようになりました。</li>
-          <li>空き容量ランキングリストに415件が加わり、<strong>計3,221件が対象</strong>になりました。</li>
-          <li>マップに北陸（富山・石川）・北海道全域のピンが表示されます。</li>
-          <li>なお、福井県の変電所データは北陸電力NWが公式に公開していないため（送電線データのみ公開）、福井県分は現時点では反映不可です。</li>
+          <li><strong>座標精度向上</strong>：全3,221件を都道府県境界で検証し、誤ジオコーディング77件を修正。</li>
+          <li>フィルターに「北陸電力」「北海道電力NW」のチェックボックスが追加されました。</li>
         </ul>
       </div>
     </div>
