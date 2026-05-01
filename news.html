@@ -213,15 +213,15 @@ body {
         <span class="news-tag tag-feature">機能追加</span>
         <span class="news-tag tag-fix">改善</span>
       </div>
-      <div class="news-title">中部電力WebGIS統合・全社空き容量データ更新・ノンファーム注意書き追加</div>
+      <div class="news-title">中部電力エリア変電所データ更新・全社空き容量更新・ノンファーム注意書き追加</div>
       <div class="news-body">
         <ul>
-          <li><strong>中部電力パワーグリッド WebGIS統合</strong>：中部電力の系統情報マップ（KRSIH001 GeoJSON）から851件の変電所データを取得し、座標・容量情報をBatteryLandに統合しました。変電所ピンの位置精度が大幅に向上しています。</li>
-          <li><strong>全6社 空き容量データを公式資料で更新</strong>：関西・東北・北陸・中国・北海道・九州電力の計2,341件を各社最新CSV（2026年3〜4月版）に基づき更新しました。</li>
-          <li><strong>空き容量の表示ロジック修正</strong>：空容量が「−」の場合、以前はN-1電制適用可能量で代替していましたが、実際の空容量値のみを使用するよう修正。空容量「−」は「0MW」として表示されます。</li>
+          <li><strong>中部電力パワーグリッド 変電所データ更新</strong>：中部電力の公式系統情報から851件の変電所データを取得し、座標・空き容量情報をBatteryLandに反映しました。変電所ピンの位置精度が大幅に向上しています。</li>
+          <li><strong>全6社 空き容量データを公式資料で更新</strong>：関西・東北・北陸・中国・北海道・九州電力の計2,341件を各社最新資料（2026年3〜4月版）に基づき更新しました。</li>
+          <li><strong>空き容量の表示を修正</strong>：空き容量が「−」の変電所は「0MW」として表示するよう修正しました。</li>
           <li><strong>ノンファーム型接続 注意書きを追加</strong>：右パネルに「空き容量0でも接続申込が可能な場合あり」というノンファーム型接続制度の注意書きを追加しました。</li>
           <li><strong>ハザードマップ 一括ON/OFF</strong>：洪水・土石流・急傾斜・地すべり・津波の5レイヤーを1クリックでまとめてON/OFFできるボタンを追加しました。</li>
-          <li><strong>逆潮流注釈・マニュアル刷新・謄本DM依頼メール通知</strong>：右パネルへの空き容量注釈追加、マニュアル全10セクション刷新、依頼確定時の管理者メール自動通知（Resend連携）を実施しました。</li>
+          <li><strong>右パネル注釈追加・マニュアル刷新</strong>：空き容量の説明注釈を追加し、マニュアルを全面刷新しました。</li>
         </ul>
       </div>
     </div>
@@ -236,10 +236,10 @@ body {
       <div class="news-title">登記簿謄本取得・DM送付サービス開始、スマホ横向き対応、UI改善</div>
       <div class="news-body">
         <ul>
-          <li><strong>登記簿謄本取得（¥500）・DM送付（¥300）サービス</strong>を開始。公図の地番ポップアップまたは物件ポップアップから直接依頼できます。Stripe決済画面に住所・地番情報が引き継がれます（Enterprise プランはクレジット消費）。</li>
+          <li><strong>登記簿謄本取得（¥500）・DM送付（¥300）サービス</strong>を開始。公図の地番ポップアップまたは物件ポップアップから直接依頼できます。住所・地番情報が決済画面に自動引き継ぎされます。</li>
           <li><strong>スマホ横向き（ランドスケープ）対応</strong>：縦向きアクセス時に横向きへの誘導を表示。横向き時は地図を広く使えるコンパクトレイアウトに自動切替。パネル折り畳みボタンも追加。</li>
           <li><strong>ズームレベル表示を「公図・地番」の上に移動</strong>し、フォントを大きく視認性を向上。</li>
-          <li><strong>住所の「（その他）」問題を修正</strong>：地番取得時に「○○市（その他）」と表示される問題を解消。国土地理院APIとの組み合わせで正確な大字を補完するよう改善しました。</li>
+          <li><strong>住所の「（その他）」問題を修正</strong>：地番取得時に「○○市（その他）」と表示される問題を解消。正確な大字を補完するよう改善しました。</li>
           <li>パネル折りたたみボタンが地図上に誤表示されていた不具合を修正。</li>
         </ul>
       </div>
@@ -257,35 +257,15 @@ body {
       </div>
     </div>
 
-    <!-- 2026/04/28 -->
-    <div class="news-card">
-      <div class="news-meta">
-        <span class="news-date">2026年4月28日</span>
-        <span class="news-tag tag-update">システム更新</span>
-      </div>
-      <div class="news-title">本番環境への切替・Stripe Checkout Session 方式に変更</div>
-      <div class="news-body">
-        <ul>
-          <li>Stripe 本番キー・Price ID への切替が完了しました。</li>
-          <li>決済方式を Stripe Checkout Session 方式に変更し、追加電力会社の数量を正確に反映するよう改善。</li>
-          <li>料金サマリーを「ご請求額」形式で分かりやすく表示するよう改善しました。</li>
-        </ul>
-      </div>
-    </div>
-
     <!-- 2026/04/25 -->
     <div class="news-card">
       <div class="news-meta">
         <span class="news-date">2026年4月25日</span>
-        <span class="news-tag tag-update">システム更新</span>
         <span class="news-tag tag-feature">機能追加</span>
       </div>
-      <div class="news-title">Stripe Webhook 連携完成・契約電力会社エリアのみ表示モード追加</div>
+      <div class="news-title">契約電力会社エリアのみ表示モード追加</div>
       <div class="news-body">
-        <ul>
-          <li>Stripe Webhook と Supabase の連携が完成し、決済完了と同時にアカウントのプランが自動更新されるようになりました。</li>
-          <li>ご契約の電力会社エリアのみ変電所ピンを表示するモードを追加しました（Standard プラン）。</li>
-        </ul>
+        ご契約の電力会社エリアのみ変電所ピンを表示するモードを追加しました（Standard プラン）。
       </div>
     </div>
 
