@@ -729,12 +729,34 @@ const tileGsi = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y
 tileGoogle.addTo(map);
 
 // Hazard layers
+// ── ハザードタイル共通オプション ──
+function makeHazardLayer(url, opacity) {
+  const layer = L.tileLayer(url, {
+    opacity,
+    minNativeZoom: 2, maxNativeZoom: 17, maxZoom: 21,
+    crossOrigin: 'anonymous',   // true ではなく 'anonymous' が正しい値
+  });
+  // タイル取得失敗時に最大3回リトライ（2秒 → 4秒 → 8秒）
+  layer.on('tileerror', function(e) {
+    const tile = e.tile;
+    const retries = parseInt(tile.dataset.retries || '0');
+    if (retries < 3) {
+      tile.dataset.retries = String(retries + 1);
+      setTimeout(() => {
+        const base = tile.src.replace(/[?&]_r=\d+/, '');
+        tile.src = base + (base.includes('?') ? '&' : '?') + '_r=' + (retries + 1);
+      }, Math.pow(2, retries + 1) * 1000);
+    }
+  });
+  return layer;
+}
+
 const hazardLayers = {
-  flood: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', { opacity: 0.8, minNativeZoom: 2, maxNativeZoom: 17, maxZoom: 21, crossOrigin: true }),
-  sediment: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', { opacity: 0.7, minNativeZoom: 2, maxNativeZoom: 17, maxZoom: 21, crossOrigin: true }),
-  landslide: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_kyukeishachihousaigai/{z}/{x}/{y}.png', { opacity: 0.7, minNativeZoom: 2, maxNativeZoom: 17, maxZoom: 21, crossOrigin: true }),
-  jisuberi: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_jisuberikeikaikuiki/{z}/{x}/{y}.png', { opacity: 0.7, minNativeZoom: 2, maxNativeZoom: 17, maxZoom: 21, crossOrigin: true }),
-  tsunami: L.tileLayer('https://disaportaldata.gsi.go.jp/raster/04_tsunami_newlegend_data/{z}/{x}/{y}.png', { opacity: 0.8, minNativeZoom: 2, maxNativeZoom: 17, maxZoom: 21, crossOrigin: true })
+  flood:     makeHazardLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', 0.8),
+  sediment:  makeHazardLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', 0.7),
+  landslide: makeHazardLayer('https://disaportaldata.gsi.go.jp/raster/05_kyukeishachihousaigai/{z}/{x}/{y}.png', 0.7),
+  jisuberi:  makeHazardLayer('https://disaportaldata.gsi.go.jp/raster/05_jisuberikeikaikuiki/{z}/{x}/{y}.png', 0.7),
+  tsunami:   makeHazardLayer('https://disaportaldata.gsi.go.jp/raster/04_tsunami_newlegend_data/{z}/{x}/{y}.png', 0.8),
 };
 const hazardActive = { flood: false, sediment: false, landslide: false, jisuberi: false, tsunami: false };
 
@@ -866,9 +888,39 @@ function scheduleFudeLoad() {
 // ===== 登記所備付地図（公図）レイヤー =====
 let cadastralLayer = null;
 let cadastralActive = false;
-// 2024年版（AMX・source.coop）と2025年版（kenzkenz.net）を両方試みる
-// 2025年版はカバレッジが地域によって異なるため2024年版をデフォルトとして維持
 const cadastralPMTiles = new pmtiles.PMTiles('https://data.source.coop/smartmaps/amx-2024-04/MojMap_amx_2024.pmtiles');
+
+// VectorTile / Pbf がESモジュール非同期ロードのため、
+// 準備完了を最大15秒ポーリングで待つ
+function waitForLibs() {
+  return new Promise((resolve, reject) => {
+    const t0 = Date.now();
+    (function check() {
+      if (typeof Pbf !== 'undefined' && typeof VectorTile !== 'undefined') {
+        resolve();
+      } else if (Date.now() - t0 > 15000) {
+        reject(new Error('公図ライブラリのロードがタイムアウトしました'));
+      } else {
+        setTimeout(check, 200);
+      }
+    })();
+  });
+}
+
+// PMTiles タイル取得（最大3回リトライ）
+async function fetchTileWithRetry(z, x, y, maxRetries = 3) {
+  let lastErr;
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const result = await cadastralPMTiles.getZxy(z, x, y);
+      return result;
+    } catch (e) {
+      lastErr = e;
+      if (i < maxRetries - 1) await new Promise(r => setTimeout(r, Math.pow(2, i) * 500));
+    }
+  }
+  throw lastErr;
+}
 
 // 公図ズレ補正（オフセット）：メートル単位 → 経度緯度換算
 let cadastralOffset = { x: 0, y: 0 }; // メートル（東西, 南北）
@@ -985,7 +1037,7 @@ function createCadastralLayer() {
       const offsetX = (coords.x / scale - tileX);
       const offsetY = (coords.y / scale - tileY);
 
-      cadastralPMTiles.getZxy(fetchZ, tileX, tileY).then(function(result) {
+      fetchTileWithRetry(fetchZ, tileX, tileY).then(function(result) {
         if (!result || !result.data) { done(null, tile); return; }
 
         var vt = new VectorTile(new Pbf(new Uint8Array(result.data)));
@@ -1094,7 +1146,7 @@ function createCadastralLayer() {
 }
 
 // 公図トグル
-document.getElementById('cadastral-cb').addEventListener('change', function() {
+document.getElementById('cadastral-cb').addEventListener('change', async function() {
   const toggle = document.getElementById('cadastral-toggle');
   const offsetPanel = document.getElementById('cadastral-offset');
   const zoomHint = document.getElementById('cadastral-zoom-hint');
@@ -1108,25 +1160,24 @@ document.getElementById('cadastral-cb').addEventListener('change', function() {
     }
     if (zoomHint) zoomHint.style.display = 'none';
 
+    // VectorTile / Pbf の読み込みを待つ（ESモジュール非同期対策）
+    try {
+      await waitForLibs();
+    } catch (e) {
+      console.error(e);
+      this.checked = false;
+      alert('公図ライブラリの読み込みに失敗しました。ページを再読み込みしてください。');
+      return;
+    }
+
     if (!cadastralLayer) cadastralLayer = createCadastralLayer();
     if (cadastralLayer) {
       cadastralLayer.addTo(map);
       cadastralActive = true;
       toggle.classList.add('active');
       if (offsetPanel) offsetPanel.style.display = 'block';
-      // 現在位置のオフセット復元
       const c = map.getCenter();
       if (loadOffsetForLocation(c.lat, c.lng)) applyOffsetToUI();
-    } else {
-      setTimeout(() => {
-        cadastralLayer = createCadastralLayer();
-        if (cadastralLayer) {
-          cadastralLayer.addTo(map);
-          cadastralActive = true;
-          toggle.classList.add('active');
-          if (offsetPanel) offsetPanel.style.display = 'block';
-        }
-      }, 1000);
     }
   } else {
     if (cadastralLayer) map.removeLayer(cadastralLayer);
@@ -1270,7 +1321,7 @@ map.on('click', async function(e) {
   const py = (worldY * n - tileY) * extent;
 
   try {
-    const result = await cadastralPMTiles.getZxy(z, tileX, tileY);
+    const result = await fetchTileWithRetry(z, tileX, tileY);
     if (!result || !result.data) return;
     const vt = new VectorTile(new Pbf(new Uint8Array(result.data)));
     const fudeLayer = vt.layers['fude'];
