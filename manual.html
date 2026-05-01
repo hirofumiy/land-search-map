@@ -7,7 +7,7 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-  font-family: 'Hiragino Mincho ProN', 'Hiragino Sans', 'Meiryo', serif;
+  font-family: 'Hiragino Sans', 'Meiryo', 'Segoe UI', sans-serif;
   background: #f5f0e8;
   min-height: 100vh;
   color: #1a1a1a;
@@ -34,7 +34,6 @@ body {
   font-weight: 800;
   color: #2c2c2c;
   letter-spacing: 2px;
-  font-family: 'Segoe UI', sans-serif;
 }
 .btn-back {
   padding: 7px 18px;
@@ -49,16 +48,34 @@ body {
   align-items: center;
   gap: 5px;
   transition: all 0.2s;
-  font-family: sans-serif;
 }
-.btn-back:hover {
-  background: #c8b89a;
-  color: #2c2c2c;
+.btn-back:hover { background: #c8b89a; color: #2c2c2c; }
+
+/* TOC */
+.toc-wrap {
+  background: #ede8dc;
+  border-bottom: 1px solid #c8b89a;
+  padding: 10px 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
+.toc-item {
+  font-size: 12px;
+  color: #5a4a3a;
+  text-decoration: none;
+  padding: 4px 10px;
+  border: 1px solid #b8a88a;
+  border-radius: 20px;
+  background: #fff8f0;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.toc-item:hover { background: #c8b89a; color: #fff; border-color: #c8b89a; }
 
 .main {
-  padding: 40px 28px;
-  max-width: 820px;
+  padding: 36px 28px 60px;
+  max-width: 860px;
   margin: 0 auto;
 }
 
@@ -69,7 +86,7 @@ body {
 }
 .page-title {
   font-size: 26px;
-  font-weight: 700;
+  font-weight: 800;
   color: #2c2c2c;
   letter-spacing: 1px;
   margin-bottom: 6px;
@@ -77,13 +94,11 @@ body {
 .page-sub {
   font-size: 13px;
   color: #7a6a5a;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
-/* セクション共通 */
-.section {
-  margin-bottom: 48px;
-}
+/* セクション */
+.section { margin-bottom: 52px; }
 .section-title {
   font-size: 17px;
   font-weight: 800;
@@ -93,93 +108,58 @@ body {
   background: #ede8dc;
   border-left: 4px solid #b8a88a;
   border-radius: 0 6px 6px 0;
-  margin-bottom: 24px;
-  font-family: 'Segoe UI', sans-serif;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
+.section-title .icon { font-size: 18px; }
 
 /* ステップリスト */
-.step-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+.step-list { display: flex; flex-direction: column; gap: 14px; }
 .step-item {
   display: flex;
-  gap: 18px;
+  gap: 16px;
   align-items: flex-start;
   background: #faf7f2;
   border: 1px solid #d8c8b0;
   border-radius: 10px;
-  padding: 20px 22px;
+  padding: 18px 20px;
 }
 .step-num {
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
-  background: #c8b89a;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 800;
+  width: 34px; height: 34px; min-width: 34px;
+  background: #c8b89a; color: #fff;
+  font-size: 14px; font-weight: 800;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Segoe UI', sans-serif;
+  display: flex; align-items: center; justify-content: center;
 }
-.step-content {}
 .step-heading {
-  font-size: 14px;
-  font-weight: 700;
-  color: #2c2c2c;
-  margin-bottom: 5px;
-  line-height: 1.5;
+  font-size: 14px; font-weight: 700; color: #2c2c2c;
+  margin-bottom: 5px; line-height: 1.5;
 }
-.step-desc {
-  font-size: 13px;
-  color: #5a4a3a;
-  line-height: 1.8;
-}
+.step-desc { font-size: 13px; color: #5a4a3a; line-height: 1.85; }
+.step-desc b { color: #2c2c2c; }
 
 /* ランク表 */
 .rank-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13.5px;
-  font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
-  background: #faf7f2;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid #d8c8b0;
+  width: 100%; border-collapse: collapse;
+  font-size: 13.5px; background: #faf7f2;
+  border-radius: 8px; overflow: hidden; border: 1px solid #d8c8b0;
 }
 .rank-table thead th {
-  background: #ede8dc;
-  color: #3a2c1a;
-  font-weight: 800;
-  padding: 11px 16px;
-  text-align: left;
-  border-bottom: 2px solid #c8b89a;
-  font-size: 12px;
-  letter-spacing: 0.5px;
+  background: #ede8dc; color: #3a2c1a; font-weight: 800;
+  padding: 11px 16px; text-align: left;
+  border-bottom: 2px solid #c8b89a; font-size: 12px;
 }
 .rank-table tbody td {
-  padding: 12px 16px;
-  border-bottom: 1px solid #e8dfd0;
-  vertical-align: middle;
-  color: #2c2c2c;
-  line-height: 1.6;
+  padding: 12px 16px; border-bottom: 1px solid #e8dfd0;
+  vertical-align: middle; color: #2c2c2c; line-height: 1.6;
 }
 .rank-table tbody tr:last-child td { border-bottom: none; }
 .rank-badge {
-  display: inline-block;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  color: #fff;
-  font-weight: 800;
-  font-size: 13px;
-  text-align: center;
-  line-height: 28px;
-  font-family: 'Segoe UI', sans-serif;
+  display: inline-block; width: 28px; height: 28px;
+  border-radius: 50%; color: #fff; font-weight: 800;
+  font-size: 13px; text-align: center; line-height: 28px;
 }
 .rank-s { background: #16a34a; }
 .rank-a { background: #2563eb; }
@@ -189,95 +169,97 @@ body {
 .rank-none { background: #64748b; font-size: 11px; }
 
 /* マーカー凡例 */
-.marker-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-}
+.marker-list { display: flex; flex-wrap: wrap; gap: 12px; }
 .marker-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #faf7f2;
-  border: 1px solid #d8c8b0;
-  border-radius: 8px;
-  padding: 12px 18px;
-  min-width: 160px;
-  flex: 1;
+  display: flex; align-items: center; gap: 10px;
+  background: #faf7f2; border: 1px solid #d8c8b0;
+  border-radius: 8px; padding: 12px 16px;
+  min-width: 155px; flex: 1;
 }
 .marker-dot {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  flex-shrink: 0;
+  width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0;
   border: 2px solid rgba(0,0,0,0.15);
 }
-.marker-label {
+.marker-label { font-size: 13px; color: #2c2c2c; font-weight: 600; }
+.marker-sub { font-size: 11px; color: #7a6a5a; margin-top: 1px; }
+
+/* 注釈ボックス */
+.note-box {
+  background: #fff8e7;
+  border: 1px solid #e6c97a;
+  border-left: 4px solid #d4a017;
+  border-radius: 6px;
+  padding: 14px 18px;
   font-size: 13px;
-  color: #2c2c2c;
-  font-weight: 600;
-  font-family: 'Segoe UI', sans-serif;
+  color: #5a3e00;
+  line-height: 1.8;
+  margin-top: 18px;
 }
-.marker-sub {
-  font-size: 11px;
-  color: #7a6a5a;
-  margin-top: 1px;
+.note-box b { color: #3a2800; }
+
+.warn-box {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-left: 4px solid #ef4444;
+  border-radius: 6px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: #7f1d1d;
+  line-height: 1.8;
+  margin-top: 12px;
+}
+
+.info-box {
+  background: #eff6ff;
+  border: 1px solid #93c5fd;
+  border-left: 4px solid #3b82f6;
+  border-radius: 6px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: #1e3a5f;
+  line-height: 1.8;
+  margin-top: 12px;
 }
 
 /* FAQ */
 .faq-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  border: 1px solid #d8c8b0;
-  border-radius: 8px;
-  overflow: hidden;
+  border: 1px solid #d8c8b0; border-radius: 8px; overflow: hidden;
 }
 .faq-item {
-  background: #faf7f2;
-  border-bottom: 1px dashed #d8c8b0;
-  padding: 20px 24px;
+  background: #faf7f2; border-bottom: 1px dashed #d8c8b0; padding: 20px 24px;
 }
 .faq-item:last-child { border-bottom: none; }
 .faq-q {
-  font-size: 14px;
-  font-weight: 700;
-  color: #2c2c2c;
-  margin-bottom: 8px;
-  display: flex;
-  gap: 10px;
+  font-size: 14px; font-weight: 700; color: #2c2c2c;
+  margin-bottom: 8px; display: flex; gap: 10px;
 }
 .faq-q-badge {
-  width: 22px;
-  height: 22px;
-  min-width: 22px;
-  background: #b8a88a;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 800;
-  border-radius: 4px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Segoe UI', sans-serif;
+  width: 22px; height: 22px; min-width: 22px;
+  background: #b8a88a; color: #fff; font-size: 11px;
+  font-weight: 800; border-radius: 4px;
+  display: inline-flex; align-items: center; justify-content: center;
   margin-top: 1px;
 }
-.faq-a {
-  font-size: 13px;
-  color: #5a4a3a;
-  line-height: 1.85;
-  padding-left: 32px;
+.faq-a { font-size: 13px; color: #5a4a3a; line-height: 1.85; padding-left: 32px; }
+
+/* 機能グリッド */
+.feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 600px) { .feature-grid { grid-template-columns: 1fr; } }
+.feature-card {
+  background: #faf7f2; border: 1px solid #d8c8b0;
+  border-radius: 10px; padding: 16px 18px;
 }
+.feature-card-title {
+  font-size: 14px; font-weight: 700; color: #2c2c2c;
+  margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+}
+.feature-card-desc { font-size: 12.5px; color: #5a4a3a; line-height: 1.8; }
 
 /* フッター */
 .footer {
-  margin-top: 60px;
-  padding: 24px 0;
+  margin-top: 60px; padding: 24px 0;
   border-top: 1px solid #d8c8b0;
-  text-align: center;
-  font-size: 12px;
-  color: #9a8a7a;
-  font-family: 'Segoe UI', sans-serif;
+  text-align: center; font-size: 12px; color: #9a8a7a;
 }
 </style>
 </head>
@@ -291,189 +273,390 @@ body {
   <a href="index.html" class="btn-back">← マップに戻る</a>
 </div>
 
+<div class="toc-wrap">
+  <a href="#sec-start" class="toc-item">🔐 ログイン</a>
+  <a href="#sec-map" class="toc-item">🗺️ マップ操作</a>
+  <a href="#sec-search" class="toc-item">🔍 住所・座標検索</a>
+  <a href="#sec-filter" class="toc-item">⚡ フィルター</a>
+  <a href="#sec-capacity" class="toc-item">📋 空き容量の見方</a>
+  <a href="#sec-layers" class="toc-item">🗂️ オーバーレイ</a>
+  <a href="#sec-pin" class="toc-item">📍 ピンメモ</a>
+  <a href="#sec-service" class="toc-item">📄 謄本・DM</a>
+  <a href="#sec-mobile" class="toc-item">📱 スマホ利用</a>
+  <a href="#sec-faq" class="toc-item">❓ よくある質問</a>
+</div>
+
 <div class="main">
 
   <div class="page-header">
     <div class="page-title">使い方マニュアル</div>
-    <div class="page-sub">BatteryLandの基本操作ガイド</div>
+    <div class="page-sub">BatteryLandの全機能ガイド — 蓄電所適地探索から謄本取得・変電所検索まで</div>
   </div>
 
-  <!-- セクション1: 基本的な使い方 -->
-  <div class="section">
-    <div class="section-title">基本的な使い方</div>
+  <!-- ─── 1. ログイン ─── -->
+  <div class="section" id="sec-start">
+    <div class="section-title"><span class="icon">🔐</span>ログイン・アカウント</div>
     <div class="step-list">
       <div class="step-item">
         <div class="step-num">1</div>
         <div class="step-content">
-          <div class="step-heading">電力会社を選ぶ</div>
-          <div class="step-desc">右パネルの「電力会社フィルター」のチェックボックスで、対象エリアを選択します。複数の電力会社を同時に選択することも可能です。チェックを外すとそのエリアの変電所ピンが非表示になります。</div>
+          <div class="step-heading">メールアドレスとパスワードでログイン</div>
+          <div class="step-desc">ページを開くと自動的にログイン画面が表示されます。招待されたメールアドレスとパスワードを入力してログインしてください。初回ログイン時にパスワードを設定できます。</div>
         </div>
       </div>
       <div class="step-item">
         <div class="step-num">2</div>
         <div class="step-content">
-          <div class="step-heading">ランクで絞り込む</div>
-          <div class="step-desc">右パネルの「ランクフィルター」でS〜Dのランクを選択します。S（20MW以上）が最も接続しやすい変電所です。初期状態では全ランクが表示されています。目的の条件に合わせて絞り込んでください。</div>
+          <div class="step-heading">プランの確認</div>
+          <div class="step-desc">右パネル上部にご利用プランが表示されます。<b>Standard（月額プラン）</b>では謄本取得・DM送付は都度 Stripe 決済（¥500 / ¥300）、<b>Enterprise</b>ではクレジット消費で利用できます。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 2. マップ操作 ─── -->
+  <div class="section" id="sec-map">
+    <div class="section-title"><span class="icon">🗺️</span>マップ基本操作</div>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-heading">ズームと移動</div>
+          <div class="step-desc">マウスホイールまたは画面右下の「＋/−」ボタンでズームを調整します。ドラッグで移動できます。スマホではピンチイン・ピンチアウト操作でズームを調整してください。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-heading">ズームレベル表示と送電線</div>
+          <div class="step-desc">右パネルの「公図・地番」セクションの上に現在のズームレベルが表示されます。<b>Lv12 以上</b>にズームすると送電線（推定）が地図上に表示されます。送電線ルートを参考に候補地を探してください。</div>
         </div>
       </div>
       <div class="step-item">
         <div class="step-num">3</div>
         <div class="step-content">
-          <div class="step-heading">地図でピンを確認する</div>
-          <div class="step-desc">地図上に表示されるカラーピンが各変電所の位置です。ピンをクリックすると、変電所名・空き容量・ランク・都道府県などの詳細情報がポップアップで表示されます。</div>
+          <div class="step-heading">変電所ピンをクリック</div>
+          <div class="step-desc">地図上のカラーピンが各変電所です。クリックするとポップアップが開き、<b>変電所名・空き容量・ランク・所在都道府県・データ更新日</b>が確認できます。</div>
         </div>
       </div>
       <div class="step-item">
         <div class="step-num">4</div>
         <div class="step-content">
-          <div class="step-heading">住所で検索・半径検索をする</div>
-          <div class="step-desc">右パネルの「住所検索」欄に候補地の住所を入力して検索します。指定した半径（km）以内にある変電所の一覧が距離順で表示されます。</div>
+          <div class="step-heading">半径検索</div>
+          <div class="step-desc">住所を検索するとマップが移動し、同時に指定した半径（km）以内の変電所が距離順で右パネル下部に一覧表示されます。件数の多い変電所密集エリアを効率的に調査できます。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 3. 住所・座標検索 ─── -->
+  <div class="section" id="sec-search">
+    <div class="section-title"><span class="icon">🔍</span>住所・座標検索</div>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-heading">住所で検索</div>
+          <div class="step-desc">右パネル上部の検索ボックスに住所を入力して「検索」ボタンを押します（またはEnterキー）。国土地理院のジオコーダーを使って当該地点にマップが移動します。</div>
         </div>
       </div>
       <div class="step-item">
-        <div class="step-num">5</div>
+        <div class="step-num">2</div>
         <div class="step-content">
-          <div class="step-heading">ランキングで高空き容量を探す</div>
-          <div class="step-desc">右パネル下部の「変電所ランキング」リストに、空き容量の多い変電所が順に表示されます。リスト内のアイテムをクリックすると、マップが該当変電所の位置に移動します。</div>
+          <div class="step-heading">座標で直接ジャンプ</div>
+          <div class="step-desc">検索ボックスに <b>34.123456, 135.123456</b> のように「緯度, 経度」を入力して検索すると、その座標をズームLv16で表示します。Googleマップ等からコピーした座標もそのまま使えます。</div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box">💡 座標はカンマ区切り・スペース区切りどちらでも対応します。緯度が 20〜50、経度が 120〜155 の範囲内であれば日本国内として認識されます。</div>
+  </div>
+
+  <!-- ─── 4. フィルター ─── -->
+  <div class="section" id="sec-filter">
+    <div class="section-title"><span class="icon">⚡</span>電力会社・ランクフィルター</div>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-heading">電力会社でフィルタリング</div>
+          <div class="step-desc">右パネルの「電力会社」チェックボックスで対象エリアを絞ります。チェックを外すとその電力会社の変電所ピンが非表示になります。複数選択可能です。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-heading">負担金ランクで絞り込む</div>
+          <div class="step-desc">「負担金ランク」でS〜Dのランクを選択します。S（20MW以上）が最も空き容量が大きく接続しやすい変電所です。優先したいランクだけ残して探索できます。</div>
+        </div>
+      </div>
+    </div>
+    <div class="note-box">
+      📋 <b>「空き容量」は逆潮流（発電設備）の連系可能容量です</b><br>
+      表示される空き容量は、各電力会社が公表する系統接続案内における「<b>逆潮流（発電設備）の連系可能容量</b>」を集計・表示したものです。蓄電所・太陽光・風力など発電設備を接続する際の参考指標としてお使いください。<br><br>
+      ⚠️ <b>推測値についての注意</b>：本データは各電力会社が開示する資料に基づく推測値です。実際の空き容量・工事費用・接続可否は申込状況や系統の運用状況によって異なります。必ず各電力会社への事前相談・接続検討申込みでご確認ください。
+    </div>
+    <div style="margin-top:22px;">
+      <table class="rank-table">
+        <thead>
+          <tr><th>ランク</th><th>空き容量（目安）</th><th>接続しやすさ</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rank-badge rank-s">S</span></td>
+            <td><strong>20MW以上</strong></td>
+            <td>◎ 接続工事なしで申込可能な可能性が高い</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-a">A</span></td>
+            <td><strong>10〜20MW</strong></td>
+            <td>○ 軽微な工事のみで接続できる可能性</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-b">B</span></td>
+            <td><strong>5〜10MW</strong></td>
+            <td>△ 一部工事が必要な場合あり</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-c">C</span></td>
+            <td><strong>2〜5MW</strong></td>
+            <td>△ 系統補強が必要な場合が多い</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-d">D</span></td>
+            <td><strong>2MW未満</strong></td>
+            <td>✕ 系統補強工事が必要・困難な場合あり</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-none">−</span></td>
+            <td><strong>データなし</strong></td>
+            <td>東電PGなど空き容量未公開エリア（位置情報のみ）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:18px;">
+      <div style="font-size:13px;font-weight:700;color:#2c2c2c;margin-bottom:12px;">マーカーの色と意味</div>
+      <div class="marker-list">
+        <div class="marker-item">
+          <div class="marker-dot" style="background:#16a34a;"></div>
+          <div><div class="marker-label">緑 — ランクS</div><div class="marker-sub">20MW以上</div></div>
+        </div>
+        <div class="marker-item">
+          <div class="marker-dot" style="background:#2563eb;"></div>
+          <div><div class="marker-label">青 — ランクA</div><div class="marker-sub">10〜20MW</div></div>
+        </div>
+        <div class="marker-item">
+          <div class="marker-dot" style="background:#ca8a04;"></div>
+          <div><div class="marker-label">黄 — ランクB</div><div class="marker-sub">5〜10MW</div></div>
+        </div>
+        <div class="marker-item">
+          <div class="marker-dot" style="background:#ea580c;"></div>
+          <div><div class="marker-label">橙 — ランクC</div><div class="marker-sub">2〜5MW</div></div>
+        </div>
+        <div class="marker-item">
+          <div class="marker-dot" style="background:#dc2626;"></div>
+          <div><div class="marker-label">赤 — ランクD</div><div class="marker-sub">2MW未満</div></div>
+        </div>
+        <div class="marker-item">
+          <div class="marker-dot" style="background:#64748b;"></div>
+          <div><div class="marker-label">灰 — データなし</div><div class="marker-sub">東電PG等（未公開）</div></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- セクション2: 変電所ランク基準 -->
-  <div class="section">
-    <div class="section-title">変電所ランク基準</div>
-    <table class="rank-table">
-      <thead>
-        <tr>
-          <th>ランク</th>
-          <th>空き容量</th>
-          <th>接続しやすさ</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="rank-badge rank-s">S</span></td>
-          <td><strong>20MW以上</strong></td>
-          <td>◎ 接続工事なしで申込可能な可能性が高い</td>
-        </tr>
-        <tr>
-          <td><span class="rank-badge rank-a">A</span></td>
-          <td><strong>10〜20MW</strong></td>
-          <td>○ 軽微な工事のみで接続可能な可能性</td>
-        </tr>
-        <tr>
-          <td><span class="rank-badge rank-b">B</span></td>
-          <td><strong>5〜10MW</strong></td>
-          <td>△ 一部工事が必要な場合あり</td>
-        </tr>
-        <tr>
-          <td><span class="rank-badge rank-c">C</span></td>
-          <td><strong>2〜5MW</strong></td>
-          <td>△ 系統補強が必要な場合が多い</td>
-        </tr>
-        <tr>
-          <td><span class="rank-badge rank-d">D</span></td>
-          <td><strong>2MW未満</strong></td>
-          <td>✕ 系統補強工事が必要・困難な場合あり</td>
-        </tr>
-        <tr>
-          <td><span class="rank-badge rank-none">−</span></td>
-          <td><strong>データなし</strong></td>
-          <td>東電PGなど空き容量未公開のエリア（位置情報のみ表示）</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- ─── 5. 空き容量の見方 ─── -->
+  <div class="section" id="sec-capacity">
+    <div class="section-title"><span class="icon">📊</span>変電所ランキング・最新データ</div>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-heading">変電所ランキングリスト</div>
+          <div class="step-desc">右パネル下部の「変電所」タブに空き容量の多い順で変電所が一覧表示されます。アイテムをクリックするとマップがその変電所位置に移動し、ポップアップが開きます。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-heading">データ更新日の確認</div>
+          <div class="step-desc">右パネル上部の「空き容量データ」欄に電力会社別の最終更新日が表示されます。定期的に更新していますが、電力会社による公開タイミングにより差異が生じます。</div>
+        </div>
+      </div>
+    </div>
+    <div class="warn-box">
+      ⚠️ <b>本データは参考情報です：</b>空き容量は電力会社の申込状況・工事の進捗・季節的な需要変動によって随時変化します。ランクSであっても接続を保証するものではありません。実際の連系申込・接続検討は必ず各電力会社の窓口へご相談ください。
+    </div>
   </div>
 
-  <!-- セクション3: マーカーの色と意味 -->
-  <div class="section">
-    <div class="section-title">マーカーの色と意味</div>
-    <div class="marker-list">
-      <div class="marker-item">
-        <div class="marker-dot" style="background:#16a34a;"></div>
-        <div>
-          <div class="marker-label">緑 — ランクS</div>
-          <div class="marker-sub">空き容量 20MW以上</div>
+  <!-- ─── 6. オーバーレイ ─── -->
+  <div class="section" id="sec-layers">
+    <div class="section-title"><span class="icon">🗂️</span>オーバーレイ（重ね地図）</div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-card-title">⚡ 送電線（推定）</div>
+        <div class="feature-card-desc">ズームLv12以上で表示されます。変電所から伸びる送電ルートを推定表示しており、候補地の連系可能性を視覚的に判断できます。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-title">🌊 ハザードマップ</div>
+        <div class="feature-card-desc">右パネルの「ハザード」トグルでオン/オフ。洪水・土砂・津波リスクを国土交通省のデータで色分け表示します。蓄電所設置の安全性確認にご活用ください。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-title">🗺️ 公図・地番</div>
+        <div class="feature-card-desc">右パネルの「公図・地番」トグルでオン。Lv15以上でPMTiles形式の公図データが重なり、土地の筆界と地番が確認できます。ポップアップから謄本取得も可能です。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-title">🌾 農地区画</div>
+        <div class="feature-card-desc">農水省のデータを元にした農地区画レイヤーです。農地法の制約がある土地かどうかの参考情報として確認できます。</div>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-top:16px;">
+      💡 <b>公図・ハザードが表示されない場合：</b>タイルデータのネットワーク読み込みに時間がかかる場合があります。トグルを一度オフにして再度オンにすると読み込みが再試行されます。
+    </div>
+  </div>
+
+  <!-- ─── 7. ピンメモ ─── -->
+  <div class="section" id="sec-pin">
+    <div class="section-title"><span class="icon">📍</span>ピンメモ・最寄変電所検索</div>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-heading">地点をメモに保存（右クリック）</div>
+          <div class="step-desc">地図上の任意の場所で<b>右クリック</b>（スマホは長押し）すると、コンテキストメニューが表示されます。「📌 メモリへ保存」を選ぶと、その地点の住所（逆ジオコード）とともに右パネルの「保存地点」リストに追加されます。<b>最大10件</b>まで保存できます。</div>
         </div>
       </div>
-      <div class="marker-item">
-        <div class="marker-dot" style="background:#2563eb;"></div>
-        <div>
-          <div class="marker-label">青 — ランクA</div>
-          <div class="marker-sub">空き容量 10〜20MW</div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-heading">最寄変電所を探す（右クリック）</div>
+          <div class="step-desc">右クリックメニューの「⚡ 近くの変電所をさがす」を選ぶと、その地点から<b>直線距離</b>で最も近い変電所を検索します。変電所との間にオレンジの破線が引かれ、距離（m または km）がポップアップで表示されます。</div>
         </div>
       </div>
-      <div class="marker-item">
-        <div class="marker-dot" style="background:#ca8a04;"></div>
-        <div>
-          <div class="marker-label">黄 — ランクB</div>
-          <div class="marker-sub">空き容量 5〜10MW</div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-heading">保存地点の管理</div>
+          <div class="step-desc">右パネル「保存地点」セクションのリストに保存した地点が一覧で表示されます。各地点の「🗑」ボタンで削除できます。保存データはブラウザのローカルストレージに保持されるため、ページを再読み込みしても消えません。</div>
         </div>
       </div>
-      <div class="marker-item">
-        <div class="marker-dot" style="background:#ea580c;"></div>
-        <div>
-          <div class="marker-label">橙 — ランクC</div>
-          <div class="marker-sub">空き容量 2〜5MW</div>
+    </div>
+    <div class="note-box">
+      📌 <b>最寄変電所の距離は直線距離です。</b>実際の連系工事ルートは道路・地形によって異なります。あくまでも最寄変電所の目安としてご活用ください。
+    </div>
+  </div>
+
+  <!-- ─── 8. 謄本・DM ─── -->
+  <div class="section" id="sec-service">
+    <div class="section-title"><span class="icon">📄</span>登記簿謄本取得・DM送付サービス</div>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-heading">公図レイヤーを開いて土地の地番を確認</div>
+          <div class="step-desc">「公図・地番」をオンにしてLv15以上にズームすると、各筆の地番が表示されます。地番エリアをクリックするとポップアップが開き、住所・地番情報が確認できます。</div>
         </div>
       </div>
-      <div class="marker-item">
-        <div class="marker-dot" style="background:#dc2626;"></div>
-        <div>
-          <div class="marker-label">赤 — ランクD</div>
-          <div class="marker-sub">空き容量 2MW未満</div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-heading">「謄本取得（¥500）」ボタンを押す</div>
+          <div class="step-desc">公図ポップアップまたは不動産物件ポップアップの「📄 謄本取得（¥500）」ボタンを押します。対象地の住所・地番情報が自動で引き継がれ、Stripe の決済画面に移動します。</div>
         </div>
       </div>
-      <div class="marker-item">
-        <div class="marker-dot" style="background:#64748b;"></div>
-        <div>
-          <div class="marker-label">灰 — データなし</div>
-          <div class="marker-sub">東電PG等（未公開）</div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-heading">決済を完了する（Standard プランのみ）</div>
+          <div class="step-desc">Stripe のカード決済画面で支払いを完了すると、依頼が確定されます。Enterprise プランの場合はクレジットが自動消費されるため決済画面は表示されません。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-heading">DM送付（¥300）</div>
+          <div class="step-desc">「📮 DM送付（¥300）」ボタンから、対象地の土地所有者へのDM発送を依頼できます。謄本取得と同様の手順で決済・依頼が完了します。依頼後に管理者へ通知メールが自動送信されます。</div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box">
+      💡 サービス依頼後の対応・進捗は管理者より別途ご連絡いたします。依頼内容は管理画面で確認できます。
+    </div>
+  </div>
+
+  <!-- ─── 9. スマホ ─── -->
+  <div class="section" id="sec-mobile">
+    <div class="section-title"><span class="icon">📱</span>スマートフォンでの利用</div>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-heading">横向き（ランドスケープ）で使用してください</div>
+          <div class="step-desc">BatteryLandはスマートフォンでの<b>横向き（ランドスケープ）モード</b>に最適化されています。縦向きで開くと「横向きに回転してください」の案内が表示されます。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-heading">パネルの折り畳み</div>
+          <div class="step-desc">横向き・スモールスクリーン環境では右パネルを折り畳むボタンが表示されます。地図を広く使いたい場合はパネルを閉じてください。再度タップすると展開できます。</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-heading">長押しで右クリックメニューを表示</div>
+          <div class="step-desc">スマホでは地図を長押しすると右クリックメニュー（「メモリへ保存」「近くの変電所をさがす」）が表示されます。</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- セクション4: よくある質問 -->
-  <div class="section">
-    <div class="section-title">よくある質問</div>
+  <!-- ─── 10. FAQ ─── -->
+  <div class="section" id="sec-faq">
+    <div class="section-title"><span class="icon">❓</span>よくある質問</div>
     <div class="faq-list">
       <div class="faq-item">
-        <div class="faq-q">
-          <span class="faq-q-badge">Q</span>
-          データはどこから取得しているのですか？
-        </div>
-        <div class="faq-a">
-          各電力会社が公式に公開している系統空き容量CSV・PDFを収集・整理してデータベース化しています。最新の情報は定期的に更新しています。
-        </div>
+        <div class="faq-q"><span class="faq-q-badge">Q</span>空き容量データはどこから取得していますか？</div>
+        <div class="faq-a">各電力会社が公式に公開している系統接続案内（CSV・PDF）を収集・整理してデータベース化しています。定期的に更新しています。</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">
-          <span class="faq-q-badge">Q</span>
-          東京電力エリアの変電所データはありますか？
-        </div>
-        <div class="faq-a">
-          東京電力パワーグリッド（東電PG）は他社のような系統空き容量CSVを公開していないため、位置情報（変電所の場所）のみ搭載しています。空き容量・ランクは「-」（データなし・灰色ピン）として表示されます。
-        </div>
+        <div class="faq-q"><span class="faq-q-badge">Q</span>「空き容量」は何の容量ですか？</div>
+        <div class="faq-a">表示される空き容量は、各電力会社の系統接続案内における「<b>逆潮流（発電設備）の連系可能容量</b>」です。蓄電池・太陽光・風力など逆潮流を行う発電設備を接続する際の参考容量です。数値は電力会社が開示する資料に基づく推測値であり、実際の接続可否・条件は申込時の詳細審査によります。</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">
-          <span class="faq-q-badge">Q</span>
-          ランクSの変電所であれば必ず接続できますか？
-        </div>
-        <div class="faq-a">
-          BatteryLandは接続可否を保証するものではありません。ランクは空き容量データをもとにした参考指標です。実際の接続可否・条件については、必ず各電力会社への事前相談・接続検討申込みをご確認ください。
-        </div>
+        <div class="faq-q"><span class="faq-q-badge">Q</span>東京電力エリアの変電所データはありますか？</div>
+        <div class="faq-a">東京電力パワーグリッド（東電PG）は系統空き容量を公開していないため、変電所の位置情報のみ搭載しています。空き容量・ランクは「−」（灰色ピン）として表示されます。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-badge">Q</span>ランクSの変電所なら必ず接続できますか？</div>
+        <div class="faq-a">保証はありません。空き容量は電力会社の申込状況・系統運用状況によって随時変化します。ランクは参考指標であり、実際の接続可否・工事費用は各電力会社への接続検討申込みで確認してください。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-badge">Q</span>公図が表示されません</div>
+        <div class="faq-a">公図の表示にはズームLv15以上が必要です。また、PMTilesデータの読み込みに時間がかかる場合があります。「公図・地番」トグルを一度オフにして数秒待ち、再度オンにしてみてください。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-badge">Q</span>謄本取得を依頼しましたが、その後どうなりますか？</div>
+        <div class="faq-a">決済完了後、管理者（合同会社440）に通知が届きます。取得した謄本はメールにてお送りします。通常数営業日以内に対応しますが、土日祝・繁忙期は前後する場合があります。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-badge">Q</span>ピンメモはブラウザを閉じても残りますか？</div>
+        <div class="faq-a">はい。ブラウザのローカルストレージに保存されるため、同じブラウザ・端末であれば再読み込みや閉じても保持されます。ただし、ブラウザのキャッシュ削除や別の端末からは見えません。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="faq-q-badge">Q</span>「最寄変電所をさがす」は実際のルートを考慮していますか？</div>
+        <div class="faq-a">いいえ。直線距離（Haversine公式）による最短距離です。実際の送電線ルートは地形・道路・既存設備によって異なります。あくまでも最寄変電所の目安としてご活用ください。</div>
       </div>
     </div>
   </div>
 
   <div class="footer">
-    &copy;2026 合同会社440 | BatteryLand
+    &copy;2026 合同会社440 | BatteryLand — 蓄電所適地探索プラットフォーム
   </div>
 
 </div>
-
 </body>
 </html>
