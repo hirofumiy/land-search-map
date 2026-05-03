@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お問い合わせ | BatteryLand</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+  background: #0f172a;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #e2e8f0;
+}
+
+.logo-area {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.logo-icon { font-size: 40px; display: block; margin-bottom: 8px; }
+.logo-text {
+  font-size: 22px;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: 2px;
+}
+.logo-text span { color: #60a5fa; }
+.page-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-top: 6px;
+}
+.page-sub {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+.card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 36px 40px;
+  width: 100%;
+  max-width: 540px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+.form-label .req {
+  color: #f87171;
+  margin-left: 4px;
+}
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  outline: none;
+}
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: #60a5fa;
+}
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  cursor: pointer;
+}
+.form-select option { background: #1e293b; }
+.form-textarea {
+  resize: vertical;
+  min-height: 130px;
+  line-height: 1.6;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 13px;
+  background: #2563eb;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  letter-spacing: 0.5px;
+}
+.btn-submit:hover:not(:disabled) { background: #1d4ed8; }
+.btn-submit:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
+
+.msg {
+  display: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+.msg.success {
+  display: block;
+  background: rgba(16,185,129,0.12);
+  border: 1px solid rgba(16,185,129,0.3);
+  color: #6ee7b7;
+}
+.msg.error {
+  display: block;
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.3);
+  color: #fca5a5;
+}
+
+.note-box {
+  margin-top: 20px;
+  padding: 12px 16px;
+  background: rgba(59,130,246,0.08);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 8px;
+  font-size: 12px;
+  color: #93c5fd;
+  line-height: 1.7;
+}
+
+.footer-links {
+  margin-top: 32px;
+  font-size: 12px;
+  color: #475569;
+  text-align: center;
+}
+.footer-links a {
+  color: #60a5fa;
+  text-decoration: none;
+  margin: 0 8px;
+}
+.footer-links a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="logo-area">
+  <span class="logo-icon">⚡</span>
+  <div class="logo-text">Battery<span>Land</span></div>
+  <div class="page-title">お問い合わせ</div>
+  <div class="page-sub">ご質問・ご要望はこちらからお気軽にどうぞ。<br>通常2営業日以内にご返信いたします。</div>
+</div>
+
+<div class="card">
+  <div id="msg" class="msg"></div>
+
+  <form id="contact-form" novalidate>
+    <div class="form-group">
+      <label class="form-label">会社名・屋号</label>
+      <input type="text" id="company" class="form-input" placeholder="例：株式会社〇〇エネルギー">
+    </div>
+    <div class="form-group">
+      <label class="form-label">お名前<span class="req">*</span></label>
+      <input type="text" id="name" class="form-input" placeholder="例：山田 太郎" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label">メールアドレス<span class="req">*</span></label>
+      <input type="email" id="email" class="form-input" placeholder="例：taro@example.com" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label">お問い合わせ種別<span class="req">*</span></label>
+      <select id="category" class="form-select" required>
+        <option value="">選択してください</option>
+        <option value="plan">プラン・料金について</option>
+        <option value="function">機能・操作について</option>
+        <option value="trial">トライアルについて</option>
+        <option value="billing">請求・決済について</option>
+        <option value="data">変電所・データについて</option>
+        <option value="other">その他</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">お問い合わせ内容<span class="req">*</span></label>
+      <textarea id="message" class="form-textarea" placeholder="ご質問・ご要望をできるだけ詳しくお書きください。" required></textarea>
+    </div>
+
+    <button type="submit" id="submit-btn" class="btn-submit">送信する</button>
+  </form>
+
+  <div class="note-box">
+    📩 送信後、受付確認メールをお送りします。メールが届かない場合は迷惑メールフォルダをご確認ください。<br>
+    直接のご連絡はこちらまで：<a href="mailto:info@440marketing.biz" style="color:#60a5fa;">info@440marketing.biz</a>
+  </div>
+</div>
+
+<div class="footer-links">
+  <a href="index.html">← マップに戻る</a>
+  <a href="terms.html">利用規約</a>
+  <a href="privacy.html">プライバシーポリシー</a>
+  <a href="tokushoho.html">特定商取引法</a>
+</div>
+
+<script>
+document.getElementById('contact-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name     = document.getElementById('name').value.trim();
+  const email    = document.getElementById('email').value.trim();
+  const category = document.getElementById('category').value;
+  const message  = document.getElementById('message').value.trim();
+  const company  = document.getElementById('company').value.trim();
+  const msgEl    = document.getElementById('msg');
+  const btn      = document.getElementById('submit-btn');
+
+  msgEl.className = 'msg';
+  msgEl.style.display = 'none';
+
+  if (!name || !email || !category || !message) {
+    msgEl.className = 'msg error';
+    msgEl.textContent = '必須項目（＊）をすべて入力してください。';
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    msgEl.className = 'msg error';
+    msgEl.textContent = 'メールアドレスの形式が正しくありません。';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '送信中...';
+
+  try {
+    const cfg = window.BATTERYLAND_CONFIG;
+    const res = await fetch(`${cfg.SUPABASE_URL}/functions/v1/send-contact`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': cfg.SUPABASE_ANON_KEY,
+      },
+      body: JSON.stringify({ name, email, category, message, company }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || '送信に失敗しました');
+
+    document.getElementById('contact-form').reset();
+    msgEl.className = 'msg success';
+    msgEl.textContent = 'お問い合わせを受け付けました。確認メールをお送りしましたのでご確認ください。通常2営業日以内にご返信いたします。';
+  } catch (err) {
+    msgEl.className = 'msg error';
+    msgEl.textContent = `送信に失敗しました。時間をおいて再度お試しいただくか、info@440marketing.biz までご連絡ください。（${err.message}）`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '送信する';
+  }
+});
+</script>
+</body>
+</html>
