@@ -6,7 +6,7 @@
 // 【必要な Supabase Secrets】
 //   RESEND_API_KEY: Resend API キー
 
-const ADMIN_EMAIL = 'info@440marketing.biz'
+const ADMIN_EMAIL = 'hirofumiy@gmail.com'  // ドメイン未認証中はgmailのみ受信可
 const FROM_EMAIL  = 'BatteryLand <onboarding@resend.dev>'
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -96,22 +96,25 @@ Deno.serve(async (req: Request) => {
       </div>
     `
 
-    // 2通並列送信
-    const [adminRes, userRes] = await Promise.all([
-      sendMail(resendKey, FROM_EMAIL, ADMIN_EMAIL,
-        `【BatteryLand お問い合わせ】${categoryLabel}（${name}）`, adminHtml),
-      sendMail(resendKey, FROM_EMAIL, email,
-        '【BatteryLand】お問い合わせを受け付けました', userHtml),
-    ])
+    // 管理者への通知メール（必須）
+    const adminRes = await sendMail(resendKey, FROM_EMAIL, ADMIN_EMAIL,
+      `【BatteryLand お問い合わせ】${categoryLabel}（${name}）`, adminHtml)
 
     if (!adminRes.ok) {
       const err = await adminRes.text()
       console.error('❌ Admin mail error:', err)
       throw new Error('管理者への通知メール送信に失敗しました')
     }
-    if (!userRes.ok) {
-      const err = await userRes.text()
-      console.warn('⚠️ User confirmation mail error:', err) // 確認メール失敗は警告のみ
+
+    // 送信者への確認メール（ドメイン認証後に有効化・失敗しても処理継続）
+    try {
+      const userRes = await sendMail(resendKey, FROM_EMAIL, email,
+        '【BatteryLand】お問い合わせを受け付けました', userHtml)
+      if (!userRes.ok) {
+        console.warn('⚠️ User confirmation mail skipped (domain not verified yet):', await userRes.text())
+      }
+    } catch (e) {
+      console.warn('⚠️ User confirmation mail error (non-fatal):', e)
     }
 
     console.log(`✅ お問い合わせ受付: ${name} <${email}> [${categoryLabel}]`)

@@ -258,6 +258,7 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
       headers: {
         'Content-Type': 'application/json',
         'apikey': cfg.SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${cfg.SUPABASE_ANON_KEY}`,
       },
       body: JSON.stringify({ name, email, category, message, company }),
     });
