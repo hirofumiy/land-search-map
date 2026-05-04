@@ -266,9 +266,7 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || '送信に失敗しました');
 
-    document.getElementById('contact-form').reset();
-    msgEl.className = 'msg success';
-    msgEl.textContent = 'お問い合わせを受け付けました。確認メールをお送りしましたのでご確認ください。通常2営業日以内にご返信いたします。';
+    location.href = 'contact-complete.html';
   } catch (err) {
     msgEl.className = 'msg error';
     msgEl.textContent = `送信に失敗しました。時間をおいて再度お試しいただくか、info@440marketing.biz までご連絡ください。（${err.message}）`;
