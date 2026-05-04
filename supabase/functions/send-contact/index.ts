@@ -6,7 +6,7 @@
 // 【必要な Supabase Secrets】
 //   RESEND_API_KEY: Resend API キー
 
-const ADMIN_EMAIL = 'hirofumiy@gmail.com'  // ドメイン未認証中はgmailのみ受信可
+const ADMIN_EMAIL = 'info@440marketing.biz'
 const FROM_EMAIL  = 'BatteryLand <onboarding@resend.dev>'
 
 const CATEGORY_LABELS: Record<string, string> = {
