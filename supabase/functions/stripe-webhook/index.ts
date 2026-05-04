@@ -164,8 +164,8 @@ async function sendServiceNotification({
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'BatteryLand <onboarding@resend.dev>',
-      to: ['hirofumiy@gmail.com'],  // ドメイン未認証中はgmailのみ受信可
+      from: 'BatteryLand <info@440marketing.biz>',
+      to: ['info@440marketing.biz'],
       subject: `【BatteryLand】${label}依頼が入りました`,
       html: `
         <div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:24px;border:1px solid #e2e8f0;border-radius:8px;">

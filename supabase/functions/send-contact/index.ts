@@ -6,8 +6,8 @@
 // 【必要な Supabase Secrets】
 //   RESEND_API_KEY: Resend API キー
 
-const ADMIN_EMAIL = 'hirofumiy@gmail.com'  // Resendドメイン認証完了後にinfo@440marketing.bizへ変更
-const FROM_EMAIL  = 'BatteryLand <onboarding@resend.dev>'
+const ADMIN_EMAIL = 'info@440marketing.biz'
+const FROM_EMAIL  = 'BatteryLand <info@440marketing.biz>'
 
 const CATEGORY_LABELS: Record<string, string> = {
   plan:     'プラン・料金について',
