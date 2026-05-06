@@ -388,7 +388,7 @@ body.rotate-bypassed #app { visibility: visible !important; }
 
 /* ── モバイル 横向き: コンパクトレイアウト ── */
 @media (max-width: 1024px) and (orientation: landscape) and (max-height: 680px) {
-  #panel { width: 240px; min-width: 240px; transition: width 0.25s; }
+  #panel { width: 240px; min-width: 240px; transition: width 0.3s ease; overflow-y: auto; overflow-x: hidden; }
   #panel.collapsed { width: 0; min-width: 0; overflow: hidden; }
   #panel-header { padding: 8px 10px; }
   #panel-header h1 { font-size: 13px; }
@@ -406,13 +406,31 @@ body.rotate-bypassed #app { visibility: visible !important; }
 /* パネル折りたたみボタン（横向きモバイル専用） */
 #panel-collapse-btn {
   display: none;
-  position: fixed; top: 50%; z-index: 500;
+  position: fixed; top: 50%; z-index: 600;
   transform: translateY(-50%);
-  background: #1e293b; border: 1px solid #475569;
-  color: #94a3b8; width: 20px; height: 56px;
+  background: #2563eb; border: 1px solid #3b82f6;
+  color: #fff; width: 36px; height: 72px;
+  flex-direction: column;
   align-items: center; justify-content: center;
-  cursor: pointer; border-radius: 6px 0 0 6px;
-  font-size: 12px; transition: right 0.25s;
+  gap: 3px;
+  cursor: pointer; border-radius: 8px 0 0 8px;
+  font-size: 18px; transition: right 0.3s ease;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.4);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+#panel-collapse-btn:active {
+  background: #1d4ed8;
+}
+#panel-collapse-btn .btn-label {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  line-height: 1;
+  color: rgba(255,255,255,0.85);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
 }
 </style>
 </head>
@@ -430,7 +448,10 @@ body.rotate-bypassed #app { visibility: visible !important; }
 </div>
 
 <!-- パネル折りたたみボタン（横向きモバイル専用） -->
-<div id="panel-collapse-btn" onclick="toggleMobilePanel()" title="パネルを開閉">›</div>
+<div id="panel-collapse-btn" onclick="toggleMobilePanel()" title="パネルを開閉">
+  <span id="panel-collapse-arrow">‹</span>
+  <span class="btn-label" id="panel-collapse-label">閉じる</span>
+</div>
 
 <div id="app">
   <div id="map"></div>
@@ -2924,14 +2945,23 @@ function bypassRotate() {
 let __panelCollapsed = false;
 
 function toggleMobilePanel() {
-  const panel = document.getElementById('panel');
-  const btn   = document.getElementById('panel-collapse-btn');
+  const panel  = document.getElementById('panel');
+  const btn    = document.getElementById('panel-collapse-btn');
+  const arrow  = document.getElementById('panel-collapse-arrow');
+  const label  = document.getElementById('panel-collapse-label');
   __panelCollapsed = !__panelCollapsed;
   panel.classList.toggle('collapsed', __panelCollapsed);
-  btn.textContent = __panelCollapsed ? '‹' : '›';
-  btn.style.right = __panelCollapsed ? '0' : '240px';
+  if (__panelCollapsed) {
+    arrow.textContent = '›';
+    label.textContent = '開く';
+    btn.style.right = '0';
+  } else {
+    arrow.textContent = '‹';
+    label.textContent = '閉じる';
+    btn.style.right = '240px';
+  }
   // 地図サイズ更新
-  setTimeout(() => { if (window.map) window.map.invalidateSize(); }, 260);
+  setTimeout(() => { if (window.map) window.map.invalidateSize(); }, 320);
 }
 
 // ボタン初期位置
@@ -2946,6 +2976,10 @@ function toggleMobilePanel() {
       btn.style.right = __panelCollapsed ? '0' : '240px';
     } else {
       btn.style.right = '';
+      // 縦向きに戻ったらパネル状態リセット
+      const panel = document.getElementById('panel');
+      if (panel) panel.classList.remove('collapsed');
+      __panelCollapsed = false;
     }
   }
   updateBtn();
