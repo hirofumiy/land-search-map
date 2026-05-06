@@ -388,7 +388,7 @@ body.rotate-bypassed #app { visibility: visible !important; }
 
 /* ── モバイル 横向き: コンパクトレイアウト ── */
 @media (max-width: 1024px) and (orientation: landscape) and (max-height: 680px) {
-  #panel { width: 240px; min-width: 240px; transition: width 0.3s ease; overflow-y: auto; overflow-x: hidden; }
+  #panel { width: 280px; min-width: 280px; transition: width 0.3s ease; overflow-y: auto; overflow-x: hidden; }
   #panel.collapsed { width: 0; min-width: 0; overflow: hidden; }
   #panel-header { padding: 8px 10px; }
   #panel-header h1 { font-size: 13px; }
@@ -400,6 +400,7 @@ body.rotate-bypassed #app { visibility: visible !important; }
   .stat-value { font-size: 15px; }
   .stat-label { font-size: 9px; }
   .filter-group label { font-size: 10px; padding: 2px 5px; }
+  .filter-group { flex-wrap: wrap; }
   #panel-collapse-btn { display: flex !important; }
 }
 
@@ -425,12 +426,11 @@ body.rotate-bypassed #app { visibility: visible !important; }
 #panel-collapse-btn .btn-label {
   font-size: 8px;
   font-weight: 600;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
   line-height: 1;
   color: rgba(255,255,255,0.85);
-  writing-mode: vertical-rl;
+  writing-mode: vertical-lr;
   text-orientation: mixed;
-  transform: rotate(180deg);
 }
 </style>
 </head>
@@ -2958,7 +2958,7 @@ function toggleMobilePanel() {
   } else {
     arrow.textContent = '‹';
     label.textContent = '閉じる';
-    btn.style.right = '240px';
+    btn.style.right = '280px';
   }
   // 地図サイズ更新
   setTimeout(() => { if (window.map) window.map.invalidateSize(); }, 320);
@@ -2973,7 +2973,7 @@ function toggleMobilePanel() {
       window.innerHeight <= 680 &&
       window.innerWidth > window.innerHeight;
     if (isLandscapeMobile) {
-      btn.style.right = __panelCollapsed ? '0' : '240px';
+      btn.style.right = __panelCollapsed ? '0' : '280px';
     } else {
       btn.style.right = '';
       // 縦向きに戻ったらパネル状態リセット
