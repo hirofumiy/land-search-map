@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BatteryLand — 変電所空き容量マップ | 蓄電所・再エネ開発者向けSaaS</title>
+<meta name="description" content="全国の変電所空き容量をリアルタイムで可視化。蓄電所・再エネ開発の用地調査を劇的に効率化するSaaSプラットフォーム。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --white: #ffffff;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-700: #334155;
+  --gray-900: #0f172a;
+  --blue: #2563eb;
+  --blue-light: #eff6ff;
+  --blue-mid: #dbeafe;
+  --blue-600: #1d4ed8;
+  --amber: #d97706;
+  --amber-light: #fffbeb;
+  --green: #16a34a;
+  --green-light: #f0fdf4;
+  --red: #dc2626;
+  --font: 'Inter', 'Noto Sans JP', sans-serif;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.06);
+}
+
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--font); background: var(--white); color: var(--gray-900); line-height: 1.7; overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+
+/* ── Scroll Animation ── */
+.fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+.fade-up.visible { opacity: 1; transform: none; }
+.delay-1 { transition-delay: 0.08s; }
+.delay-2 { transition-delay: 0.16s; }
+.delay-3 { transition-delay: 0.24s; }
+.delay-4 { transition-delay: 0.32s; }
+
+/* ── Nav ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 40px;
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,0); backdrop-filter: blur(0px);
+  transition: background 0.3s, box-shadow 0.3s, backdrop-filter 0.3s;
+  border-bottom: 1px solid transparent;
+}
+nav.scrolled {
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 0 var(--gray-200);
+  border-bottom-color: var(--gray-200);
+}
+.nav-logo { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 800; color: var(--gray-900); letter-spacing: -0.3px; }
+.nav-logo .bolt { color: var(--blue); }
+.nav-links { display: flex; align-items: center; gap: 8px; }
+.nav-link { padding: 8px 16px; font-size: 14px; font-weight: 500; color: var(--gray-500); border-radius: 8px; transition: color 0.2s, background 0.2s; }
+.nav-link:hover { color: var(--gray-900); background: var(--gray-100); }
+.nav-btn {
+  padding: 9px 20px; font-size: 14px; font-weight: 600;
+  background: var(--blue); color: var(--white); border-radius: 8px;
+  transition: background 0.2s, transform 0.1s;
+}
+.nav-btn:hover { background: var(--blue-600); }
+.nav-btn:active { transform: scale(0.98); }
+
+/* ── Hero ── */
+#hero {
+  padding: 140px 40px 100px;
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 100px;
+  background: var(--blue-light); color: var(--blue);
+  font-size: 12px; font-weight: 600; letter-spacing: 0.3px;
+  margin-bottom: 20px;
+}
+.hero-eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+.hero-title {
+  font-size: clamp(32px, 4.5vw, 52px);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -1.5px;
+  color: var(--gray-900);
+  margin-bottom: 20px;
+}
+.hero-title em { font-style: normal; color: var(--blue); }
+.hero-sub {
+  font-size: 17px; color: var(--gray-500); line-height: 1.8;
+  margin-bottom: 36px; max-width: 440px;
+}
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 14px 28px; font-size: 15px; font-weight: 700;
+  background: var(--blue); color: var(--white); border-radius: 10px;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  box-shadow: 0 2px 12px rgba(37,99,235,0.25);
+}
+.btn-primary:hover { background: var(--blue-600); box-shadow: 0 4px 20px rgba(37,99,235,0.35); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 14px 28px; font-size: 15px; font-weight: 600;
+  background: var(--white); color: var(--gray-700);
+  border: 1.5px solid var(--gray-200); border-radius: 10px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-secondary:hover { border-color: var(--gray-300); background: var(--gray-50); }
+
+/* Hero Map Mock */
+.hero-visual { position: relative; }
+.map-mock {
+  background: var(--gray-900);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0,0,0,0.08);
+  aspect-ratio: 4/3;
+  position: relative;
+}
+.map-mock-bg {
+  width: 100%; height: 100%;
+  background:
+    linear-gradient(180deg, #1a2f4a 0%, #1e3a5f 40%, #16324f 100%);
+  position: relative;
+  overflow: hidden;
+}
+/* グリッドライン（地図の格子風） */
+.map-mock-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+/* 道路風ライン */
+.map-mock-bg::after {
+  content: '';
+  position: absolute;
+  top: 45%; left: 0; right: 0; height: 2px;
+  background: rgba(255,255,255,0.08);
+  box-shadow: 0 -60px 0 1px rgba(255,255,255,0.05), 0 80px 0 1px rgba(255,255,255,0.04);
+}
+/* マーカー群 */
+.mock-markers { position: absolute; inset: 0; }
+.mock-marker {
+  position: absolute;
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 800; color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  border: 2px solid rgba(255,255,255,0.3);
+  font-family: 'Inter', sans-serif;
+}
+.mock-marker.s  { background: #22c55e; top: 28%; left: 35%; }
+.mock-marker.a  { background: #3b82f6; top: 45%; left: 55%; }
+.mock-marker.b  { background: #f59e0b; top: 60%; left: 30%; }
+.mock-marker.b2 { background: #f59e0b; top: 35%; left: 65%; }
+.mock-marker.c  { background: #f97316; top: 55%; left: 70%; }
+.mock-marker.d  { background: #ef4444; top: 70%; left: 48%; }
+.mock-marker.s2 { background: #22c55e; top: 20%; left: 50%; }
+.mock-marker.a2 { background: #3b82f6; top: 75%; left: 20%; }
+
+/* サイドパネル風 */
+.mock-panel {
+  position: absolute; right: 0; top: 0; bottom: 0; width: 38%;
+  background: #0f1e36;
+  border-left: 1px solid rgba(255,255,255,0.06);
+  padding: 14px 12px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.mock-panel-title { font-size: 10px; font-weight: 700; color: #60a5fa; letter-spacing: 0.5px; }
+.mock-filter-label { font-size: 8px; color: #64748b; font-weight: 600; margin-bottom: 4px; }
+.mock-chips { display: flex; flex-wrap: wrap; gap: 3px; }
+.mock-chip {
+  padding: 2px 7px; border-radius: 4px; font-size: 8px; font-weight: 600;
+  background: rgba(59,130,246,0.15); color: #60a5fa;
+  border: 1px solid rgba(59,130,246,0.25);
+}
+.mock-ranks { display: flex; gap: 4px; flex-wrap: wrap; }
+.mock-rank { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800; color: white; }
+.mock-rank.s { background: #22c55e; }
+.mock-rank.a { background: #3b82f6; }
+.mock-rank.b { background: #f59e0b; }
+.mock-rank.c { background: #f97316; }
+.mock-rank.d { background: #ef4444; }
+.mock-divider { height: 1px; background: rgba(255,255,255,0.06); }
+.mock-stat { font-size: 9px; color: #94a3b8; }
+.mock-stat span { color: #f8fafc; font-weight: 700; font-size: 16px; display: block; }
+
+/* Tooltip */
+.mock-tooltip {
+  position: absolute; left: 28%; top: 15%;
+  background: white; border-radius: 8px; padding: 8px 10px;
+  font-size: 8px; color: #0f172a; line-height: 1.5;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  white-space: nowrap;
+  min-width: 120px;
+}
+.mock-tooltip::after {
+  content: '';
+  position: absolute; bottom: -5px; left: 14px;
+  width: 10px; height: 10px;
+  background: white;
+  transform: rotate(45deg);
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+.mock-tooltip-title { font-weight: 700; font-size: 9px; color: #0f172a; margin-bottom: 3px; }
+.mock-tooltip-row { display: flex; justify-content: space-between; gap: 12px; }
+.mock-tooltip-row .val { font-weight: 700; color: #22c55e; }
+
+/* ── Section Base ── */
+section { padding: 100px 40px; }
+.container { max-width: 1100px; margin: 0 auto; }
+.section-label {
+  display: inline-block;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.8px;
+  text-transform: uppercase; color: var(--blue);
+  margin-bottom: 12px;
+}
+.section-title {
+  font-size: clamp(26px, 3.5vw, 42px);
+  font-weight: 800; letter-spacing: -1px;
+  color: var(--gray-900); line-height: 1.2;
+  margin-bottom: 16px;
+}
+.section-sub {
+  font-size: 17px; color: var(--gray-500); max-width: 560px; line-height: 1.8;
+}
+
+/* ── Problem Section ── */
+#problem { background: var(--gray-50); }
+.problem-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; margin-top: 56px; }
+.problem-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 32px 28px; border: 1px solid var(--gray-200);
+  position: relative; overflow: hidden;
+}
+.problem-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: #fca5a5;
+}
+.problem-num {
+  font-size: 11px; font-weight: 700; color: var(--red);
+  letter-spacing: 0.5px; margin-bottom: 14px; opacity: 0.7;
+}
+.problem-card h3 { font-size: 16px; font-weight: 700; color: var(--gray-900); margin-bottom: 10px; line-height: 1.4; }
+.problem-card p { font-size: 14px; color: var(--gray-500); line-height: 1.8; }
+
+/* ── Solution Section ── */
+.solution-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; margin-top: 56px; }
+.solution-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 32px 28px; border: 1px solid var(--gray-200);
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+  position: relative; overflow: hidden;
+}
+.solution-card:hover {
+  box-shadow: var(--shadow);
+  border-color: var(--blue);
+  transform: translateY(-2px);
+}
+.solution-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--blue);
+}
+.solution-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: var(--blue-light); display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 18px;
+}
+.solution-card h3 { font-size: 17px; font-weight: 700; color: var(--gray-900); margin-bottom: 10px; }
+.solution-card p { font-size: 14px; color: var(--gray-500); line-height: 1.8; }
+
+/* ── Coverage Section ── */
+#coverage { background: var(--gray-50); }
+.coverage-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.coverage-companies { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+.company-tag {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 8px;
+  background: var(--white); border: 1px solid var(--gray-200);
+  font-size: 13px; font-weight: 600; color: var(--gray-700);
+  box-shadow: var(--shadow-sm);
+}
+.company-tag::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+.coverage-note { margin-top: 24px; font-size: 13px; color: var(--gray-400); line-height: 1.8; }
+
+/* Coverage Visual */
+.coverage-visual {
+  background: var(--white); border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg); padding: 32px;
+  box-shadow: var(--shadow);
+}
+.coverage-visual h4 { font-size: 13px; font-weight: 700; color: var(--gray-500); margin-bottom: 20px; letter-spacing: 0.3px; }
+.rank-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.rank-badge {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; color: white; flex-shrink: 0;
+}
+.rank-badge.s { background: #22c55e; }
+.rank-badge.a { background: #3b82f6; }
+.rank-badge.b { background: #f59e0b; }
+.rank-badge.c { background: #f97316; }
+.rank-badge.d { background: #ef4444; }
+.rank-info { flex: 1; }
+.rank-info strong { font-size: 13px; font-weight: 700; color: var(--gray-900); display: block; }
+.rank-info span { font-size: 12px; color: var(--gray-400); }
+.rank-bar-wrap { flex-shrink: 0; width: 80px; }
+.rank-bar { height: 4px; border-radius: 2px; }
+
+/* ── Pricing ── */
+#pricing { }
+.pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 56px; max-width: 860px; margin-left: auto; margin-right: auto; }
+.plan-card {
+  background: var(--white); border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-lg); padding: 40px 36px;
+  position: relative; overflow: hidden;
+}
+.plan-card.featured {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px var(--blue-mid), var(--shadow-lg);
+}
+.plan-badge {
+  position: absolute; top: 20px; right: 20px;
+  padding: 4px 10px; border-radius: 100px;
+  background: var(--blue); color: white;
+  font-size: 11px; font-weight: 700;
+}
+.plan-name { font-size: 13px; font-weight: 700; color: var(--blue); letter-spacing: 0.5px; margin-bottom: 8px; }
+.plan-price-row { display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; }
+.plan-amount { font-size: 40px; font-weight: 900; color: var(--gray-900); letter-spacing: -2px; }
+.plan-unit { font-size: 14px; color: var(--gray-400); }
+.plan-init { font-size: 12px; color: var(--gray-400); margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--gray-100); }
+.plan-init strong { color: var(--gray-600); }
+.plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+.plan-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--gray-700); line-height: 1.5; }
+.plan-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+.plan-features li.na { color: var(--gray-300); }
+.plan-features li.na::before { content: '—'; color: var(--gray-300); font-weight: 400; }
+.btn-plan {
+  display: block; width: 100%; padding: 14px;
+  text-align: center; font-size: 15px; font-weight: 700;
+  border-radius: 10px; transition: all 0.2s;
+}
+.btn-plan-blue { background: var(--blue); color: white; }
+.btn-plan-blue:hover { background: var(--blue-600); }
+.btn-plan-outline { background: transparent; color: var(--blue); border: 1.5px solid var(--blue); }
+.btn-plan-outline:hover { background: var(--blue-light); }
+.plan-note { font-size: 12px; color: var(--gray-400); margin-top: 14px; line-height: 1.7; text-align: center; }
+
+/* ── How it works ── */
+#howto { background: var(--gray-50); }
+.steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: 60px; position: relative; }
+.steps::before {
+  content: '';
+  position: absolute; top: 30px; left: calc(100%/6); right: calc(100%/6);
+  height: 1px; background: var(--gray-200); z-index: 0;
+}
+.step { text-align: center; padding: 0 24px; position: relative; z-index: 1; }
+.step-num {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: var(--white); border: 2px solid var(--gray-200);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 900; color: var(--blue);
+  margin: 0 auto 20px; box-shadow: var(--shadow-sm);
+}
+.step h3 { font-size: 16px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px; }
+.step p { font-size: 14px; color: var(--gray-500); line-height: 1.7; }
+
+/* ── FAQ ── */
+.faq-list { margin-top: 48px; max-width: 740px; }
+.faq-item {
+  border-bottom: 1px solid var(--gray-200);
+  overflow: hidden;
+}
+.faq-q {
+  width: 100%; background: none; border: none; text-align: left;
+  padding: 22px 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  font-size: 16px; font-weight: 600; color: var(--gray-900);
+  font-family: var(--font);
+  transition: color 0.2s;
+}
+.faq-q:hover { color: var(--blue); }
+.faq-icon { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--gray-100); display: flex; align-items: center; justify-content: center; font-size: 14px; transition: transform 0.3s, background 0.2s; }
+.faq-item.open .faq-icon { transform: rotate(45deg); background: var(--blue-light); color: var(--blue); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1); }
+.faq-a-inner { padding: 0 0 22px; font-size: 15px; color: var(--gray-500); line-height: 1.8; }
+
+/* ── CTA ── */
+#cta {
+  background: var(--blue); padding: 100px 40px;
+  text-align: center;
+}
+#cta h2 { font-size: clamp(28px, 4vw, 46px); font-weight: 900; color: white; letter-spacing: -1px; line-height: 1.2; margin-bottom: 16px; }
+#cta p { font-size: 17px; color: rgba(255,255,255,0.75); margin-bottom: 36px; }
+.cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-cta-white { padding: 14px 32px; font-size: 15px; font-weight: 700; background: white; color: var(--blue); border-radius: 10px; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+.btn-cta-white:hover { box-shadow: 0 6px 28px rgba(0,0,0,0.2); }
+.btn-cta-ghost { padding: 14px 32px; font-size: 15px; font-weight: 600; border: 1.5px solid rgba(255,255,255,0.4); color: white; border-radius: 10px; transition: background 0.2s, border-color 0.2s; }
+.btn-cta-ghost:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.6); }
+
+/* ── Footer ── */
+footer {
+  background: var(--gray-900); color: var(--gray-400);
+  padding: 48px 40px;
+}
+.footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+.footer-logo { font-size: 16px; font-weight: 800; color: white; }
+.footer-logo .bolt { color: var(--blue); }
+.footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: var(--gray-400); transition: color 0.2s; }
+.footer-links a:hover { color: white; }
+.footer-copy { font-size: 12px; color: var(--gray-500); }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  nav { padding: 0 20px; }
+  .nav-links .nav-link { display: none; }
+  #hero { grid-template-columns: 1fr; gap: 40px; padding: 120px 20px 60px; }
+  .hero-visual { order: -1; }
+  .hero-title { font-size: 30px; }
+  section { padding: 72px 20px; }
+  .problem-grid, .solution-grid { grid-template-columns: 1fr; gap: 16px; }
+  .coverage-inner { grid-template-columns: 1fr; gap: 40px; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 440px; }
+  .steps { grid-template-columns: 1fr; gap: 40px; }
+  .steps::before { display: none; }
+  .step { text-align: left; padding: 0; display: flex; gap: 16px; align-items: flex-start; }
+  .step-num { flex-shrink: 0; margin: 0; width: 48px; height: 48px; font-size: 18px; }
+  .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+}
+@media (max-width: 600px) {
+  .hero-title { font-size: 26px; letter-spacing: -0.5px; }
+  .section-title { font-size: 24px; }
+  .plan-card { padding: 28px 24px; }
+  .plan-amount { font-size: 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ───────── Nav ───────── -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <span class="bolt">⚡</span>BatteryLand
+  </a>
+  <div class="nav-links">
+    <a href="#solution" class="nav-link">機能</a>
+    <a href="#coverage" class="nav-link">対応エリア</a>
+    <a href="#pricing" class="nav-link">料金</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+    <a href="index.html" class="nav-link">ログイン</a>
+    <a href="contact.html" class="nav-btn">資料請求</a>
+  </div>
+</nav>
+
+<!-- ───────── Hero ───────── -->
+<div id="hero">
+  <div class="hero-text">
+    <div class="hero-eyebrow fade-up">蓄電所・再エネ開発者向け SaaS</div>
+    <h1 class="hero-title fade-up delay-1">
+      変電所の<em>空き容量</em>を、<br>地図で一瞬に把握する。
+    </h1>
+    <p class="hero-sub fade-up delay-2">
+      全国8電力会社エリアの変電所情報をひとつのマップに集約。空き容量ランクで色分けし、用地調査の時間を劇的に短縮します。
+    </p>
+    <div class="hero-actions fade-up delay-3">
+      <a href="contact.html" class="btn-primary">資料請求する →</a>
+      <a href="index.html" class="btn-secondary">マップを見る</a>
+    </div>
+  </div>
+
+  <!-- Map Mockup -->
+  <div class="hero-visual fade-up delay-2">
+    <div class="map-mock">
+      <div class="map-mock-bg">
+        <div class="mock-markers">
+          <div class="mock-marker s">S</div>
+          <div class="mock-marker a">A</div>
+          <div class="mock-marker b">B</div>
+          <div class="mock-marker b2">B</div>
+          <div class="mock-marker c">C</div>
+          <div class="mock-marker d">D</div>
+          <div class="mock-marker s2">S</div>
+          <div class="mock-marker a2">A</div>
+        </div>
+        <div class="mock-tooltip">
+          <div class="mock-tooltip-title">〇〇変電所</div>
+          <div class="mock-tooltip-row"><span>空き容量</span><span class="val">S ランク</span></div>
+          <div class="mock-tooltip-row"><span>空き容量</span><span>12.5 MW</span></div>
+          <div class="mock-tooltip-row"><span>電力会社</span><span>関西電力</span></div>
+        </div>
+      </div>
+      <!-- Side Panel -->
+      <div class="mock-panel">
+        <div class="mock-panel-title">BatteryLand</div>
+        <div class="mock-divider"></div>
+        <div>
+          <div class="mock-filter-label">電力会社</div>
+          <div class="mock-chips">
+            <div class="mock-chip">関西</div>
+            <div class="mock-chip">東京</div>
+            <div class="mock-chip">九州</div>
+          </div>
+        </div>
+        <div>
+          <div class="mock-filter-label">空き容量ランク</div>
+          <div class="mock-ranks">
+            <div class="mock-rank s">S</div>
+            <div class="mock-rank a">A</div>
+            <div class="mock-rank b">B</div>
+            <div class="mock-rank c">C</div>
+            <div class="mock-rank d">D</div>
+          </div>
+        </div>
+        <div class="mock-divider"></div>
+        <div class="mock-stat">
+          表示中の変電所
+          <span>4,708</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── Problem ───────── -->
+<section id="problem">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-label">課題</div>
+      <h2 class="section-title">変電所調査、<br>まだ手作業ですか？</h2>
+      <p class="section-sub">電力会社ごとに異なる情報源を手動で調べるのは、時間とコストの無駄です。</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card fade-up delay-1">
+        <div class="problem-num">PROBLEM 01</div>
+        <h3>電力会社ごとに<br>バラバラな情報源</h3>
+        <p>各電力会社のWebサイトを個別に確認し、PDFや一覧表から必要な情報を探し出す作業が発生します。</p>
+      </div>
+      <div class="problem-card fade-up delay-2">
+        <div class="problem-num">PROBLEM 02</div>
+        <h3>地図との紐づけが<br>困難</h3>
+        <p>変電所の名称だけでは位置が分からず、地図ソフトで一件ずつ確認する手間がかかります。</p>
+      </div>
+      <div class="problem-card fade-up delay-3">
+        <div class="problem-num">PROBLEM 03</div>
+        <h3>空き容量の<br>判断基準が曖昧</h3>
+        <p>MWの数値だけでは申込の優先度が判断しにくく、経験や勘に頼った意思決定になりがちです。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── Solution ───────── -->
+<section id="solution">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-label">ソリューション</div>
+      <h2 class="section-title">BatteryLandで、<br>調査コストを大幅削減。</h2>
+      <p class="section-sub">複数の電力会社データをひとつのマップに統合。ランク表示で判断を素早く。</p>
+    </div>
+    <div class="solution-grid">
+      <div class="solution-card fade-up delay-1">
+        <div class="solution-icon">🗺</div>
+        <h3>全国マップで<br>一括確認</h3>
+        <p>8電力会社4,700件超の変電所データを地図上に表示。エリアを絞り込んで周辺の候補を即座に一覧できます。</p>
+      </div>
+      <div class="solution-card fade-up delay-2">
+        <div class="solution-icon">⚡</div>
+        <h3>空き容量ランクで<br>優先度を可視化</h3>
+        <p>空き容量をS〜Dの5段階でカラー表示。申込みを優先すべき変電所が一目で分かります。</p>
+      </div>
+      <div class="solution-card fade-up delay-3">
+        <div class="solution-icon">📍</div>
+        <h3>売地情報との<br>統合表示</h3>
+        <p>変電所の近辺にある売地情報もあわせて表示。用地選定から接続検討まで、ひとつの画面で完結します。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── Coverage ───────── -->
+<section id="coverage">
+  <div class="container">
+    <div class="coverage-inner">
+      <div class="fade-up">
+        <div class="section-label">対応エリア</div>
+        <h2 class="section-title">全国8電力会社に<br>対応。</h2>
+        <p class="section-sub">主要電力会社エリアのデータを継続的に収集・更新。月次データ更新でつねに最新情報をお届けします。</p>
+        <div class="coverage-companies">
+          <div class="company-tag">東京電力PG</div>
+          <div class="company-tag">中部電力PG</div>
+          <div class="company-tag">関西電力</div>
+          <div class="company-tag">九州電力</div>
+          <div class="company-tag">中国電力NW</div>
+          <div class="company-tag">東北電力NW</div>
+          <div class="company-tag">北陸電力</div>
+          <div class="company-tag">北海道電力NW</div>
+        </div>
+        <p class="coverage-note">※ 四国電力NW・沖縄電力は順次対応予定<br>※ ノンファーム型接続制度にも対応（空き容量0でも申込可能な場合あり）</p>
+      </div>
+      <div class="coverage-visual fade-up delay-2">
+        <h4>空き容量ランク基準</h4>
+        <div class="rank-row">
+          <div class="rank-badge s">S</div>
+          <div class="rank-info"><strong>S ランク（最優先）</strong><span>接続に非常に有利な水準</span></div>
+          <div class="rank-bar-wrap"><div class="rank-bar" style="width:100%;background:#22c55e;"></div></div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-badge a">A</div>
+          <div class="rank-info"><strong>A ランク</strong><span>十分な余裕あり</span></div>
+          <div class="rank-bar-wrap"><div class="rank-bar" style="width:80%;background:#3b82f6;"></div></div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-badge b">B</div>
+          <div class="rank-info"><strong>B ランク</strong><span>一定の空き容量あり</span></div>
+          <div class="rank-bar-wrap"><div class="rank-bar" style="width:60%;background:#f59e0b;"></div></div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-badge c">C</div>
+          <div class="rank-info"><strong>C ランク</strong><span>容量少なめ・要検討</span></div>
+          <div class="rank-bar-wrap"><div class="rank-bar" style="width:36%;background:#f97316;"></div></div>
+        </div>
+        <div class="rank-row">
+          <div class="rank-badge d">D</div>
+          <div class="rank-info"><strong>D ランク</strong><span>空き容量なし〜極小</span></div>
+          <div class="rank-bar-wrap"><div class="rank-bar" style="width:14%;background:#ef4444;"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── How it works ───────── -->
+<section id="howto">
+  <div class="container">
+    <div class="fade-up" style="text-align:center;">
+      <div class="section-label">使い方</div>
+      <h2 class="section-title">3ステップで始められます</h2>
+    </div>
+    <div class="steps">
+      <div class="step fade-up delay-1">
+        <div class="step-num">1</div>
+        <div>
+          <h3>アカウント登録</h3>
+          <p>メールアドレスで即日登録。プランを選択し、見たい電力会社エリアを指定するだけです。</p>
+        </div>
+      </div>
+      <div class="step fade-up delay-2">
+        <div class="step-num">2</div>
+        <div>
+          <h3>マップで候補地を探す</h3>
+          <p>空き容量ランク・電力会社・半径でフィルタリング。優先度の高い変電所周辺の用地を効率的に絞り込みます。</p>
+        </div>
+      </div>
+      <div class="step fade-up delay-3">
+        <div class="step-num">3</div>
+        <div>
+          <h3>詳細確認・次アクション</h3>
+          <p>変電所の詳細情報を確認後、登記簿謄本取得やDM送付サービスをそのまま依頼できます。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── Pricing ───────── -->
+<section id="pricing">
+  <div class="container">
+    <div class="fade-up" style="text-align:center;">
+      <div class="section-label">料金プラン</div>
+      <h2 class="section-title">シンプルな料金体系</h2>
+      <p class="section-sub" style="margin:0 auto;">必要なエリアだけ契約。規模に応じてスケールアップできます。</p>
+    </div>
+    <div class="pricing-grid">
+
+      <!-- Standard -->
+      <div class="plan-card fade-up delay-1">
+        <div class="plan-name">STANDARD</div>
+        <div class="plan-price-row">
+          <div class="plan-amount">¥150,000</div>
+          <div class="plan-unit">〜 / 月（税別）</div>
+        </div>
+        <div class="plan-init">初回登録料 <strong>¥50,000</strong>（税別）<br>1電力会社エリア付属 / 追加 +¥50,000/エリア</div>
+        <ul class="plan-features">
+          <li>選択エリアの変電所マップ</li>
+          <li>空き容量ランク（S〜D）フィルタ</li>
+          <li>半径検索・距離計測</li>
+          <li>変電所詳細情報</li>
+          <li>月次データ更新</li>
+          <li>メールサポート</li>
+          <li class="na">専任担当・カスタム対応</li>
+        </ul>
+        <a href="contact.html" class="btn-plan btn-plan-outline">このプランで申し込む</a>
+        <p class="plan-note">※ 追加エリアは1社ごとに +¥50,000/月</p>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="plan-card featured fade-up delay-2">
+        <div class="plan-badge">人気プラン</div>
+        <div class="plan-name">ENTERPRISE</div>
+        <div class="plan-price-row">
+          <div class="plan-amount">¥500,000</div>
+          <div class="plan-unit">/ 月（税別）</div>
+        </div>
+        <div class="plan-init">初回登録料 <strong>¥100,000</strong>（税別）<br>全電力会社エリア含む・追加料金なし</div>
+        <ul class="plan-features">
+          <li><strong>全8電力会社</strong>エリア（追加料金なし）</li>
+          <li>Standardの全機能</li>
+          <li>複数ユーザー共有（無制限）</li>
+          <li>専任サポート担当</li>
+          <li>カスタム開発・データ対応</li>
+          <li>APIアクセス（外部システム連携）</li>
+          <li>SLA保証</li>
+        </ul>
+        <a href="contact.html" class="btn-plan btn-plan-blue">Enterpriseを問い合わせる</a>
+        <p class="plan-note">※ 料金・仕様はご要件に応じてご相談可能です</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ───────── FAQ ───────── -->
+<section id="faq" style="background: var(--gray-50);">
+  <div class="container">
+    <div class="fade-up">
+      <div class="section-label">よくある質問</div>
+      <h2 class="section-title">FAQ</h2>
+    </div>
+    <div class="faq-list">
+
+      <div class="faq-item fade-up">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>無料トライアルはありますか？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">現在、限定的なデモアカウントをご用意しています。一部機能・エリアをお試しいただけます。詳細はお問い合わせください。</div>
+        </div>
+      </div>
+
+      <div class="faq-item fade-up delay-1">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>データはどのくらいの頻度で更新されますか？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">原則として月1回、各電力会社が公開する最新データをもとに更新します。電力会社ごとの最終更新日はマップ内に表示しています。</div>
+        </div>
+      </div>
+
+      <div class="faq-item fade-up delay-2">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>途中でプランを変更できますか？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">StandardからEnterpriseへのアップグレードはいつでも可能です。エリアの追加・変更も月単位で対応しています。ご相談はお問い合わせフォームからどうぞ。</div>
+        </div>
+      </div>
+
+      <div class="faq-item fade-up delay-3">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>ノンファーム型接続についての情報は含まれますか？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">はい。空き容量が0（Dランク）の変電所でも、ノンファーム型接続制度を利用すれば接続申込が可能な場合があります。BatteryLandでは該当情報を案内する注意表示を設けています。</div>
+        </div>
+      </div>
+
+      <div class="faq-item fade-up delay-4">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>登記簿謄本取得・DM送付サービスとは何ですか？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">マップ上で気になる候補地（売地）を見つけた際に、登記簿謄本の取得代行（¥500/件）や土地所有者へのDM送付代行（¥300/件）をアプリ内からご依頼いただけるオプションサービスです。</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ───────── CTA ───────── -->
+<section id="cta">
+  <h2 class="fade-up">まずは資料請求から。</h2>
+  <p class="fade-up delay-1">導入のご相談、デモのご依頼もお気軽にどうぞ。</p>
+  <div class="cta-actions fade-up delay-2">
+    <a href="contact.html" class="btn-cta-white">資料請求・お問い合わせ →</a>
+    <a href="index.html" class="btn-cta-ghost">マップを見る</a>
+  </div>
+</section>
+
+<!-- ───────── Footer ───────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="bolt">⚡</span> BatteryLand</div>
+    <div class="footer-links">
+      <a href="terms.html">利用規約</a>
+      <a href="privacy.html">プライバシーポリシー</a>
+      <a href="tokushoho.html">特定商取引法</a>
+      <a href="contact.html">お問い合わせ</a>
+    </div>
+    <div class="footer-copy">© 2026 合同会社440</div>
+  </div>
+</footer>
+
+<script>
+/* Nav scroll */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+
+/* Fade-up observer */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+/* FAQ accordion */
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const answer = item.querySelector('.faq-a');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => {
+    i.classList.remove('open');
+    i.querySelector('.faq-a').style.maxHeight = null;
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+  }
+}
+</script>
+</body>
+</html>
