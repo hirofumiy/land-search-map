@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BatteryLand — 変電所空き容量マップ チラシ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Noto+Sans+JP:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+/* ── Print Setup ── */
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0; padding: 0;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── Screen preview: centered A4 card ── */
+body {
+  background: #e8eaf0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+}
+
+@media print {
+  body {
+    background: none;
+    display: block;
+    min-height: unset;
+    padding: 0;
+  }
+}
+
+/* ── A4 Container ── */
+.page {
+  width: 210mm;
+  height: 297mm;
+  background: #ffffff;
+  box-shadow: 0 8px 60px rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+@media print {
+  .page {
+    box-shadow: none;
+    width: 210mm;
+    height: 297mm;
+  }
+}
+
+/* ════════════════════════════════
+   HEADER
+════════════════════════════════ */
+.header {
+  background: #0f172a;
+  padding: 22px 28px 20px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* 右上のアクセント装飾 */
+.header::after {
+  content: '';
+  position: absolute;
+  right: -30px; top: -30px;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  border: 24px solid rgba(37,99,235,0.18);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.logo-bolt {
+  width: 28px; height: 28px;
+  background: #2563eb;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+}
+
+.header-badge {
+  background: rgba(37,99,235,0.2);
+  border: 1px solid rgba(37,99,235,0.4);
+  color: #93c5fd;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  text-transform: uppercase;
+}
+
+.header-catch {
+  font-family: 'DM Serif Display', 'Noto Sans JP', serif;
+  font-size: 26px;
+  line-height: 1.25;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+  margin-bottom: 8px;
+  font-weight: 400;
+}
+
+.header-catch em {
+  font-style: italic;
+  color: #60a5fa;
+}
+
+.header-sub {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* ════════════════════════════════
+   RANK STRIP
+════════════════════════════════ */
+.rank-strip {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 3px solid #e2e8f0;
+  padding: 10px 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.rank-strip-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rank-badge {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  flex-shrink: 0;
+}
+.rank-badge.s { background: #22c55e; }
+.rank-badge.a { background: #3b82f6; }
+.rank-badge.b { background: #f59e0b; }
+.rank-badge.c { background: #f97316; }
+.rank-badge.d { background: #ef4444; }
+
+.rank-desc {
+  font-size: 8.5px;
+  color: #64748b;
+  line-height: 1.3;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.rank-sep {
+  width: 1px;
+  height: 20px;
+  background: #e2e8f0;
+}
+
+/* ════════════════════════════════
+   MAIN CONTENT
+════════════════════════════════ */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 28px 0;
+  gap: 16px;
+  overflow: hidden;
+}
+
+/* Map mock + features row */
+.content-row {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+/* ── Map Mock ── */
+.map-area {
+  flex: 0 0 112mm;
+  background: #1a2f4a;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  min-height: 100px;
+  border: 1px solid #e2e8f0;
+}
+
+.map-bg {
+  width: 100%; height: 100%;
+  background: linear-gradient(160deg, #1a2f4a 0%, #1e3a5f 50%, #152f48 100%);
+  position: relative;
+  min-height: 110px;
+}
+
+/* グリッド */
+.map-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+/* 道路風 */
+.map-bg::after {
+  content: '';
+  position: absolute;
+  top: 42%; left: 0; right: 0; height: 1px;
+  background: rgba(255,255,255,0.07);
+  box-shadow: 0 -28px 0 1px rgba(255,255,255,0.04), 0 36px 0 1px rgba(255,255,255,0.04);
+}
+
+.map-markers { position: absolute; inset: 0; }
+
+.mm {
+  position: absolute;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 800;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  font-family: 'Inter', sans-serif;
+}
+.mm.s  { background: #22c55e; top: 18%; left: 20%; }
+.mm.s2 { background: #22c55e; top: 10%; left: 55%; }
+.mm.a  { background: #3b82f6; top: 38%; left: 42%; }
+.mm.a2 { background: #3b82f6; top: 68%; left: 12%; }
+.mm.b  { background: #f59e0b; top: 52%; left: 24%; }
+.mm.b2 { background: #f59e0b; top: 28%; left: 68%; }
+.mm.c  { background: #f97316; top: 56%; left: 60%; }
+.mm.d  { background: #ef4444; top: 72%; left: 44%; }
+
+/* Tooltip */
+.map-tooltip {
+  position: absolute;
+  left: 38%; top: 5%;
+  background: white;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 7.5px;
+  line-height: 1.5;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.35);
+  min-width: 90px;
+  color: #0f172a;
+}
+.map-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 10px;
+  width: 8px; height: 8px;
+  background: white;
+  transform: rotate(45deg);
+  box-shadow: 2px 2px 3px rgba(0,0,0,0.08);
+}
+.tt-title { font-weight: 800; font-size: 8px; color: #0f172a; }
+.tt-row { display: flex; justify-content: space-between; gap: 8px; color: #475569; }
+.tt-val { font-weight: 700; color: #22c55e; }
+
+/* ── Features ── */
+.features {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+}
+
+.feature-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 11px 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.feature-icon-wrap {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: #eff6ff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.feature-text h3 {
+  font-size: 11px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 2px;
+  letter-spacing: -0.1px;
+}
+
+.feature-text p {
+  font-size: 9.5px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* ════════════════════════════════
+   STATS BAR
+════════════════════════════════ */
+.stats-bar {
+  display: flex;
+  gap: 0;
+  background: #eff6ff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #dbeafe;
+  flex-shrink: 0;
+}
+
+.stat-item {
+  flex: 1;
+  padding: 12px 16px;
+  text-align: center;
+  border-right: 1px solid #dbeafe;
+}
+.stat-item:last-child { border-right: none; }
+
+.stat-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: #2563eb;
+  line-height: 1;
+  margin-bottom: 3px;
+  letter-spacing: -0.5px;
+}
+
+.stat-label {
+  font-size: 8.5px;
+  color: #64748b;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* ════════════════════════════════
+   PRICING
+════════════════════════════════ */
+.pricing-section {
+  flex-shrink: 0;
+  padding: 0 28px;
+}
+
+.pricing-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.plan-card {
+  border-radius: 8px;
+  padding: 14px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.plan-card.standard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.plan-card.enterprise {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+}
+
+.plan-card.enterprise::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: #2563eb;
+}
+
+.plan-name {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.plan-card.standard .plan-name { color: #2563eb; }
+.plan-card.enterprise .plan-name { color: #60a5fa; }
+
+.plan-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  margin-bottom: 2px;
+}
+
+.plan-amount {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+.plan-card.standard .plan-amount { color: #0f172a; }
+.plan-card.enterprise .plan-amount { color: #f8fafc; }
+
+.plan-unit {
+  font-size: 9px;
+  font-weight: 500;
+}
+.plan-card.standard .plan-unit { color: #94a3b8; }
+.plan-card.enterprise .plan-unit { color: #64748b; }
+
+.plan-note {
+  font-size: 8px;
+  line-height: 1.5;
+  margin-top: 6px;
+}
+.plan-card.standard .plan-note { color: #64748b; }
+.plan-card.enterprise .plan-note { color: #94a3b8; }
+
+.plan-features-mini {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.pf {
+  font-size: 8.5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.pf::before {
+  content: '✓';
+  font-weight: 800;
+  font-size: 8px;
+  flex-shrink: 0;
+}
+.plan-card.standard .pf { color: #475569; }
+.plan-card.standard .pf::before { color: #22c55e; }
+.plan-card.enterprise .pf { color: #94a3b8; }
+.plan-card.enterprise .pf::before { color: #22c55e; }
+
+/* ════════════════════════════════
+   FOOTER
+════════════════════════════════ */
+.footer {
+  background: #0f172a;
+  padding: 13px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.footer-logo {
+  display: flex; align-items: center; gap: 6px;
+}
+
+.footer-logo-bolt {
+  width: 20px; height: 20px;
+  background: #2563eb;
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+}
+
+.footer-logo-text {
+  font-size: 13px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.3px;
+}
+
+.footer-sep {
+  width: 1px; height: 16px;
+  background: #334155;
+}
+
+.footer-company {
+  font-size: 9px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.footer-url {
+  font-size: 11px;
+  font-weight: 700;
+  color: #60a5fa;
+  letter-spacing: -0.2px;
+}
+
+.footer-email {
+  font-size: 9px;
+  color: #64748b;
+}
+
+/* ── Spacer ── */
+.spacer { flex: 1; }
+
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="header-top">
+      <div class="logo">
+        <div class="logo-bolt">⚡</div>
+        <div class="logo-text">BatteryLand</div>
+      </div>
+      <div class="header-badge">蓄電所・再エネ開発者向け SaaS</div>
+    </div>
+    <div class="header-catch">
+      変電所の<em>空き容量</em>を、<br>地図で一瞬に把握する。
+    </div>
+    <div class="header-sub">全国8電力会社・4,700件超の変電所情報をひとつのマップに統合した、用地調査効率化プラットフォームです。</div>
+  </div>
+
+  <!-- ── RANK STRIP ── -->
+  <div class="rank-strip">
+    <div class="rank-strip-label">空き容量ランク</div>
+    <div class="rank-item">
+      <div class="rank-badge s">S</div>
+      <div class="rank-desc">接続に<br>非常に有利</div>
+    </div>
+    <div class="rank-sep"></div>
+    <div class="rank-item">
+      <div class="rank-badge a">A</div>
+      <div class="rank-desc">十分な<br>余裕あり</div>
+    </div>
+    <div class="rank-sep"></div>
+    <div class="rank-item">
+      <div class="rank-badge b">B</div>
+      <div class="rank-desc">一定の<br>空きあり</div>
+    </div>
+    <div class="rank-sep"></div>
+    <div class="rank-item">
+      <div class="rank-badge c">C</div>
+      <div class="rank-desc">容量少なめ<br>要検討</div>
+    </div>
+    <div class="rank-sep"></div>
+    <div class="rank-item">
+      <div class="rank-badge d">D</div>
+      <div class="rank-desc">空きなし<br>〜極小</div>
+    </div>
+  </div>
+
+  <!-- ── MAIN ── -->
+  <div class="main">
+
+    <!-- Map + Features -->
+    <div class="content-row">
+      <!-- Map -->
+      <div class="map-area">
+        <div class="map-bg">
+          <div class="map-markers">
+            <div class="mm s">S</div>
+            <div class="mm s2">S</div>
+            <div class="mm a">A</div>
+            <div class="mm a2">A</div>
+            <div class="mm b">B</div>
+            <div class="mm b2">B</div>
+            <div class="mm c">C</div>
+            <div class="mm d">D</div>
+          </div>
+          <div class="map-tooltip">
+            <div class="tt-title">〇〇変電所</div>
+            <div class="tt-row"><span>空き容量</span><span class="tt-val">S ランク</span></div>
+            <div class="tt-row"><span>容量</span><span>12.5 MW</span></div>
+            <div class="tt-row"><span>電力会社</span><span>関西電力</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon-wrap">🗺</div>
+          <div class="feature-text">
+            <h3>全国マップで一括確認</h3>
+            <p>8電力会社・4,700件超の変電所を地図上に表示。電力会社・ランクでフィルタリングし、優先候補を素早く絞り込めます。</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrap">⚡</div>
+          <div class="feature-text">
+            <h3>空き容量ランクで優先度を可視化</h3>
+            <p>空き容量をS〜D の5段階でカラー表示。ひと目で申込みを優先すべき変電所が判断できます。</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrap">📍</div>
+          <div class="feature-text">
+            <h3>売地情報との統合表示</h3>
+            <p>変電所近辺の売地もあわせて確認。登記簿謄本取得・DM送付もアプリ内から依頼可能です。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-num">8</div>
+        <div class="stat-label">対応電力会社</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">4,700<span style="font-size:13px;">+</span></div>
+        <div class="stat-label">変電所データ件数</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">月次</div>
+        <div class="stat-label">データ更新頻度</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">即日</div>
+        <div class="stat-label">アカウント発行</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── PRICING ── -->
+  <div class="pricing-section" style="padding-top: 16px; padding-bottom: 16px;">
+    <div class="pricing-label">料金プラン</div>
+    <div class="pricing-grid">
+
+      <div class="plan-card standard">
+        <div class="plan-name">Standard</div>
+        <div class="plan-price-row">
+          <div class="plan-amount">¥150,000</div>
+          <div class="plan-unit">〜 / 月（税別）</div>
+        </div>
+        <div class="plan-features-mini">
+          <div class="pf">1電力会社エリア付属</div>
+          <div class="pf">追加エリア +¥50,000/社</div>
+          <div class="pf">初回登録料 ¥50,000</div>
+          <div class="pf">メールサポート</div>
+        </div>
+      </div>
+
+      <div class="plan-card enterprise">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price-row">
+          <div class="plan-amount">¥500,000</div>
+          <div class="plan-unit">/ 月（税別）</div>
+        </div>
+        <div class="plan-features-mini">
+          <div class="pf">全8電力会社エリア含む</div>
+          <div class="pf">初回登録料 ¥100,000</div>
+          <div class="pf">専任サポート担当付き</div>
+          <div class="pf">カスタム対応・API連携</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div class="footer-left">
+      <div class="footer-logo">
+        <div class="footer-logo-bolt">⚡</div>
+        <div class="footer-logo-text">BatteryLand</div>
+      </div>
+      <div class="footer-sep"></div>
+      <div class="footer-company">合同会社440</div>
+    </div>
+    <div class="footer-right">
+      <div class="footer-url">batteryland.440marketing.biz</div>
+      <div class="footer-email">info@440marketing.biz</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
