@@ -808,7 +808,7 @@ function makeHazardLayer(url, opacity) {
     minNativeZoom: 2, maxNativeZoom: 17, maxZoom: 21,
     crossOrigin: 'anonymous',   // true ではなく 'anonymous' が正しい値
   });
-  // タイル取得失敗時に最大3回リトライ（2秒 → 4秒 → 8秒）
+  // タイル取得失敗時に最大3回リトライ（0.5秒 → 1秒 → 1.5秒）② 遅延短縮
   layer.on('tileerror', function(e) {
     const tile = e.tile;
     const retries = parseInt(tile.dataset.retries || '0');
@@ -817,7 +817,7 @@ function makeHazardLayer(url, opacity) {
       setTimeout(() => {
         const base = tile.src.replace(/[?&]_r=\d+/, '');
         tile.src = base + (base.includes('?') ? '&' : '?') + '_r=' + (retries + 1);
-      }, Math.pow(2, retries + 1) * 1000);
+      }, (retries + 1) * 500);
     }
   });
   return layer;
@@ -2188,11 +2188,25 @@ async function loadData() {
     selectedCompanies = new Set(COMPANIES);
     buildFilters();
     loadData();
+    // ③ プリロード（URLパラメータありルート）
+    setTimeout(() => {
+      Object.values(hazardLayers).forEach(layer => {
+        layer.addTo(map); map.removeLayer(layer);
+      });
+    }, 5000);
   } else {
     // URLパラメータなし → Supabaseから非同期取得
     // ローディング中は全社表示でフィルタUIを構築
     buildFilters();
     loadData();
+
+    // ③ ハザードタイルをバックグラウンドでプリロード（変電所データ読み込み後に実行）
+    setTimeout(() => {
+      Object.values(hazardLayers).forEach(layer => {
+        layer.addTo(map);       // 一瞬追加してタイル取得を開始
+        map.removeLayer(layer); // すぐ非表示（タイルはブラウザキャッシュに残る）
+      });
+    }, 5000); // 変電所マーカー描画完了後のタイミングで実行
 
     // Supabaseから取得（認証ガードの完了を待つ）
     // window.__currentUser はページ上部の認証スクリプトが設定する
