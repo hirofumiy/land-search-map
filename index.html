@@ -823,12 +823,14 @@ function makeHazardLayer(url, opacity) {
   return layer;
 }
 
+// ① Cloudflare Workerプロキシ経由（キャッシュ＆高速化）
+const HAZARD_PROXY = 'https://hazard-proxy.hirofumiy.workers.dev';
 const hazardLayers = {
-  flood:     makeHazardLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', 0.8),
-  sediment:  makeHazardLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', 0.7),
-  landslide: makeHazardLayer('https://disaportaldata.gsi.go.jp/raster/05_kyukeishachihousaigai/{z}/{x}/{y}.png', 0.7),
-  jisuberi:  makeHazardLayer('https://disaportaldata.gsi.go.jp/raster/05_jisuberikeikaikuiki/{z}/{x}/{y}.png', 0.7),
-  tsunami:   makeHazardLayer('https://disaportaldata.gsi.go.jp/raster/04_tsunami_newlegend_data/{z}/{x}/{y}.png', 0.8),
+  flood:     makeHazardLayer(`${HAZARD_PROXY}/flood/{z}/{x}/{y}.png`, 0.8),
+  sediment:  makeHazardLayer(`${HAZARD_PROXY}/sediment/{z}/{x}/{y}.png`, 0.7),
+  landslide: makeHazardLayer(`${HAZARD_PROXY}/landslide/{z}/{x}/{y}.png`, 0.7),
+  jisuberi:  makeHazardLayer(`${HAZARD_PROXY}/jisuberi/{z}/{x}/{y}.png`, 0.7),
+  tsunami:   makeHazardLayer(`${HAZARD_PROXY}/tsunami/{z}/{x}/{y}.png`, 0.8),
 };
 const hazardActive = { flood: false, sediment: false, landslide: false, jisuberi: false, tsunami: false };
 
@@ -2044,9 +2046,9 @@ async function checkPropertyHazard(lat, lng) {
   try {
     // 1. 土石流・急傾斜・地すべり（いずれか1ピクセルでもNG）
     const hazardUrls = [
-      { url: `https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/${z}/${tile.x}/${tile.y}.png`, label: '土石流' },
-      { url: `https://disaportaldata.gsi.go.jp/raster/05_kyukeishachihousaigai/${z}/${tile.x}/${tile.y}.png`, label: '急傾斜地崩壊' },
-      { url: `https://disaportaldata.gsi.go.jp/raster/05_jisuberikeikaikuiki/${z}/${tile.x}/${tile.y}.png`, label: '地すべり' },
+      { url: `${HAZARD_PROXY}/sediment/${z}/${tile.x}/${tile.y}.png`, label: '土石流' },
+      { url: `${HAZARD_PROXY}/landslide/${z}/${tile.x}/${tile.y}.png`, label: '急傾斜地崩壊' },
+      { url: `${HAZARD_PROXY}/jisuberi/${z}/${tile.x}/${tile.y}.png`, label: '地すべり' },
     ];
     for (const { url, label } of hazardUrls) {
       const px = await getTilePixel(url, tile.px, tile.py);
@@ -2057,7 +2059,7 @@ async function checkPropertyHazard(lat, lng) {
     }
 
     // 2. 洪水（3m以上はNG）
-    const floodUrl = `https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/${z}/${tile.x}/${tile.y}.png`;
+    const floodUrl = `${HAZARD_PROXY}/flood/${z}/${tile.x}/${tile.y}.png`;
     const fpx = await getTilePixel(floodUrl, tile.px, tile.py);
     if (fpx && fpx.a > 20) {
       const depth = floodDepthFromPixel(fpx.r, fpx.g, fpx.b, fpx.a);
