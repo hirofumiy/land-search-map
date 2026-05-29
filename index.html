@@ -801,12 +801,18 @@ const tileGsi = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y
 tileGoogle.addTo(map);
 
 // Hazard layers
+// ── ハザード専用pane（z-index 250）: ベースタイル(200)より常に上、マーカー(400)より下 ──
+map.createPane('hazardPane');
+map.getPane('hazardPane').style.zIndex = 250;
+map.getPane('hazardPane').style.pointerEvents = 'none'; // クリックを透過
+
 // ── ハザードタイル共通オプション ──
 function makeHazardLayer(url, opacity) {
   const layer = L.tileLayer(url, {
     opacity,
+    pane: 'hazardPane',  // 専用paneを使用（ベースマップ切替でも消えない）
     minNativeZoom: 2, maxNativeZoom: 17, maxZoom: 21,
-    crossOrigin: 'anonymous',   // true ではなく 'anonymous' が正しい値
+    crossOrigin: 'anonymous',
   });
   // タイル取得失敗時に最大3回リトライ（0.5秒 → 1秒 → 1.5秒）② 遅延短縮
   layer.on('tileerror', function(e) {
