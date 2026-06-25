@@ -2834,12 +2834,22 @@ async function doLogout() {
 <div id="map-ctx-menu" style="
   display:none; position:fixed; z-index:9000;
   background:#1e293b; border:1px solid #334155; border-radius:8px;
-  box-shadow:0 8px 24px rgba(0,0,0,0.4); overflow:hidden; min-width:180px;">
+  box-shadow:0 8px 24px rgba(0,0,0,0.4); overflow:hidden; min-width:200px;">
+  <div id="ctx-coord-row" onclick="ctxCopyCoord(event)" title="クリックで座標をコピー" style="
+    display:flex; align-items:center; gap:8px; padding:9px 14px;
+    border-bottom:1px solid #334155; cursor:pointer; transition:background 0.1s;"
+    onmouseover="this.style.background='#334155'" onmouseout="this.style.background='transparent'">
+    <span id="ctx-coord-text" style="flex:1; font-size:12px; color:#cbd5e1; font-family:monospace; white-space:nowrap;">―</span>
+    <span id="ctx-copy-icon" style="font-size:13px; flex-shrink:0;">📋</span>
+  </div>
   <div class="ctx-item" id="ctx-save-pin" onclick="ctxSavePin()">
     📍 メモリへ保存
   </div>
   <div class="ctx-item" id="ctx-find-sub" onclick="ctxFindSubstation()">
     ⚡ 近くの変電所を探す
+  </div>
+  <div class="ctx-item" id="ctx-streetview" onclick="ctxStreetView()">
+    🛣️ Googleストリートビューを開く
   </div>
 </div>
 
@@ -3111,10 +3121,15 @@ const ctxMenu = document.getElementById('map-ctx-menu');
 map.on('contextmenu', function(e) {
   L.DomEvent.preventDefault(e.originalEvent);
   __ctxLatLng = e.latlng;
+  // 座標を表示（コピー用）
+  const coordEl = document.getElementById('ctx-coord-text');
+  if (coordEl) coordEl.textContent = `${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
+  const iconEl = document.getElementById('ctx-copy-icon');
+  if (iconEl) iconEl.textContent = '📋';
   const x = e.originalEvent.clientX;
   const y = e.originalEvent.clientY;
   // 画面端補正
-  const menuW = 190, menuH = 90;
+  const menuW = 210, menuH = 168;
   ctxMenu.style.left = (x + menuW > window.innerWidth ? x - menuW : x) + 'px';
   ctxMenu.style.top  = (y + menuH > window.innerHeight ? y - menuH : y) + 'px';
   ctxMenu.style.display = 'block';
@@ -3136,6 +3151,37 @@ function ctxFindSubstation() {
   ctxMenu.style.display = 'none';
   if (!__ctxLatLng) return;
   pinFindSub(__ctxLatLng.lat, __ctxLatLng.lng);
+}
+
+// 座標をコピー（メニューは閉じずにフィードバック表示）
+function ctxCopyCoord(ev) {
+  if (ev) ev.stopPropagation();
+  if (!__ctxLatLng) return;
+  const text = `${__ctxLatLng.lat.toFixed(6)}, ${__ctxLatLng.lng.toFixed(6)}`;
+  const icon = document.getElementById('ctx-copy-icon');
+  const done = () => { if (icon) { icon.textContent = '✅'; setTimeout(() => { icon.textContent = '📋'; }, 1200); } };
+  const fallback = () => {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); done(); } catch (e) {}
+    document.body.removeChild(ta);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(fallback);
+  } else {
+    fallback();
+  }
+}
+
+// Googleストリートビューを別ウィンドウで開く
+function ctxStreetView() {
+  ctxMenu.style.display = 'none';
+  if (!__ctxLatLng) return;
+  const lat = __ctxLatLng.lat, lng = __ctxLatLng.lng;
+  // 最寄りのパノラマに自動スナップ（viewpointパラメータ）
+  const url = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`;
+  window.open(url, '_blank', 'noopener');
 }
 
 // 初期描画
