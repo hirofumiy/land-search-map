@@ -268,6 +268,13 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
 .hazard-switch input:checked + .slider { background: #3b82f6; }
 .hazard-switch input:checked + .slider::before { transform: translateX(14px); }
 
+/* Hazard legend chips */
+.lg-chip { display:inline-flex; align-items:center; gap:3px; font-size:9px; color:#cbd5e1; white-space:nowrap; }
+.lg-sw { width:11px; height:11px; border-radius:2px; flex-shrink:0; border:1px solid rgba(255,255,255,0.28); }
+/* Popup hazard block */
+.popup-hazard { margin-top:6px; padding-top:6px; border-top:1px solid #e2e8f0; }
+.popup-hazard .ph-row { font-size:11.5px; line-height:1.55; }
+
 /* Powerline legend */
 .powerline-hint {
   font-size: 10px; color: #64748b; margin-top: 6px; padding: 6px 8px;
@@ -497,6 +504,45 @@ body.rotate-bypassed #app { visibility: visible !important; }
 
         <div class="section-title" style="margin-top:10px;">ハザードマップ</div>
         <div style="font-size:9.5px; color:#64748b; margin-bottom:6px; line-height:1.5;">※ ハザード指定区域のみ色が表示されます。指定外エリアは透明です。河川・海岸付近で確認してください。</div>
+
+        <!-- 凡例（重ねるハザードマップ準拠・実タイル色） -->
+        <div id="hazard-legend-box" style="background:#0f172a;border:1px solid #1e293b;border-radius:6px;margin-bottom:6px;overflow:hidden;">
+          <div id="hazard-legend-head" onclick="toggleHazardLegend()" style="display:flex;align-items:center;justify-content:space-between;padding:6px 9px;cursor:pointer;user-select:none;">
+            <span style="font-size:11px;font-weight:700;color:#cbd5e1;">📖 凡例</span>
+            <span id="hazard-legend-arrow" style="font-size:10px;color:#64748b;">▼</span>
+          </div>
+          <div id="hazard-legend-body" style="padding:0 9px 8px;">
+            <!-- 洪水・津波（浸水深） -->
+            <div style="font-size:9.5px;color:#93c5fd;font-weight:600;margin:2px 0 4px;">洪水・津波浸水想定（浸水深）</div>
+            <div style="display:flex;flex-wrap:wrap;gap:3px 7px;margin-bottom:7px;">
+              <span class="lg-chip"><span class="lg-sw" style="background:rgb(255,255,179);"></span>0.5m未満</span>
+              <span class="lg-chip"><span class="lg-sw" style="background:rgb(255,216,192);"></span>0.5〜3m</span>
+              <span class="lg-chip"><span class="lg-sw" style="background:rgb(255,183,183);"></span>3〜5m</span>
+              <span class="lg-chip"><span class="lg-sw" style="background:rgb(255,145,145);"></span>5〜10m</span>
+              <span class="lg-chip"><span class="lg-sw" style="background:rgb(242,133,201);"></span>10〜20m</span>
+              <span class="lg-chip"><span class="lg-sw" style="background:rgb(220,122,220);"></span>20m以上</span>
+            </div>
+            <!-- 土砂災害（警戒区域/特別警戒区域） -->
+            <div style="font-size:9.5px;color:#fca5a5;font-weight:600;margin:2px 0 4px;">土砂災害（警戒区域 / 特別警戒区域）</div>
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-size:9px;color:#94a3b8;width:52px;flex-shrink:0;">土石流</span>
+                <span class="lg-chip"><span class="lg-sw" style="background:rgb(230,200,50);"></span>警戒</span>
+                <span class="lg-chip"><span class="lg-sw" style="background:rgb(165,0,33);"></span>特別警戒</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-size:9px;color:#94a3b8;width:52px;flex-shrink:0;">急傾斜地</span>
+                <span class="lg-chip"><span class="lg-sw" style="background:rgb(250,230,0);"></span>警戒</span>
+                <span class="lg-chip"><span class="lg-sw" style="background:rgb(250,40,0);"></span>特別警戒</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-size:9px;color:#94a3b8;width:52px;flex-shrink:0;">地すべり</span>
+                <span class="lg-chip"><span class="lg-sw" style="background:rgb(255,153,0);"></span>警戒区域</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- 一括トグル -->
         <div id="hazard-all-row" onclick="toggleAllHazards()" style="display:flex;align-items:center;justify-content:space-between;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:7px 10px;margin-bottom:6px;cursor:pointer;user-select:none;">
           <span style="font-size:12px;font-weight:700;color:#e2e8f0;">🗂️ ハザード 一括 ON / OFF</span>
@@ -506,27 +552,27 @@ body.rotate-bypassed #app { visibility: visible !important; }
         </div>
         <div class="hazard-controls">
           <div class="hazard-toggle" data-hazard="flood">
-            <div class="hazard-dot" style="background:#4fc3f7;"></div>
+            <div class="hazard-dot" style="background:rgb(255,145,145);"></div>
             <span style="flex:1;">洪水浸水想定</span>
             <label class="hazard-switch"><input type="checkbox" data-hazard="flood"><span class="slider"></span></label>
           </div>
           <div class="hazard-toggle" data-hazard="sediment">
-            <div class="hazard-dot" style="background:#ef6c00;"></div>
+            <div class="hazard-dot" style="background:rgb(230,200,50);"></div>
             <span style="flex:1;">土石流危険渓流</span>
             <label class="hazard-switch"><input type="checkbox" data-hazard="sediment"><span class="slider"></span></label>
           </div>
           <div class="hazard-toggle" data-hazard="landslide">
-            <div class="hazard-dot" style="background:#d32f2f;"></div>
+            <div class="hazard-dot" style="background:rgb(250,230,0);"></div>
             <span style="flex:1;">急傾斜地崩壊</span>
             <label class="hazard-switch"><input type="checkbox" data-hazard="landslide"><span class="slider"></span></label>
           </div>
           <div class="hazard-toggle" data-hazard="jisuberi">
-            <div class="hazard-dot" style="background:#8d6e63;"></div>
+            <div class="hazard-dot" style="background:rgb(255,153,0);"></div>
             <span style="flex:1;">地すべり危険箇所</span>
             <label class="hazard-switch"><input type="checkbox" data-hazard="jisuberi"><span class="slider"></span></label>
           </div>
           <div class="hazard-toggle" data-hazard="tsunami">
-            <div class="hazard-dot" style="background:#7e57c2;"></div>
+            <div class="hazard-dot" style="background:rgb(242,133,201);"></div>
             <span style="flex:1;">津波浸水想定</span>
             <label class="hazard-switch"><input type="checkbox" data-hazard="tsunami"><span class="slider"></span></label>
           </div>
@@ -1823,6 +1869,7 @@ function applyFilters() {
 // ===== Search =====
 // ── 住所検索ピン ──
 let searchPin = null;
+let searchPinSeq = 0;
 const searchPinIcon = L.divIcon({
   className: '',
   html: `<div style="
@@ -1841,10 +1888,24 @@ const searchPinIcon = L.divIcon({
 
 function placeSearchPin(lat, lng, label) {
   if (searchPin) map.removeLayer(searchPin);
+  const pinId = ++searchPinSeq;
+  const buildHtml = (hazardBlock) =>
+    `<div class="popup-title">📍 ${label}</div>` +
+    `<div class="popup-row" style="font-size:11px;color:#6b7280;">${lat.toFixed(6)}, ${lng.toFixed(6)}</div>` +
+    `<div class="popup-hazard">${hazardBlock}</div>`;
   searchPin = L.marker([lat, lng], { icon: searchPinIcon, zIndexOffset: 1000 })
-    .bindPopup(`<div class="popup-title">📍 ${label}</div><div class="popup-row" style="font-size:11px;color:#6b7280;">${lat.toFixed(6)}, ${lng.toFixed(6)}</div>`, { autoClose: false })
+    .bindPopup(buildHtml('<div style="font-size:11px;color:#94a3b8;">ハザード判定中…</div>'), { autoClose: false, minWidth: 180 })
     .addTo(map)
     .openPopup();
+  const targetPin = searchPin;
+  getHazardInfoAtPoint(lat, lng).then((info) => {
+    // 判定中に別地点が指定された場合は破棄
+    if (pinId !== searchPinSeq || !targetPin) return;
+    targetPin.setPopupContent(buildHtml(renderHazardRows(info)));
+  }).catch(() => {
+    if (pinId !== searchPinSeq || !targetPin) return;
+    targetPin.setPopupContent(buildHtml('<div style="font-size:11px;color:#94a3b8;">ハザード情報を取得できませんでした</div>'));
+  });
 }
 
 function searchAddress() {
@@ -1908,6 +1969,16 @@ map.on('click', function(e) {
 
 // ===== Hazard Toggle (ON/OFF switches) =====
 const HAZARD_KEYS = ['flood', 'sediment', 'landslide', 'jisuberi', 'tsunami'];
+
+// 凡例の開閉
+function toggleHazardLegend() {
+  const body = document.getElementById('hazard-legend-body');
+  const arrow = document.getElementById('hazard-legend-arrow');
+  if (!body) return;
+  const hidden = body.style.display === 'none';
+  body.style.display = hidden ? 'block' : 'none';
+  if (arrow) arrow.textContent = hidden ? '▼' : '▶';
+}
 
 function syncHazardAllBtn() {
   const allCb = document.getElementById('hazard-all-cb');
@@ -2054,18 +2125,105 @@ function getTilePixel(url, px, py) {
   });
 }
 
-// 洪水深さ判定（GSI disaportal 色テーブル）
-// 0.5m未満:薄青 0.5-3m:中青(OK) 3m+:濃青(NG)
+// ===== ハザード判定カラーパレット（実タイル色から確定・2026/6・重ねるハザードマップ準拠）=====
+// 浸水深スケール（洪水・津波 共通）。indexが大きいほど深い＝危険。
+const DEPTH_PALETTE = [
+  { rgb: [255, 255, 179], label: '0.5m未満', depth: 0.1 },
+  { rgb: [255, 216, 192], label: '0.5〜3m',  depth: 1.5 },
+  { rgb: [255, 183, 183], label: '3〜5m',    depth: 4   },
+  { rgb: [255, 145, 145], label: '5〜10m',   depth: 7   },
+  { rgb: [242, 133, 201], label: '10〜20m',  depth: 15  },
+  { rgb: [220, 122, 220], label: '20m以上',  depth: 25  },
+];
+// 土砂災害系（警戒区域 / 特別警戒区域）。indexが大きいほど危険。
+const ZONE_PALETTES = {
+  sediment:  [ { rgb: [230, 200, 50], label: '警戒区域' }, { rgb: [165, 0, 33], label: '特別警戒区域' } ],
+  landslide: [ { rgb: [250, 230, 0], label: '警戒区域' }, { rgb: [250, 40, 0], label: '特別警戒区域' } ],
+  jisuberi:  [ { rgb: [255, 153, 0], label: '警戒区域' }, { rgb: [200, 0, 0],  label: '特別警戒区域' } ],
+};
+const HAZARD_NAME_JP = { flood: '洪水', sediment: '土石流', landslide: '急傾斜地', jisuberi: '地すべり', tsunami: '津波' };
+
+// 最近傍カラーマッチ（しきい値内のみ採用）
+function nearestPaletteEntry(r, g, b, palette, thresh) {
+  let best = null, bestD = Infinity, bestIdx = -1;
+  for (let i = 0; i < palette.length; i++) {
+    const p = palette[i];
+    const dr = r - p.rgb[0], dg = g - p.rgb[1], db = b - p.rgb[2];
+    const d = dr * dr + dg * dg + db * db;
+    if (d < bestD) { bestD = d; best = p; bestIdx = i; }
+  }
+  return bestD <= thresh ? { entry: best, idx: bestIdx } : null;
+}
+
+// タイル全体のImageDataを取得（URL単位でキャッシュ）
+const _hazardTileImgCache = {};
+function getTileImageData(url) {
+  if (_hazardTileImgCache[url] !== undefined) return Promise.resolve(_hazardTileImgCache[url]);
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = 256; canvas.height = 256;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, 256, 256);
+        const d = ctx.getImageData(0, 0, 256, 256);
+        _hazardTileImgCache[url] = d; resolve(d);
+      } catch (e) { _hazardTileImgCache[url] = null; resolve(null); }
+    };
+    img.onerror = () => { _hazardTileImgCache[url] = null; resolve(null); };
+    img.src = url;
+  });
+}
+
+// 指定座標の5ハザードを判定して { flood:'なし'|ラベル, ... } を返す
+// z14固定: 津波レイヤー(04_tsunami_newlegend)がz15以上はタイル未提供のため、
+// 全レイヤーが揃うz14で統一（既存の物件除外フィルターと同じズーム）
+async function getHazardInfoAtPoint(lat, lng) {
+  const z = 14;
+  const tile = latLngToTile(lat, lng, z);
+  const result = {};
+  await Promise.all(HAZARD_KEYS.map(async (type) => {
+    const url = `${HAZARD_PROXY}/${type}/${z}/${tile.x}/${tile.y}.png`;
+    const data = await getTileImageData(url);
+    if (!data) { result[type] = 'なし'; return; }
+    const isDepth = (type === 'flood' || type === 'tsunami');
+    const palette = isDepth ? DEPTH_PALETTE : ZONE_PALETTES[type];
+    let bestIdx = -1, bestLabel = null;
+    // 3×3近傍をサンプリングし、最も危険度の高い区分を採用（細い区域の取りこぼし防止）
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) {
+        const x = Math.min(255, Math.max(0, tile.px + dx));
+        const y = Math.min(255, Math.max(0, tile.py + dy));
+        const i = (y * 256 + x) * 4;
+        if (data.data[i + 3] < 30) continue; // 透明
+        const m = nearestPaletteEntry(data.data[i], data.data[i + 1], data.data[i + 2], palette, 2400);
+        if (m && m.idx > bestIdx) { bestIdx = m.idx; bestLabel = m.entry.label; }
+      }
+    }
+    result[type] = bestLabel || 'なし';
+  }));
+  return result;
+}
+
+// ポップアップ用ハザード行HTML
+function renderHazardRows(info) {
+  const rows = HAZARD_KEYS.map((k) => {
+    const v = info[k];
+    const danger = v && v !== 'なし';
+    const color = danger ? '#dc2626' : '#64748b';
+    const weight = danger ? '700' : '400';
+    return `<div class="ph-row" style="color:${color};font-weight:${weight};">・${HAZARD_NAME_JP[k]}：${v}</div>`;
+  }).join('');
+  return rows;
+}
+
+// 洪水深さ判定（浸水深カラースケールから数値化。ハザード除外フィルター用）
 function floodDepthFromPixel(r, g, b, a) {
   if (a < 10) return 0; // 透明=安全
-  // 深い洪水（3m超）: 濃い青系 r<100, b>120, g<140
-  if (r < 120 && b > 100 && g < 160 && b > g) {
-    const darkness = (255 - r + 255 - g) / 2;
-    if (darkness > 130) return 5;  // 5m+
-    if (darkness > 100) return 3;  // 3-5m
-    return 1.5; // 0.5-3m
-  }
-  return 0.1; // 0.5m未満
+  const m = nearestPaletteEntry(r, g, b, DEPTH_PALETTE, 2400);
+  return m ? m.entry.depth : 0;
 }
 
 async function checkPropertyHazard(lat, lng) {
