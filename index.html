@@ -1423,6 +1423,59 @@ map.on('moveend', function() {
   }
 });
 
+// ===== 公図タイル探索（z16→15→14フォールバック）=====
+// 登記所備付地図PMTilesは地域ごとに格納ズームが異なる（都心部はz14、地方はz16等）。
+// z16固定だと取りこぼすため、データのある最深ズームのタイルを探す。
+// 戻り値: { z, tileX, tileY, extent, px, py, fudeLayer } または null（未整備）
+async function findCadastralTile(targetLat, targetLng) {
+  const extent = 4096;
+  for (const z of [16, 15, 14]) {
+    const n = Math.pow(2, z);
+    const worldX = (targetLng + 180) / 360;
+    const worldY = (1 - Math.log(Math.tan(targetLat * Math.PI / 180) + 1 / Math.cos(targetLat * Math.PI / 180)) / Math.PI) / 2;
+    const tileX = Math.floor(worldX * n);
+    const tileY = Math.floor(worldY * n);
+    let result;
+    try {
+      result = await fetchTileWithRetry(z, tileX, tileY);
+    } catch (e) { continue; }
+    if (!result || !result.data) continue; // このズームにタイル無し→次へ
+    const vt = new VectorTile(new Pbf(new Uint8Array(result.data)));
+    const fudeLayer = vt.layers['fude'];
+    if (!fudeLayer || fudeLayer.length === 0) continue;
+    return {
+      z, tileX, tileY, extent,
+      px: (worldX * n - tileX) * extent,
+      py: (worldY * n - tileY) * extent,
+      fudeLayer,
+    };
+  }
+  return null;
+}
+
+// ===== 公図カバレッジ判定（右クリックメニュー用）=====
+// 戻り値: 'covered_parcel'（筆あり）/ 'covered_gap'（整備エリア内・筆界外）/
+//         'unmapped'（未整備の可能性）/ 'unknown'（判定不可）
+async function checkCadastralCoverage(lat, lng) {
+  if (typeof Pbf === 'undefined' || typeof VectorTile === 'undefined') return 'unknown';
+  const { dLat, dLng } = meterToLngLat(cadastralOffset.x, cadastralOffset.y, lat);
+  try {
+    const t = await findCadastralTile(lat - dLat, lng - dLng);
+    if (!t) return 'unmapped'; // どのズームにもタイル無し＝未整備
+    for (let i = 0; i < t.fudeLayer.length; i++) {
+      const feat = t.fudeLayer.feature(i);
+      if (feat.type !== 3) continue;
+      const geom = feat.loadGeometry();
+      for (let r = 0; r < geom.length; r++) {
+        if (pointInRing(t.px, t.py, geom[r])) return 'covered_parcel';
+      }
+    }
+    return 'covered_gap'; // 周辺に筆はあるが、この地点は筆界外（道路・水路・隙間等）
+  } catch (e) {
+    return 'unknown';
+  }
+}
+
 // ===== 地番クリック検出 =====
 map.on('click', async function(e) {
   if (!cadastralActive || map.getZoom() < 14) return;
@@ -1436,22 +1489,10 @@ map.on('click', async function(e) {
   const targetLat = lat - dLat;
   const targetLng = lng - dLng;
 
-  const z = 16;
-  const n = Math.pow(2, z);
-  const worldX = (targetLng + 180) / 360;
-  const worldY = (1 - Math.log(Math.tan(targetLat * Math.PI / 180) + 1 / Math.cos(targetLat * Math.PI / 180)) / Math.PI) / 2;
-  const tileX = Math.floor(worldX * n);
-  const tileY = Math.floor(worldY * n);
-  const extent = 4096;
-  const px = (worldX * n - tileX) * extent;
-  const py = (worldY * n - tileY) * extent;
-
   try {
-    const result = await fetchTileWithRetry(z, tileX, tileY);
-    if (!result || !result.data) return;
-    const vt = new VectorTile(new Pbf(new Uint8Array(result.data)));
-    const fudeLayer = vt.layers['fude'];
-    if (!fudeLayer) return;
+    const t = await findCadastralTile(targetLat, targetLng);
+    if (!t) return;
+    const { z, tileX, tileY, extent, px, py, fudeLayer } = t;
 
     let matched = null;
     let matchedGeom = null;
@@ -2851,6 +2892,11 @@ async function doLogout() {
   <div class="ctx-item" id="ctx-streetview" onclick="ctxStreetView()">
     🛣️ Googleストリートビューを開く
   </div>
+  <div id="ctx-cadastral-status" style="
+    padding:8px 14px; font-size:11px; line-height:1.5;
+    border-top:1px solid #334155; color:#94a3b8; background:#0f172a;">
+    公図データを確認中…
+  </div>
 </div>
 
 <!-- サービス依頼モーダル -->
@@ -3126,14 +3172,46 @@ map.on('contextmenu', function(e) {
   if (coordEl) coordEl.textContent = `${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
   const iconEl = document.getElementById('ctx-copy-icon');
   if (iconEl) iconEl.textContent = '📋';
+  // 公図カバレッジ判定（非同期）
+  updateCadastralStatus(e.latlng.lat, e.latlng.lng);
   const x = e.originalEvent.clientX;
   const y = e.originalEvent.clientY;
   // 画面端補正
-  const menuW = 210, menuH = 168;
+  const menuW = 230, menuH = 230;
   ctxMenu.style.left = (x + menuW > window.innerWidth ? x - menuW : x) + 'px';
   ctxMenu.style.top  = (y + menuH > window.innerHeight ? y - menuH : y) + 'px';
   ctxMenu.style.display = 'block';
 });
+
+// 公図ステータス表示を更新（右クリックのたびに呼ぶ）
+let __cadastralStatusSeq = 0;
+async function updateCadastralStatus(lat, lng) {
+  const el = document.getElementById('ctx-cadastral-status');
+  if (!el) return;
+  const seq = ++__cadastralStatusSeq;
+  el.style.color = '#94a3b8';
+  el.style.background = '#0f172a';
+  el.innerHTML = '公図データを確認中…';
+  const state = await checkCadastralCoverage(lat, lng);
+  if (seq !== __cadastralStatusSeq) return; // 別地点が右クリックされたら破棄
+  if (state === 'covered_parcel') {
+    el.style.color = '#86efac';
+    el.style.background = '#0f172a';
+    el.innerHTML = '🟢 公図あり（登記所備付地図）<br><span style="color:#64748b;">公図ONで地番を確認できます</span>';
+  } else if (state === 'covered_gap') {
+    el.style.color = '#86efac';
+    el.style.background = '#0f172a';
+    el.innerHTML = '🟢 公図整備エリア内<br><span style="color:#64748b;">この地点は筆界外（道路・水路等）です</span>';
+  } else if (state === 'unmapped') {
+    el.style.color = '#fcd34d';
+    el.style.background = 'rgba(251,191,36,0.10)';
+    el.innerHTML = '⚠️ 公図データ未整備の可能性<br><span style="color:#cbd5e1;">この付近は法務省の登記所備付地図に含まれていません。正確な区画は現地で<b>公図の取得</b>が必要です。</span>';
+  } else {
+    el.style.color = '#94a3b8';
+    el.style.background = '#0f172a';
+    el.innerHTML = '公図データを判定できませんでした<br><span style="color:#64748b;">時間をおいて再度お試しください</span>';
+  }
+}
 
 // メニューを閉じる
 map.on('click', () => { ctxMenu.style.display = 'none'; });
