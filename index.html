@@ -304,6 +304,7 @@ body { font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif; overflow:
   padding: 7px 10px; font-size: 11px; color: #cbd5e1;
 }
 .pin-card-addr { font-weight: 600; color: #f1f5f9; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pin-card-sub { color: #94a3b8; font-size: 10px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pin-card-meta { color: #64748b; font-size: 10px; }
 .pin-card-btns { display: flex; gap: 4px; margin-top: 5px; }
 .pin-btn {
@@ -3054,17 +3055,23 @@ function renderPinList() {
     return;
   }
   empty.style.display = 'none';
-  list.innerHTML = pins.map(p => `
+  list.innerHTML = pins.map(p => {
+    const title = (p.label && p.label.length) ? p.label : p.address;
+    const showAddr = (p.label && p.label.length) ? `<div class="pin-card-sub" title="${p.address}">${p.address}</div>` : '';
+    return `
     <div class="pin-card">
-      <div class="pin-card-addr" title="${p.address}">${p.address}</div>
+      <div class="pin-card-addr" title="${title}">${title}</div>
+      ${showAddr}
       <div class="pin-card-meta">${p.lat.toFixed(5)}, ${p.lng.toFixed(5)}</div>
       <div class="pin-card-btns">
         <button class="pin-btn" onclick="pinJump(${p.lat},${p.lng})">🗺 移動</button>
+        <button class="pin-btn" onclick="pinRename('${p.id}')">✏️ 名前</button>
         <button class="pin-btn" onclick="pinFindSub(${p.lat},${p.lng})">⚡ 変電所</button>
         <button class="pin-btn danger" onclick="pinDelete('${p.id}')">✕ 削除</button>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 // ── ピンを地図移動 ──
@@ -3099,14 +3106,32 @@ async function savePin(lat, lng) {
     alert('ピンメモは最大10件です。古いピンを削除してから追加してください。');
     return;
   }
+  // 保存名（管理番号など）を入力。キャンセルで保存中止、空欄なら住所を使用。
+  const label = prompt('保存名（管理番号など）を入力してください。\n空欄の場合は住所が入ります。', '');
+  if (label === null) return; // キャンセル
   const address = await reverseGeocode(lat, lng);
-  pins.push({ id: String(Date.now()), lat, lng, address });
+  const name = label.trim();
+  pins.push({ id: String(Date.now()), lat, lng, label: name, address });
   savePins(pins);
   renderPinList();
   // 一時マーカー表示
+  const title = name || address;
   L.popup().setLatLng([lat, lng])
-    .setContent(`<div class="popup-title">📍 保存しました</div><div class="popup-row">${address}</div>`)
+    .setContent(`<div class="popup-title">📍 保存しました</div><div class="popup-row">${title}</div>${name ? `<div class="popup-row" style="font-size:10px;color:#6b7280;">${address}</div>` : ''}`)
     .openOn(map);
+}
+
+// ── ピン名（管理番号）の変更 ──
+function pinRename(id) {
+  const pins = loadPins();
+  const pin = pins.find(p => p.id === id);
+  if (!pin) return;
+  const current = pin.label || '';
+  const next = prompt('保存名（管理番号など）を入力してください。\n空欄の場合は住所を表示します。', current);
+  if (next === null) return; // キャンセル
+  pin.label = next.trim();
+  savePins(pins);
+  renderPinList();
 }
 
 // ── 最寄変電所を探す ──
