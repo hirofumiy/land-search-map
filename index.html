@@ -491,7 +491,7 @@ body.rotate-bypassed #app { visibility: visible !important; }
       <div class="section">
         <div class="section-title">住所検索</div>
         <div class="search-row">
-          <input type="text" id="search-input" class="search-input" placeholder="住所・地名を入力..." />
+          <input type="text" id="search-input" class="search-input" placeholder="住所・地名・座標・GoogleマップURL" />
           <button id="search-btn" class="btn-primary">検索</button>
         </div>
       </div>
@@ -1950,26 +1950,89 @@ function placeSearchPin(lat, lng, label) {
   });
 }
 
-function searchAddress() {
+// 文字列から座標を抽出（精度の高い順）。返り値: {lat,lng} or null
+function extractCoordsFromText(text) {
+  const dec = (() => { try { return decodeURIComponent(text); } catch (e) { return text; } })();
+  const src = dec.replace(/%2C/gi, ','); // エンコードされたカンマを正規化
+  const patterns = [
+    /!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/,        // 地点マーカーの実座標（最優先）
+    /@(-?\d+\.\d+),(-?\d+\.\d+)/,            // 地図中心 @lat,lng
+    /[?&](?:q|ll|center|destination|daddr)=(?:loc:)?(-?\d+\.\d+),(-?\d+\.\d+)/, // q= / ll= 等
+    /\/(-?\d+\.\d+),(-?\d+\.\d+)/,           // パス内 /lat,lng
+  ];
+  for (const re of patterns) {
+    const m = src.match(re);
+    if (m) {
+      const lat = parseFloat(m[1]), lng = parseFloat(m[2]);
+      if (!isNaN(lat) && !isNaN(lng)) return { lat, lng };
+    }
+  }
+  return null;
+}
+
+// Google Maps URLから座標を抽出。返り値: {lat,lng} / {short:true} / {lat:null} / null
+function parseGoogleMapsUrl(text) {
+  if (!/(google\.[a-z.]+\/maps|maps\.google|maps\.app\.goo\.gl|goo\.gl\/maps|g\.co\/)/i.test(text)) {
+    return null; // Google Maps URLではない
+  }
+  const coords = extractCoordsFromText(text);
+  if (coords) return coords;
+  // 座標が含まれない短縮URL → サーバー展開が必要
+  if (/(maps\.app\.goo\.gl|goo\.gl\/maps|g\.co\/)/i.test(text)) {
+    return { short: true };
+  }
+  return { lat: null }; // Maps URLだが座標を抽出できず
+}
+
+// 短縮URLをプロキシ経由で展開して座標を取得
+async function resolveShortMapsUrl(url) {
+  try {
+    const res = await fetch(`${HAZARD_PROXY}/resolve?u=${encodeURIComponent(url)}`).then(r => r.json());
+    if (res && res.url) return extractCoordsFromText(res.url);
+  } catch (e) {}
+  return null;
+}
+
+function applyMapPoint(lat, lng, label) {
+  if (lat >= 20 && lat <= 50 && lng >= 120 && lng <= 155) {
+    map.setView([lat, lng], 16);
+    placeSearchPin(lat, lng, label);
+    return true;
+  }
+  alert('座標が日本の範囲外です。');
+  return false;
+}
+
+async function searchAddress() {
   const q = document.getElementById('search-input').value.trim();
   if (!q) return;
 
-  // 座標入力チェック: "34.123456,135.123456" または "34.123456 135.123456"
-  const coordMatch = q.match(/^\s*(-?\d+\.?\d*)\s*[,\s]\s*(-?\d+\.?\d*)\s*$/);
-  if (coordMatch) {
-    const lat = parseFloat(coordMatch[1]);
-    const lng = parseFloat(coordMatch[2]);
-    if (lat >= 20 && lat <= 50 && lng >= 120 && lng <= 155) {
-      map.setView([lat, lng], 16);
-      placeSearchPin(lat, lng, '指定座標');
-      return;
-    } else {
-      alert('座標が日本の範囲外です。');
+  // ① Google Maps URL チェック
+  const gm = parseGoogleMapsUrl(q);
+  if (gm) {
+    if (gm.lat != null) { applyMapPoint(gm.lat, gm.lng, 'GoogleMap地点'); return; }
+    if (gm.short) {
+      // 短縮URL → プロキシで展開
+      const btn = document.getElementById('search-btn');
+      const orig = btn.textContent; btn.textContent = '展開中…'; btn.disabled = true;
+      const resolved = await resolveShortMapsUrl(q);
+      btn.textContent = orig; btn.disabled = false;
+      if (resolved && resolved.lat != null) { applyMapPoint(resolved.lat, resolved.lng, 'GoogleMap地点'); return; }
+      alert('短縮URLの展開に失敗しました。Google Mapで地点を開き、URL内の座標（@35.12,136.45 など）を含むURLを貼り付けてください。');
       return;
     }
+    alert('このGoogle Maps URLから座標を読み取れませんでした。地点を開いた状態のURL（@緯度,経度 を含むもの）を貼り付けてください。');
+    return;
   }
 
-  // 通常の住所検索
+  // ② 座標入力チェック: "34.123456,135.123456" または "34.123456 135.123456"
+  const coordMatch = q.match(/^\s*(-?\d+\.?\d*)\s*[,\s]\s*(-?\d+\.?\d*)\s*$/);
+  if (coordMatch) {
+    applyMapPoint(parseFloat(coordMatch[1]), parseFloat(coordMatch[2]), '指定座標');
+    return;
+  }
+
+  // ③ 通常の住所検索
   fetch(`https://msearch.gsi.go.jp/address-search/AddressSearch?q=${encodeURIComponent(q)}`)
     .then(r => r.json())
     .then(data => {

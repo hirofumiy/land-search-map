@@ -11,14 +11,57 @@
 const TYPE_MAP = {
   flood:     '01_flood_l2_shinsuishin_data',
   sediment:  '05_dosekiryukeikaikuiki',
-  landslide: '05_kyukeishachihousaigai',
+  landslide: '05_kyukeishakeikaikuiki',   // 旧: 05_kyukeishachihousaigai（危険箇所）→ 新: 警戒区域（重ねるハザードマップ準拠）
   jisuberi:  '05_jisuberikeikaikuiki',
   tsunami:   '04_tsunami_newlegend_data',
 };
 
+// Google Maps 短縮URLの展開を許可するホスト（オープンリダイレクト/SSRF防止）
+const RESOLVE_ALLOWED_HOSTS = ['maps.app.goo.gl', 'goo.gl', 'g.co', 'maps.google.com'];
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    // ── /resolve?u=<短縮URL> : リダイレクト先の最終URLを返す ──
+    if (url.pathname === '/resolve') {
+      const cors = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+      const target = url.searchParams.get('u');
+      if (!target) return new Response(JSON.stringify({ error: 'missing u' }), { status: 400, headers: cors });
+      let host;
+      try { host = new URL(target).hostname; } catch { return new Response(JSON.stringify({ error: 'bad url' }), { status: 400, headers: cors }); }
+      if (!RESOLVE_ALLOWED_HOSTS.some(h => host === h || host.endsWith('.' + h))) {
+        return new Response(JSON.stringify({ error: 'host not allowed' }), { status: 403, headers: cors });
+      }
+      const reqHeaders = {
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+        'Accept-Language': 'ja,en;q=0.8',
+      };
+      try {
+        // ① まず最初のリダイレクト先（Locationヘッダ）だけ読む。
+        //    最終のmapsページを取得しないことでGoogleのbot検知(/sorry)を回避。
+        const r1 = await fetch(target, { redirect: 'manual', headers: reqHeaders });
+        let loc = r1.headers.get('Location');
+        if (loc) {
+          try { loc = new URL(loc, target).href; } catch (e) {}
+          if (!/\/sorry\/|consent\.google|accounts\.google/i.test(loc)) {
+            return new Response(JSON.stringify({ url: loc }), { status: 200, headers: cors });
+          }
+        }
+        // ② Locationが無い/bot検知 → bodyからmaps URLか座標を探す（Firebase Dynamic Links対策）
+        const r2 = (r1.status >= 200 && r1.status < 300) ? r1
+                 : await fetch(target, { redirect: 'follow', headers: reqHeaders });
+        const body = await r2.text();
+        const mUrl = body.match(/https?:\/\/(?:www\.)?google\.[a-z.]+\/maps\/[^"'<>\\\s]+/i);
+        if (mUrl) return new Response(JSON.stringify({ url: mUrl[0] }), { status: 200, headers: cors });
+        const mAt = body.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) || body.match(/[?&]center=(-?\d+\.\d+)(?:%2C|,)(-?\d+\.\d+)/i);
+        if (mAt) return new Response(JSON.stringify({ url: `@${mAt[1]},${mAt[2]}` }), { status: 200, headers: cors });
+        return new Response(JSON.stringify({ error: 'no coords' }), { status: 422, headers: cors });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: 'fetch failed' }), { status: 502, headers: cors });
+      }
+    }
+
     const parts = url.pathname.split('/').filter(Boolean); // ['flood','14','14508','6453.png']
 
     if (parts.length !== 4) {
