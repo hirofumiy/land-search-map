@@ -2953,8 +2953,14 @@ async function doLogout() {
   <div class="ctx-item" id="ctx-find-sub" onclick="ctxFindSubstation()">
     ⚡ 近くの変電所を探す
   </div>
+  <div class="ctx-item" id="ctx-show-hazard" onclick="ctxShowHazard()">
+    🌊 ハザードを見る
+  </div>
   <div class="ctx-item" id="ctx-streetview" onclick="ctxStreetView()">
     🛣️ Googleストリートビューを開く
+  </div>
+  <div class="ctx-item" id="ctx-open-gmap" onclick="ctxOpenGoogleMap()">
+    🗺️ GoogleMapで表示する
   </div>
   <div id="ctx-cadastral-status" style="
     padding:8px 14px; font-size:11px; line-height:1.5;
@@ -3127,7 +3133,7 @@ function renderPinList() {
       ${showAddr}
       <div class="pin-card-meta">${p.lat.toFixed(5)}, ${p.lng.toFixed(5)}</div>
       <div class="pin-card-btns">
-        <button class="pin-btn" onclick="pinJump(${p.lat},${p.lng})">🗺 移動</button>
+        <button class="pin-btn" onclick="pinJump('${p.id}')">🗺 移動</button>
         <button class="pin-btn" onclick="pinRename('${p.id}')">✏️ 名前</button>
         <button class="pin-btn" onclick="pinFindSub(${p.lat},${p.lng})">⚡ 変電所</button>
         <button class="pin-btn danger" onclick="pinDelete('${p.id}')">✕ 削除</button>
@@ -3138,8 +3144,13 @@ function renderPinList() {
 }
 
 // ── ピンを地図移動 ──
-function pinJump(lat, lng) {
-  map.setView([lat, lng], Math.max(map.getZoom(), 14));
+function pinJump(id) {
+  const pin = loadPins().find(p => String(p.id) === String(id));
+  if (!pin) return;
+  map.setView([pin.lat, pin.lng], Math.max(map.getZoom(), 15));
+  // 移動先が分かるよう地図上にピンを表示（管理番号または住所をラベルに）
+  const label = (pin.label && pin.label.length) ? pin.label : (pin.address || 'ピンメモ地点');
+  placeSearchPin(pin.lat, pin.lng, label);
 }
 
 // ── ピン削除 ──
@@ -3265,7 +3276,7 @@ map.on('contextmenu', function(e) {
   const x = e.originalEvent.clientX;
   const y = e.originalEvent.clientY;
   // 画面端補正
-  const menuW = 230, menuH = 230;
+  const menuW = 230, menuH = 310;
   ctxMenu.style.left = (x + menuW > window.innerWidth ? x - menuW : x) + 'px';
   ctxMenu.style.top  = (y + menuH > window.innerHeight ? y - menuH : y) + 'px';
   ctxMenu.style.display = 'block';
@@ -3347,6 +3358,37 @@ function ctxStreetView() {
   const lat = __ctxLatLng.lat, lng = __ctxLatLng.lng;
   // 最寄りのパノラマに自動スナップ（viewpointパラメータ）
   const url = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`;
+  window.open(url, '_blank', 'noopener');
+}
+
+// ハザード状況をポップアップに文字で表示
+function ctxShowHazard() {
+  ctxMenu.style.display = 'none';
+  if (!__ctxLatLng) return;
+  const lat = __ctxLatLng.lat, lng = __ctxLatLng.lng;
+  const build = (body) =>
+    `<div class="popup-title">🌊 ハザード状況</div>` +
+    `<div class="popup-row" style="font-size:11px;color:#6b7280;">${lat.toFixed(6)}, ${lng.toFixed(6)}</div>` +
+    `<div class="popup-hazard">${body}</div>`;
+  const popup = L.popup({ minWidth: 190, autoClose: true })
+    .setLatLng([lat, lng])
+    .setContent(build('<div style="font-size:11px;color:#94a3b8;">ハザード判定中…</div>'))
+    .openOn(map);
+  getHazardInfoAtPoint(lat, lng).then((info) => {
+    if (!map.hasLayer(popup) && map._popup !== popup) { /* 既に閉じられていても更新は安全 */ }
+    popup.setContent(build(renderHazardRows(info)));
+  }).catch(() => {
+    popup.setContent(build('<div style="font-size:11px;color:#94a3b8;">ハザード情報を取得できませんでした</div>'));
+  });
+}
+
+// GoogleMapで地点を別ウィンドウ表示（ピン付き）
+function ctxOpenGoogleMap() {
+  ctxMenu.style.display = 'none';
+  if (!__ctxLatLng) return;
+  const lat = __ctxLatLng.lat, lng = __ctxLatLng.lng;
+  // search API: 指定座標にマーカーを立てて表示
+  const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
   window.open(url, '_blank', 'noopener');
 }
 
