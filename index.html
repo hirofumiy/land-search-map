@@ -1737,6 +1737,7 @@ function renderSubstations() {
         <div class="popup-row"><b>増強要否:</b> ${hasCapacityData ? (p.reinforcement_needed || '不明') : 'データなし'}</div>
         <div class="popup-row"><b>ランク:</b> ${rankBadge}</div>
         <div class="popup-row"><b>空き容量更新日:</b> ${hasCapacityData ? updateDateStr : 'データなし'}</div>
+        ${p.upper_grid ? `<div class="popup-row" style="line-height:1.5;"><b>上位系統:</b> <span style="font-size:11px;color:#475569;">${p.upper_grid}</span><br><span style="font-size:9.5px;color:#94a3b8;">※ 各電力会社の予想潮流等一覧表に基づく上位系設備コード</span></div>` : ''}
         ${dataNoteRow}
         <div class="popup-row"><b>備考:</b> ${p.notes || ''}</div>
       `, { maxWidth: 300 })
