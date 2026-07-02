@@ -1694,6 +1694,32 @@ function formatYen(yen) {
 }
 
 // ===== Render Substations =====
+// 上位系統ルート（この変電所→上位変電所→基幹系統）のHTML生成
+function buildUpperRouteHtml(p) {
+  const TYPE_LABEL = { '送電線': '送電線', '変電所': '変電所', '基幹送電線': '基幹', '基幹変電所': '基幹変電所' };
+  if (Array.isArray(p.upper_route) && p.upper_route.length) {
+    const rows = p.upper_route.map(n => {
+      const nm = n.name || `<span style="color:#94a3b8;">${n.code}（未解決）</span>`;
+      const typ = n.type ? `<span style="font-size:9px;color:#64748b;">〔${TYPE_LABEL[n.type] || n.type}〕</span>` : '';
+      let cap = '';
+      if (n.mw != null) {
+        const col = RANK_COLORS[n.rank] || '#64748b';
+        cap = ` <span style="background:${col};color:#fff;font-size:9px;font-weight:700;border-radius:3px;padding:0 4px;">空き${n.mw}MW</span>`;
+      } else if (n.type === '変電所' || n.type === '基幹変電所') {
+        cap = ` <span style="font-size:9px;color:#94a3b8;">空き非公開</span>`;
+      }
+      return `<div style="font-size:11px;color:#334155;padding:1px 0;">↑ ${nm} ${typ}${cap}</div>`;
+    }).join('');
+    return `<div class="popup-row" style="line-height:1.4;"><b>上位系統ルート</b>
+      <div style="margin-top:2px;border-left:2px solid #cbd5e1;padding-left:8px;">${rows}</div>
+      <span style="font-size:9px;color:#94a3b8;">※ 予想潮流等一覧表に基づく系譜。上位設備の空き容量は各社公開範囲（多くは配電用のみ公開）。連系可否は接続検討が必要。</span></div>`;
+  }
+  if (p.upper_grid) {
+    return `<div class="popup-row" style="line-height:1.5;"><b>上位系統:</b> <span style="font-size:11px;color:#475569;">${p.upper_grid}</span><br><span style="font-size:9.5px;color:#94a3b8;">※ 各電力会社の予想潮流等一覧表に基づく上位系設備コード</span></div>`;
+  }
+  return '';
+}
+
 function renderSubstations() {
   substationMarkers.forEach(m => map.removeLayer(m));
   substationMarkers = [];
@@ -1737,7 +1763,7 @@ function renderSubstations() {
         <div class="popup-row"><b>増強要否:</b> ${hasCapacityData ? (p.reinforcement_needed || '不明') : 'データなし'}</div>
         <div class="popup-row"><b>ランク:</b> ${rankBadge}</div>
         <div class="popup-row"><b>空き容量更新日:</b> ${hasCapacityData ? updateDateStr : 'データなし'}</div>
-        ${p.upper_grid ? `<div class="popup-row" style="line-height:1.5;"><b>上位系統:</b> <span style="font-size:11px;color:#475569;">${p.upper_grid}</span><br><span style="font-size:9.5px;color:#94a3b8;">※ 各電力会社の予想潮流等一覧表に基づく上位系設備コード</span></div>` : ''}
+        ${buildUpperRouteHtml(p)}
         ${dataNoteRow}
         <div class="popup-row"><b>備考:</b> ${p.notes || ''}</div>
       `, { maxWidth: 300 })
