@@ -1697,6 +1697,17 @@ function formatYen(yen) {
 // 上位系統ルート（この変電所→上位変電所→基幹系統）のHTML生成
 function buildUpperRouteHtml(p) {
   const TYPE_LABEL = { '送電線': '送電線', '変電所': '変電所', '基幹送電線': '基幹', '基幹変電所': '基幹変電所' };
+  let head = '';
+  // 上位系考慮の空き容量（＝上位系統の混雑を織り込んだ空き）
+  if (p.upper_considered_mw != null) {
+    const uc = p.upper_considered_mw;
+    const rank = uc >= 20 ? 'S' : uc >= 10 ? 'A' : uc >= 5 ? 'B' : uc >= 1 ? 'C' : 'D';
+    const col = RANK_COLORS[rank] || '#64748b';
+    const own = p.available_capacity_mw;
+    const bottleneck = (typeof own === 'number' && uc < own)
+      ? ` <span style="font-size:9.5px;color:#dc2626;font-weight:700;">⚠ 上位系がボトルネック</span>` : '';
+    head = `<div class="popup-row"><b>上位系考慮の空き:</b> <span style="background:${col};color:#fff;font-size:11px;font-weight:700;border-radius:3px;padding:0 5px;">${uc} MW</span>${bottleneck}<br><span style="font-size:9px;color:#94a3b8;">上位系統の混雑を織り込んだ空き容量（公式一覧表より）</span></div>`;
+  }
   if (Array.isArray(p.upper_route) && p.upper_route.length) {
     const rows = p.upper_route.map(n => {
       const nm = n.name || `<span style="color:#94a3b8;">${n.code}（未解決）</span>`;
@@ -1710,14 +1721,14 @@ function buildUpperRouteHtml(p) {
       }
       return `<div style="font-size:11px;color:#334155;padding:1px 0;">↑ ${nm} ${typ}${cap}</div>`;
     }).join('');
-    return `<div class="popup-row" style="line-height:1.4;"><b>上位系統ルート</b>
+    return head + `<div class="popup-row" style="line-height:1.4;"><b>上位系統ルート</b>
       <div style="margin-top:2px;border-left:2px solid #cbd5e1;padding-left:8px;">${rows}</div>
       <span style="font-size:9px;color:#94a3b8;">※ 予想潮流等一覧表に基づく系譜。上位設備の空き容量は各社公開範囲（多くは配電用のみ公開）。連系可否は接続検討が必要。</span></div>`;
   }
   if (p.upper_grid) {
-    return `<div class="popup-row" style="line-height:1.5;"><b>上位系統:</b> <span style="font-size:11px;color:#475569;">${p.upper_grid}</span><br><span style="font-size:9.5px;color:#94a3b8;">※ 各電力会社の予想潮流等一覧表に基づく上位系設備コード</span></div>`;
+    return head + `<div class="popup-row" style="line-height:1.5;"><b>上位系統:</b> <span style="font-size:11px;color:#475569;">${p.upper_grid}</span><br><span style="font-size:9.5px;color:#94a3b8;">※ 各電力会社の予想潮流等一覧表に基づく上位系設備コード</span></div>`;
   }
-  return '';
+  return head;
 }
 
 function renderSubstations() {
