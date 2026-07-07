@@ -503,6 +503,12 @@ body.rotate-bypassed #app { visibility: visible !important; }
         </div>
         <div id="measure-result"></div>
 
+        <!-- 接続検討インテリ（社内限定・既定は非表示） -->
+        <div id="intel-toggle-row" onclick="toggleIntel()" style="display:none;align-items:center;justify-content:space-between;background:#450a0a;border:1px solid #7f1d1d;border-radius:6px;padding:7px 10px;margin-top:10px;cursor:pointer;user-select:none;">
+          <span style="font-size:12px;font-weight:700;color:#fecaca;">🔒 接続検討インテリ（社内限定）</span>
+          <label class="hazard-switch" style="pointer-events:none;"><input type="checkbox" id="intel-cb"><span class="slider"></span></label>
+        </div>
+
         <div class="section-title" style="margin-top:10px;">ハザードマップ</div>
         <div style="font-size:9.5px; color:#64748b; margin-bottom:6px; line-height:1.5;">※ ハザード指定区域のみ色が表示されます。指定外エリアは透明です。河川・海岸付近で確認してください。</div>
 
@@ -1694,10 +1700,100 @@ function formatYen(yen) {
 }
 
 // ===== Render Substations =====
+// ===== 接続検討インテリジェンス（社内限定：hirofumiy@gmail.com のみ表示）=====
+const INTEL_EMAIL = 'hirofumiy@gmail.com';
+let congestionIntel = null;
+let intelBySub = {};      // 変電所名 → [case]
+let intelLayer = null;
+let intelActive = false;
+
+function isPrivilegedUser() {
+  try {
+    const u = window.__currentUser;
+    const email = u && u.session && u.session.user && u.session.user.email;
+    return email === INTEL_EMAIL || window.__INTEL_FORCE === true;
+  } catch (e) { return false; }
+}
+
+const intelIcon = L.divIcon({
+  className: '',
+  html: `<div style="width:26px;height:26px;transform:rotate(45deg);background:linear-gradient(135deg,#dc2626,#991b1b);border:2px solid #fff;border-radius:5px;box-shadow:0 2px 6px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;">
+    <span style="transform:rotate(-45deg);font-size:12px;">💰</span></div>`,
+  iconSize: [26, 26], iconAnchor: [13, 13], popupAnchor: [0, -14],
+});
+
+function intelSevColor(s) { return s === 'high' ? '#dc2626' : s === 'medium' ? '#d97706' : s === 'resolved' ? '#16a34a' : '#64748b'; }
+
+function intelPopupHtml(c) {
+  const ls = c.linked_substation;
+  const lsHtml = ls ? `<div class="popup-row" style="font-size:11px;"><b>紐付変電所:</b> ${ls.name}（${ls.relation}${ls.distance_km ? ' ' + ls.distance_km + 'km' : ''}）` +
+    (ls.available_mw != null ? ` 公開空き${ls.available_mw}MW/${ls.rank || '-'}` : '') +
+    (ls.upper_considered_mw != null ? ` ／上位系考慮${ls.upper_considered_mw}MW` : '') + `</div>` : '';
+  return `<div class="popup-title" style="color:${intelSevColor(c.severity)};">🔒 接続検討: ${c.title}</div>
+    <div class="popup-row" style="font-size:10px;color:#94a3b8;">${c.source} ／ ${c.company} ／ ${c.date}</div>
+    <div class="popup-hazard">
+      <div class="popup-row" style="font-size:11.5px;"><b>逼迫した上位系統:</b> ${c.upstream}</div>
+      <div class="popup-row" style="font-size:11.5px;"><b>想定工期:</b> ${c.work_years}</div>
+      <div class="popup-row" style="font-size:11.5px;color:#dc2626;font-weight:700;"><b>概算工事費:</b> ${c.cost}</div>
+      ${c.charge_limit && c.charge_limit !== '—' ? `<div class="popup-row" style="font-size:11px;"><b>充電制限:</b> ${c.charge_limit}</div>` : ''}
+      <div class="popup-row" style="font-size:11px;"><b>結末:</b> ${c.result}</div>
+      ${lsHtml}
+      <div class="popup-row" style="font-size:9px;color:#94a3b8;">🔒 社内限定情報（接続検討・交渉記録より）</div>
+    </div>`;
+}
+
+function buildIntelLayer() {
+  if (intelLayer) map.removeLayer(intelLayer);
+  intelLayer = L.layerGroup();
+  (congestionIntel.cases || []).forEach(c => {
+    if (c.lat == null) return;
+    L.marker([c.lat, c.lng], { icon: intelIcon, zIndexOffset: 2000 })
+      .bindPopup(intelPopupHtml(c), { maxWidth: 300, minWidth: 220 }).addTo(intelLayer);
+  });
+  if (intelActive) intelLayer.addTo(map);
+}
+
+async function setupIntelLayer() {
+  // 認証確定を最大10秒待つ
+  for (let i = 0; i < 40; i++) {
+    if (window.__currentUser || window.__INTEL_FORCE) break;
+    await new Promise(r => setTimeout(r, 250));
+  }
+  if (!isPrivilegedUser()) return;   // 権限なし＝何もしない（データ取得もしない）
+  try {
+    congestionIntel = await fetch('congestion_intel.json').then(r => r.ok ? r.json() : null);
+  } catch (e) { return; }
+  if (!congestionIntel) return;
+  intelBySub = {};
+  (congestionIntel.cases || []).forEach(c => {
+    if (c.linked_substation && c.linked_substation.name) {
+      (intelBySub[c.linked_substation.name] = intelBySub[c.linked_substation.name] || []).push(c);
+    }
+  });
+  const row = document.getElementById('intel-toggle-row');
+  if (row) row.style.display = '';
+  buildIntelLayer();
+}
+
+function toggleIntel() {
+  intelActive = !intelActive;
+  const cb = document.getElementById('intel-cb');
+  if (cb) cb.checked = intelActive;
+  if (!intelLayer) return;
+  if (intelActive) intelLayer.addTo(map); else map.removeLayer(intelLayer);
+}
+
 // 上位系統ルート（この変電所→上位変電所→基幹系統）のHTML生成
 function buildUpperRouteHtml(p) {
   const TYPE_LABEL = { '送電線': '送電線', '変電所': '変電所', '基幹送電線': '基幹', '基幹変電所': '基幹変電所' };
   let head = '';
+  // 社内限定：この変電所に紐づく接続検討逼迫事例
+  if (isPrivilegedUser() && intelBySub[p.name] && intelBySub[p.name].length) {
+    const items = intelBySub[p.name].map(c =>
+      `<div style="font-size:11px;color:#7f1d1d;padding:1px 0;">・${c.title}：${c.cost}／工期${c.work_years}（${c.result}）</div>`).join('');
+    head += `<div class="popup-row" style="background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:6px 8px;line-height:1.4;">
+      <b style="color:#b91c1c;">🔒 接続検討 逼迫事例（社内限定）</b>${items}</div>`;
+  }
   // 上位系考慮の空き容量（＝上位系統の混雑を織り込んだ空き）
   if (p.upper_considered_mw != null) {
     const uc = p.upper_considered_mw;
@@ -1706,7 +1802,7 @@ function buildUpperRouteHtml(p) {
     const own = p.available_capacity_mw;
     const bottleneck = (typeof own === 'number' && uc < own)
       ? ` <span style="font-size:9.5px;color:#dc2626;font-weight:700;">⚠ 上位系がボトルネック</span>` : '';
-    head = `<div class="popup-row"><b>上位系考慮の空き:</b> <span style="background:${col};color:#fff;font-size:11px;font-weight:700;border-radius:3px;padding:0 5px;">${uc} MW</span>${bottleneck}<br><span style="font-size:9px;color:#94a3b8;">上位系統の混雑を織り込んだ空き容量（公式一覧表より）</span></div>`;
+    head += `<div class="popup-row"><b>上位系考慮の空き:</b> <span style="background:${col};color:#fff;font-size:11px;font-weight:700;border-radius:3px;padding:0 5px;">${uc} MW</span>${bottleneck}<br><span style="font-size:9px;color:#94a3b8;">上位系統の混雑を織り込んだ空き容量（公式一覧表より）</span></div>`;
   }
   if (Array.isArray(p.upper_route) && p.upper_route.length) {
     const rows = p.upper_route.map(n => {
@@ -3432,6 +3528,9 @@ function ctxOpenGoogleMap() {
 
 // 初期描画
 renderPinList();
+
+// 接続検討インテリ（権限者のみ・認証確定後に取得）
+setupIntelLayer();
 
 // ===== 縦向き: そのまま使うボタン =====
 function bypassRotate() {
