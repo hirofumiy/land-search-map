@@ -942,7 +942,11 @@
     "area": "但馬地区",
     "notes": "豊岡市。但馬地方の中心。コウノトリの郷公園周辺で自然エネルギー関心が高い",
     "geocode_source": "Google Maps API v2 (豊岡変電所 兵庫県)",
-    "data_date": "不明"
+    "data_date": "不明",
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -969,7 +973,11 @@
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備19MW 運用19MW 空容量(当該設備)6MW",
     "geocode_source": "Google Maps API v2 (関西電力 養父変電所)",
     "data_date": "不明",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -994,7 +1002,11 @@
     "estimated_cost_yen_max": 2500000,
     "area": "丹波地区",
     "notes": "丹波市。農業地帯で用地取得が比較的容易",
-    "geocode_source": "Google Maps API v2 (関西電力 丹波変電所)"
+    "geocode_source": "Google Maps API v2 (関西電力 丹波変電所)",
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -1021,7 +1033,11 @@
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備19MW 運用19MW 空容量(当該設備)6MW",
     "geocode_source": "Google Maps API v2 (関西電力 篠山変電所)",
     "data_date": "不明",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -1048,7 +1064,12 @@
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)14MW",
     "geocode_source": "Google Maps API v2 (関西電力 福知山変電所)",
     "data_date": "不明",
-    "upper_considered_mw": 14
+    "upper_considered_mw": 14,
+    "kansai_reinforce": {
+     "region": "京都府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "福知山市"
+    }
    }
   },
   {
@@ -1075,7 +1096,12 @@
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。33/6.6kV 2台 設備19MW 運用19MW 空容量(当該設備)8MW",
     "geocode_source": "Google Maps API v2 (綾部変電所 京都府)",
     "data_date": "不明",
-    "upper_considered_mw": 8
+    "upper_considered_mw": 8,
+    "kansai_reinforce": {
+     "region": "京都府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "綾部市"
+    }
    }
   },
   {
@@ -1100,7 +1126,12 @@
     "estimated_cost_yen_max": 2500000,
     "area": "京都府北部",
     "notes": "舞鶴市。旧海軍施設跡地の活用可能性",
-    "geocode_source": "Google Maps API v2 (関西電力 舞鶴変電所)"
+    "geocode_source": "Google Maps API v2 (関西電力 舞鶴変電所)",
+    "kansai_reinforce": {
+     "region": "京都府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "舞鶴市"
+    }
    }
   },
   {
@@ -1206,7 +1237,12 @@
     "area": "滋賀県南部",
     "notes": "甲賀市。新名神高速沿いで物流拠点が増加中",
     "geocode_source": "Google Maps API v2 (関西電力 甲賀変電所)",
-    "data_date": "不明"
+    "data_date": "不明",
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "甲賀市"
+    }
    }
   },
   {
@@ -1233,7 +1269,12 @@
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
     "geocode_source": "Google Maps API v2 (関西電力 長浜変電所)",
     "data_date": "不明",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "長浜市"
+    }
    }
   },
   {
@@ -3871,7 +3912,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "四條畷市"
+    }
    }
   },
   {
@@ -4001,7 +4047,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備34MW 運用34MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 17
+    "upper_considered_mw": 17,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -5999,7 +6050,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 2
+    "upper_considered_mw": 2,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -6077,7 +6132,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6103,7 +6163,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6129,7 +6194,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備53MW 運用53MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6155,7 +6225,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備66MW 運用66MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6207,7 +6282,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備69MW 運用69MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 18
+    "upper_considered_mw": 18,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6285,7 +6365,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備66MW 運用66MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 18
+    "upper_considered_mw": 18,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6311,7 +6396,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備66MW 運用66MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6337,7 +6427,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6363,7 +6458,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 18
+    "upper_considered_mw": 18,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6388,7 +6488,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備57MW 運用57MW 空容量(当該設備)28MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6466,7 +6571,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備64MW 運用64MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 17
+    "upper_considered_mw": 17,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6518,7 +6628,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備52MW 運用52MW 空容量(当該設備)23MW",
-    "upper_considered_mw": 23
+    "upper_considered_mw": 23,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6570,7 +6685,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6674,7 +6794,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備76MW 運用76MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6700,7 +6825,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6726,7 +6856,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 14
+    "upper_considered_mw": 14,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6752,7 +6887,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備66MW 運用66MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6778,7 +6918,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備55MW 運用55MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 17
+    "upper_considered_mw": 17,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -6908,7 +7053,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備43MW 運用43MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 13
+    "upper_considered_mw": 13,
+    "kansai_reinforce": {
+     "region": "大阪府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東大阪市"
+    }
    }
   },
   {
@@ -9548,7 +9698,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "京都府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "舞鶴市"
+    }
    }
   },
   {
@@ -9599,7 +9754,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)15MW",
-    "upper_considered_mw": 15
+    "upper_considered_mw": 15,
+    "kansai_reinforce": {
+     "region": "京都府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "京丹後市"
+    }
    }
   },
   {
@@ -9625,7 +9785,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "京都府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "舞鶴市"
+    }
    }
   },
   {
@@ -9651,7 +9816,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)15MW",
-    "upper_considered_mw": 15
+    "upper_considered_mw": 15,
+    "kansai_reinforce": {
+     "region": "京都府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "福知山市"
+    }
    }
   },
   {
@@ -9677,7 +9847,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備36MW 運用36MW 空容量(当該設備)9MW",
-    "upper_considered_mw": 9
+    "upper_considered_mw": 9,
+    "kansai_reinforce": {
+     "region": "京都府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "福知山市"
+    }
    }
   },
   {
@@ -9831,7 +10006,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "京都府北部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "京丹後市"
+    }
    }
   },
   {
@@ -11287,7 +11467,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 18
+    "upper_considered_mw": 18,
+    "kansai_reinforce": {
+     "region": "京都府南部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "京田辺市"
+    }
    }
   },
   {
@@ -11339,7 +11524,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)15MW",
-    "upper_considered_mw": 15
+    "upper_considered_mw": 15,
+    "kansai_reinforce": {
+     "region": "京都府南部",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "京田辺市"
+    }
    }
   },
   {
@@ -11518,7 +11708,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 1台 設備19MW 運用19MW 空容量(当該設備)8MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11544,7 +11738,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11570,7 +11768,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11596,7 +11798,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)16MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11621,7 +11827,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)10MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11647,7 +11857,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)16MW",
-    "upper_considered_mw": 16
+    "upper_considered_mw": 16,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11673,7 +11887,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備40MW 運用40MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11698,7 +11916,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11723,7 +11945,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11748,7 +11974,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)15MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11774,7 +12004,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11800,7 +12034,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11826,7 +12064,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備66MW 運用66MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11852,7 +12094,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11878,7 +12124,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備36MW 運用36MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11904,7 +12154,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11930,7 +12184,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備36MW 運用36MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11956,7 +12214,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -11981,7 +12243,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備34MW 運用34MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12007,7 +12273,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12032,7 +12302,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12058,7 +12332,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備36MW 運用36MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12084,7 +12362,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備61MW 運用61MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12110,7 +12392,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備36MW 運用36MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12136,7 +12422,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備61MW 運用61MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12162,7 +12452,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備36MW 運用36MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12188,7 +12482,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備36MW 運用36MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12213,7 +12511,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備64MW 運用64MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12239,7 +12541,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備54MW 運用54MW 空容量(当該設備)26MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12265,7 +12571,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備36MW 運用36MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12291,7 +12601,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12316,7 +12630,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備52MW 運用52MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12341,7 +12659,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12366,7 +12688,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備55MW 運用55MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12392,7 +12718,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12417,7 +12747,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12442,7 +12776,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備57MW 運用57MW 空容量(当該設備)28MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12467,7 +12805,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備66MW 運用66MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12493,7 +12835,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12518,7 +12864,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12543,7 +12893,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備57MW 運用57MW 空容量(当該設備)28MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12569,7 +12923,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備32MW 運用32MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12594,7 +12952,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12619,7 +12981,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備55MW 運用55MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12645,7 +13011,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備68MW 運用68MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12671,7 +13041,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12697,7 +13071,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備44MW 運用44MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12723,7 +13101,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備66MW 運用66MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12748,7 +13130,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備64MW 運用64MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12774,7 +13160,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備66MW 運用66MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12799,7 +13189,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12825,7 +13219,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備66MW 運用66MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12851,7 +13249,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備76MW 運用76MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12877,7 +13279,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備57MW 運用57MW 空容量(当該設備)28MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12902,7 +13308,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備43MW 運用43MW 空容量(当該設備)21MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12927,7 +13337,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備66MW 運用66MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12952,7 +13366,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備32MW 運用32MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -12978,7 +13396,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備76MW 運用76MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13004,7 +13426,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13029,7 +13455,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13055,7 +13485,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備61MW 運用61MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13081,7 +13515,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備57MW 運用57MW 空容量(当該設備)28MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13107,7 +13545,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備53MW 運用53MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13133,7 +13575,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備34MW 運用34MW 空容量(当該設備)16MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13159,7 +13605,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備34MW 運用34MW 空容量(当該設備)15MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13185,7 +13635,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13210,7 +13664,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備36MW 運用36MW 空容量(当該設備)10MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13235,7 +13693,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)15MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13260,7 +13722,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13286,7 +13752,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13312,7 +13782,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13338,7 +13812,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13364,7 +13842,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備40MW 運用40MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13390,7 +13872,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備51MW 運用51MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13416,7 +13902,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備34MW 運用34MW 空容量(当該設備)16MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13441,7 +13931,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備36MW 運用36MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13466,7 +13960,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13491,7 +13989,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13516,7 +14018,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備32MW 運用32MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13541,7 +14047,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13567,7 +14077,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13593,7 +14107,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13619,7 +14137,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13645,7 +14167,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13671,7 +14197,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13697,7 +14227,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 1台 設備19MW 運用19MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13722,7 +14256,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13747,7 +14285,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13772,7 +14314,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)15MW",
-    "upper_considered_mw": 15
+    "upper_considered_mw": 15,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13798,7 +14344,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備66MW 運用66MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13824,7 +14374,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備52MW 運用52MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 14
+    "upper_considered_mw": 14,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13850,7 +14404,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 13
+    "upper_considered_mw": 13,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13876,7 +14434,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13902,7 +14464,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 1台 設備19MW 運用19MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13928,7 +14494,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備33MW 運用33MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13954,7 +14524,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -13980,7 +14554,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14006,7 +14584,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)16MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14032,7 +14614,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14058,7 +14644,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備36MW 運用36MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 17
+    "upper_considered_mw": 17,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14084,7 +14674,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 18
+    "upper_considered_mw": 18,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14110,7 +14704,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 17
+    "upper_considered_mw": 17,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14136,7 +14734,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14162,7 +14764,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 18
+    "upper_considered_mw": 18,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14188,7 +14794,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)15MW",
-    "upper_considered_mw": 15
+    "upper_considered_mw": 15,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14214,7 +14824,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)16MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14240,7 +14854,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備36MW 運用36MW 空容量(当該設備)16MW",
-    "upper_considered_mw": 16
+    "upper_considered_mw": 16,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14266,7 +14884,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備53MW 運用53MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14292,7 +14914,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)16MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14318,7 +14944,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 18
+    "upper_considered_mw": 18,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14344,7 +14974,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備52MW 運用52MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 14
+    "upper_considered_mw": 14,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14370,7 +15004,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 17
+    "upper_considered_mw": 17,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14396,7 +15034,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14422,7 +15064,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 18
+    "upper_considered_mw": 18,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14448,7 +15094,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 17
+    "upper_considered_mw": 17,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14474,7 +15124,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)16MW",
-    "upper_considered_mw": 16
+    "upper_considered_mw": 16,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14500,7 +15154,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14526,7 +15184,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 18
+    "upper_considered_mw": 18,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14552,7 +15214,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 14
+    "upper_considered_mw": 14,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14578,7 +15244,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 18
+    "upper_considered_mw": 18,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14604,7 +15274,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 18
+    "upper_considered_mw": 18,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14630,7 +15304,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)16MW",
-    "upper_considered_mw": 16
+    "upper_considered_mw": 16,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14656,7 +15334,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14682,7 +15364,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 13
+    "upper_considered_mw": 13,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14708,7 +15394,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)15MW",
-    "upper_considered_mw": 15
+    "upper_considered_mw": 15,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14734,7 +15424,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 18
+    "upper_considered_mw": 18,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14760,7 +15454,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)15MW",
-    "upper_considered_mw": 15
+    "upper_considered_mw": 15,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14786,7 +15484,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)12MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "奈良県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -14812,7 +15514,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 13
+    "upper_considered_mw": 13,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "長浜市"
+    }
    }
   },
   {
@@ -14837,7 +15544,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "近江八幡市"
+    }
    }
   },
   {
@@ -14863,7 +15575,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 14
+    "upper_considered_mw": 14,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "高島市"
+    }
    }
   },
   {
@@ -14889,7 +15606,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 14
+    "upper_considered_mw": 14,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "長浜市"
+    }
    }
   },
   {
@@ -14915,7 +15637,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備43MW 運用43MW 空容量(当該設備)20MW",
-    "upper_considered_mw": 20
+    "upper_considered_mw": 20,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "彦根市"
+    }
    }
   },
   {
@@ -14941,7 +15668,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備33MW 運用33MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 13
+    "upper_considered_mw": 13,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "彦根市"
+    }
    }
   },
   {
@@ -14967,7 +15699,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 14
+    "upper_considered_mw": 14,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "彦根市"
+    }
    }
   },
   {
@@ -14993,7 +15730,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)16MW",
-    "upper_considered_mw": 16
+    "upper_considered_mw": 16,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東近江市"
+    }
    }
   },
   {
@@ -15045,7 +15787,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)11MW",
-    "upper_considered_mw": 11
+    "upper_considered_mw": 11,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "高島市"
+    }
    }
   },
   {
@@ -15071,7 +15818,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 19
+    "upper_considered_mw": 19,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "近江八幡市"
+    }
    }
   },
   {
@@ -15122,7 +15874,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 1台 設備19MW 運用19MW 空容量(当該設備)16MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "長浜市"
+    }
    }
   },
   {
@@ -15148,7 +15905,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)14MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "高島市"
+    }
    }
   },
   {
@@ -15174,7 +15936,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)10MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "東近江市"
+    }
    }
   },
   {
@@ -15226,7 +15993,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "彦根市"
+    }
    }
   },
   {
@@ -15252,7 +16024,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)18MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "野洲市"
+    }
    }
   },
   {
@@ -15304,7 +16081,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備45MW 運用45MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 13
+    "upper_considered_mw": 13,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "守山市"
+    }
    }
   },
   {
@@ -15538,7 +16320,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備52MW 運用52MW 空容量(当該設備)11MW",
-    "upper_considered_mw": 11
+    "upper_considered_mw": 11,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "湖南市"
+    }
    }
   },
   {
@@ -15642,7 +16429,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "湖南市"
+    }
    }
   },
   {
@@ -15694,7 +16486,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備57MW 運用57MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "甲賀市"
+    }
    }
   },
   {
@@ -15720,7 +16517,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)9MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "甲賀市"
+    }
    }
   },
   {
@@ -17316,7 +18118,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備55MW 運用55MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -17339,7 +18145,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)19MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -17362,7 +18172,11 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 3台 設備64MW 運用64MW 空容量(当該設備)17MW",
-    "upper_considered_mw": 0
+    "upper_considered_mw": 0,
+    "kansai_reinforce": {
+     "region": "兵庫県全域",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）"
+    }
    }
   },
   {
@@ -17385,7 +18199,12 @@
     "data_date": "不明",
     "can_connect_2mw": true,
     "notes": "【公式データ 関西電力送配電 2026年3〜5月】予想潮流等情報CSVより。77/6.6kV 2台 設備38MW 運用38MW 空容量(当該設備)13MW",
-    "upper_considered_mw": 13
+    "upper_considered_mw": 13,
+    "kansai_reinforce": {
+     "region": "滋賀県 湖南・湖東",
+     "note": "関西電力『大規模な上位系統増強が必要となる地域』（工期概ね4〜10年／2026年5月時点）",
+     "muni": "近江八幡市"
+    }
    }
   },
   {

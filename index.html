@@ -1804,6 +1804,14 @@ function buildUpperRouteHtml(p) {
       ? ` <span style="font-size:9.5px;color:#dc2626;font-weight:700;">⚠ 上位系がボトルネック</span>` : '';
     head += `<div class="popup-row"><b>上位系考慮の空き:</b> <span style="background:${col};color:#fff;font-size:11px;font-weight:700;border-radius:3px;padding:0 5px;">${uc} MW</span>${bottleneck}<br><span style="font-size:9px;color:#94a3b8;">上位系統の混雑を織り込んだ空き容量（公式一覧表より）</span></div>`;
   }
+  // 参考：関西電力『大規模な上位系統増強が必要となる地域』（公式・公開情報）
+  if (p.kansai_reinforce) {
+    const kr = p.kansai_reinforce;
+    head += `<div class="popup-row" style="background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:5px 8px;line-height:1.4;">
+      <span style="font-size:10.5px;color:#b45309;font-weight:700;">📌 参考：大規模な上位系統増強が必要となる地域</span>
+      <div style="font-size:10px;color:#92400e;">該当：${kr.region}${kr.muni ? '（' + kr.muni + '）' : ''}／工期概ね4〜10年</div>
+      <div style="font-size:8.5px;color:#a16207;">出典：関西電力送配電 公式マップ（2026年5月時点）・参考情報</div></div>`;
+  }
   if (Array.isArray(p.upper_route) && p.upper_route.length) {
     const rows = p.upper_route.map(n => {
       const nm = n.name || `<span style="color:#94a3b8;">${n.code}（未解決）</span>`;
