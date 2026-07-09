@@ -603,6 +603,15 @@ body.rotate-bypassed #app { visibility: visible !important; }
             Lv14+で筆界線 / Lv15+で地番表示（法務省 2024年版）<br>
             <span style="color:#c2410c;">■ オレンジ=14条地図（高精度）</span> / <span style="color:#6b7280;">┅ グレー破線=旧公図（ズレあり）</span>
           </div>
+          <!-- 300坪以上フィルタ -->
+          <div class="hazard-toggle" id="min300-toggle" style="margin-top:6px;">
+            <div class="hazard-dot" style="background:#16a34a;"></div>
+            <span style="flex:1;">300坪（990㎡）以上のみ表示</span>
+            <label class="hazard-switch"><input type="checkbox" id="min300-cb"><span class="slider"></span></label>
+          </div>
+          <div id="min300-note" style="display:none; margin-top:4px; padding:5px 7px; background:rgba(22,163,74,0.10); border:1px solid rgba(22,163,74,0.3); border-radius:4px; font-size:9px; color:#94a3b8; line-height:1.5;">
+            ⚠️ 面積は公図ポリゴンからの推定値で、登記簿の「地積」そのものではありません。14条地図は高精度ですが、旧公図はズレがあり誤差が出ます。また、単一の筆が基準です。
+          </div>
           <div id="cadastral-zoom-hint" style="display:none; margin-top:4px; padding:5px 7px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.35); border-radius:4px; font-size:9px; color:#fbbf24;">
             📍 表示にはズームLv14以上が必要です。<br>
             <span id="cadastral-zoom-in-btn" style="cursor:pointer; text-decoration:underline; color:#60a5fa;">→ 現在地をLv14にズームする</span>
@@ -645,6 +654,25 @@ body.rotate-bypassed #app { visibility: visible !important; }
           </div>
           <div id="fude-zoom-hint" style="display:none; margin-top:4px; padding:5px 7px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.35); border-radius:4px; font-size:9px; color:#fbbf24;">
             📍 表示にはズームLv13以上が必要です。
+          </div>
+        </div>
+
+        <!-- 農振地・民有林（国土数値情報・参考） -->
+        <div style="margin-top:8px; padding-top:8px; border-top:1px solid #334155;">
+          <div class="section-title" style="margin-bottom:6px;">農振地・民有林（参考）</div>
+          <div class="hazard-toggle" id="nouyou-toggle">
+            <div class="hazard-dot" style="background:#22c55e;"></div>
+            <span style="flex:1;">農振地（農用地区域）</span>
+            <label class="hazard-switch"><input type="checkbox" id="nouyou-cb"><span class="slider"></span></label>
+          </div>
+          <div class="hazard-toggle" id="minyu-toggle" style="margin-top:4px;">
+            <div class="hazard-dot" style="background:#92400e;"></div>
+            <span style="flex:1;">民有林（地域森林計画対象）</span>
+            <label class="hazard-switch"><input type="checkbox" id="minyu-cb"><span class="slider"></span></label>
+          </div>
+          <div id="ksj-note" style="margin-top:4px; padding:5px 7px; background:rgba(251,191,36,0.10); border:1px solid rgba(251,191,36,0.3); border-radius:4px; font-size:9px; color:#94a3b8; line-height:1.5;">
+            ⚠️ データ年次が古いです（農業地域＝2015年度／森林＝2005・2011・2015年度）。最新の市町村の農振変更は反映されないため、あくまで参考扱いになります。<br>
+            <span style="color:#64748b;">出典：国土交通省 国土数値情報（A12農業地域・A13森林地域）</span>
           </div>
         </div>
 
@@ -1129,6 +1157,22 @@ function estimateAreaM2(ring, tileX, tileY, z, extent, centerLat) {
   return areaInUnits * mPerUnit * mPerUnit;
 }
 
+// 300坪（990㎡）以上のみ表示フィルタ
+let cadastralMin300 = false;
+const MIN300_M2 = 990;
+
+// 筆フィーチャの推定面積（最大リング基準・㎡）
+function featAreaM2(feat, fetchZ, extent, centerLat) {
+  var geom = feat.loadGeometry();
+  var maxA = 0;
+  for (var r = 0; r < geom.length; r++) {
+    if (geom[r].length < 3) continue;
+    var a = estimateAreaM2(geom[r], 0, 0, fetchZ, extent, centerLat);
+    if (a > maxA) maxA = a;
+  }
+  return maxA;
+}
+
 // 旧公図判定：精度が保証されない地図はズレるので非表示にする
 function isLegacyCadastral(feat) {
   var p = feat.properties || {};
@@ -1198,10 +1242,15 @@ function createCadastralLayer() {
           pxOffsetY = -cadastralOffset.y / mPerPx; // 南北は画面座標で反転
         }
 
+        // 300坪フィルタ用：タイル中心緯度（面積推定に使用）
+        var areaCenterLat = Math.atan(Math.sinh(Math.PI * (1 - 2 * (coords.y + 0.5) / Math.pow(2, coords.z)))) * 180 / Math.PI;
+
         // 筆界線（ポリゴン）描画：14条=オレンジ、旧公図=グレー（ズレあり警告）
         for (var i = 0; i < fudeLayer.length; i++) {
           var feat = fudeLayer.feature(i);
           if (feat.type !== 3) continue;
+          // 300坪（990㎡）以上のみ表示フィルタ
+          if (cadastralMin300 && featAreaM2(feat, fetchZ, extent, areaCenterLat) < MIN300_M2) continue;
           var legacy = isLegacyCadastral(feat);
           if (legacy) {
             ctx.fillStyle = 'rgba(120,120,120,0.10)';
@@ -1242,6 +1291,7 @@ function createCadastralLayer() {
             var feat = fudeLayer.feature(i);
             var label = feat.properties['地番'];
             if (!label) continue;
+            if (cadastralMin300 && (feat.type !== 3 || featAreaM2(feat, fetchZ, extent, areaCenterLat) < MIN300_M2)) continue;
             ctx.fillStyle = isLegacyCadastral(feat) ? '#6b7280' : '#a22';
             var geom = feat.loadGeometry();
             var cx = 0, cy = 0, n = 0;
@@ -1324,6 +1374,98 @@ document.getElementById('cadastral-cb').addEventListener('change', async functio
     if (zoomHint) zoomHint.style.display = 'none';
   }
 });
+
+// 300坪（990㎡）以上のみ表示フィルタ
+document.getElementById('min300-cb').addEventListener('change', function() {
+  cadastralMin300 = this.checked;
+  const note = document.getElementById('min300-note');
+  if (note) note.style.display = this.checked ? 'block' : 'none';
+  const t = document.getElementById('min300-toggle');
+  if (t) t.classList.toggle('active', this.checked);
+  const cadCb = document.getElementById('cadastral-cb');
+  if (this.checked && cadCb && !cadCb.checked) {
+    cadCb.click(); // 公図がOFFなら自動でON（フィルタ済み公図を表示）
+  } else {
+    redrawCadastral();
+  }
+});
+
+// ===== 農振地（農用地区域）・民有林レイヤー（国土数値情報 A12/A13・参考） =====
+// データ年次: 農業地域=2015年度 / 森林=2005・2011・2015年度。参考表示。
+const KSJ_LAYERS = {
+  nouyou: { url: new URL('layers/nouyouchi.pmtiles', location.href).href, vlayer: 'nouyou',
+            fill: 'rgba(34,197,94,0.22)', stroke: 'rgba(21,128,61,0.8)', pm: null, layer: null, active: false },
+  minyu:  { url: new URL('layers/minyurin.pmtiles', location.href).href,  vlayer: 'minyu',
+            fill: 'rgba(146,64,14,0.20)', stroke: 'rgba(120,53,15,0.65)', pm: null, layer: null, active: false },
+};
+
+function createKsjLayer(key) {
+  const cfg = KSJ_LAYERS[key];
+  if (!cfg.pm) cfg.pm = new pmtiles.PMTiles(cfg.url);
+  const KsjGridLayer = L.GridLayer.extend({
+    createTile: function(coords, done) {
+      const tile = document.createElement('canvas');
+      const size = this.getTileSize();
+      tile.width = size.x; tile.height = size.y;
+      const ctx = tile.getContext('2d');
+      (async function() {
+        if (typeof Pbf === 'undefined' || typeof VectorTile === 'undefined') { done(null, tile); return; }
+        // データはz7〜13。高ズームはz13を拡大表示
+        const fetchZ = Math.max(7, Math.min(coords.z, 13));
+        if (coords.z < 7) { done(null, tile); return; }
+        const scale = Math.pow(2, coords.z - fetchZ);
+        const tx = Math.floor(coords.x / scale), ty = Math.floor(coords.y / scale);
+        let result = null;
+        try { result = await cfg.pm.getZxy(fetchZ, tx, ty); } catch (e) {}
+        if (!result || !result.data) { done(null, tile); return; }
+        let vt;
+        try { vt = new VectorTile(new Pbf(new Uint8Array(result.data))); } catch (e) { done(null, tile); return; }
+        const lyr = vt.layers[cfg.vlayer];
+        if (!lyr) { done(null, tile); return; }
+        const extent = lyr.extent || 4096;
+        const scaleFactor = (size.x / extent) * scale;
+        const ox = (coords.x / scale - tx) * size.x * scale;
+        const oy = (coords.y / scale - ty) * size.y * scale;
+        ctx.fillStyle = cfg.fill;
+        ctx.strokeStyle = cfg.stroke;
+        ctx.lineWidth = 1;
+        for (let i = 0; i < lyr.length; i++) {
+          const feat = lyr.feature(i);
+          if (feat.type !== 3) continue;
+          const geom = feat.loadGeometry();
+          ctx.beginPath();
+          for (let r = 0; r < geom.length; r++) {
+            const ring = geom[r];
+            if (ring.length < 3) continue;
+            ctx.moveTo(ring[0].x * scaleFactor - ox, ring[0].y * scaleFactor - oy);
+            for (let p = 1; p < ring.length; p++) ctx.lineTo(ring[p].x * scaleFactor - ox, ring[p].y * scaleFactor - oy);
+            ctx.closePath();
+          }
+          ctx.fill('evenodd');
+          ctx.stroke();
+        }
+        done(null, tile);
+      })().catch(function(e) { done(null, tile); });
+      return tile;
+    }
+  });
+  return new KsjGridLayer({ pane: 'hazardPane', tileSize: 256, minZoom: 7, maxZoom: 21, updateWhenZooming: false });
+}
+
+function toggleKsjLayer(key, on) {
+  const cfg = KSJ_LAYERS[key];
+  cfg.active = on;
+  const t = document.getElementById(key + '-toggle');
+  if (t) t.classList.toggle('active', on);
+  if (on) {
+    if (!cfg.layer) cfg.layer = createKsjLayer(key);
+    cfg.layer.addTo(map);
+  } else if (cfg.layer) {
+    map.removeLayer(cfg.layer);
+  }
+}
+document.getElementById('nouyou-cb').addEventListener('change', function() { toggleKsjLayer('nouyou', this.checked); });
+document.getElementById('minyu-cb').addEventListener('change', function() { toggleKsjLayer('minyu', this.checked); });
 
 // 「現在地をLv14にズームする」リンク
 document.getElementById('cadastral-zoom-in-btn').addEventListener('click', function() {

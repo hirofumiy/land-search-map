@@ -62,6 +62,39 @@ export default {
       }
     }
 
+    // ── /layers/<file> : R2上のPMTiles等を配信（Rangeリクエスト対応・CORS付き）──
+    if (url.pathname.startsWith('/layers/') && env.LAYERS) {
+      const key = decodeURIComponent(url.pathname.slice('/layers/'.length));
+      if (!key || key.includes('..')) return new Response('Bad Request', { status: 400 });
+      const corsH = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'range,if-match',
+        'Access-Control-Expose-Headers': 'etag,content-range,content-length,accept-ranges',
+        'Accept-Ranges': 'bytes',
+        'Cache-Control': 'public, max-age=86400',
+        'Content-Type': 'application/octet-stream',
+      };
+      if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsH });
+      const rangeHdr = request.headers.get('Range');
+      if (rangeHdr) {
+        const m = /bytes=(\d+)-(\d+)?/.exec(rangeHdr);
+        if (!m) return new Response('Bad Range', { status: 416, headers: corsH });
+        const offset = Number(m[1]);
+        const length = m[2] !== undefined ? Number(m[2]) - offset + 1 : undefined;
+        const obj = await env.LAYERS.get(key, { range: length !== undefined ? { offset, length } : { offset } });
+        if (!obj) return new Response('Not Found', { status: 404, headers: corsH });
+        const total = obj.size;
+        const end = length !== undefined ? Math.min(offset + length - 1, total - 1) : total - 1;
+        return new Response(obj.body, {
+          status: 206,
+          headers: { ...corsH, 'Content-Range': `bytes ${offset}-${end}/${total}`, 'Content-Length': String(end - offset + 1) },
+        });
+      }
+      const obj = await env.LAYERS.get(key);
+      if (!obj) return new Response('Not Found', { status: 404, headers: corsH });
+      return new Response(obj.body, { status: 200, headers: { ...corsH, 'Content-Length': String(obj.size) } });
+    }
+
     const parts = url.pathname.split('/').filter(Boolean); // ['flood','14','14508','6453.png']
 
     if (parts.length !== 4) {
