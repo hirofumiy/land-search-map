@@ -205,9 +205,24 @@ body {
 
   <div class="news-list">
 
-    <!-- 2026/07/08 -->
+    <!-- 2026/07/08 (2) -->
     <div class="news-card new-card">
       <span class="new-badge">NEW</span>
+      <div class="news-meta">
+        <span class="news-date">2026年7月8日</span>
+        <span class="news-tag tag-fix">バグ修正</span>
+      </div>
+      <div class="news-title">公図（登記所備付地図）が一部地域で表示されない不具合を修正</div>
+      <div class="news-body">
+        <ul>
+          <li><strong>都心部など一部地域で公図（筆界線・地番）が表示されない不具合を修正</strong>しました。登記所備付地図は地域ごとにデータの格納ズームが異なり、従来はズーム16固定で取得していたため、東京都心・大阪中心部など「ズーム14のみ格納」の地域では筆界線が描画されませんでした。</li>
+          <li>ズーム16→15→14の順でデータのある階層を探索する方式に改め、これまで表示されなかった地域でも公図が表示されるようになりました。</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2026/07/08 -->
+    <div class="news-card new-card">
       <div class="news-meta">
         <span class="news-date">2026年7月8日</span>
         <span class="news-tag tag-feature">機能追加</span>

@@ -1162,15 +1162,19 @@ function createCadastralLayer() {
 
       if (coords.z < 14) { done(null, tile); return tile; }
 
-      // PMTiles maxDataZoom=16: 高ズームではz16タイルを拡大表示
-      const fetchZ = Math.min(coords.z, 16);
-      const scale = Math.pow(2, coords.z - fetchZ);
-      const tileX = Math.floor(coords.x / scale);
-      const tileY = Math.floor(coords.y / scale);
-      const offsetX = (coords.x / scale - tileX);
-      const offsetY = (coords.y / scale - tileY);
-
-      fetchTileWithRetry(fetchZ, tileX, tileY).then(function(result) {
+      // データのある最深ズームを探索（z16→14）。地域によりデータ格納ズームが異なり、
+      // 例) 都心部はz14のみ格納。z16固定だと未描画になるためフォールバックする。
+      (async function() {
+        var result = null, fetchZ = null, scale = 1, tileX = 0, tileY = 0, offsetX = 0, offsetY = 0;
+        var maxZ = Math.min(coords.z, 16);
+        for (var fz = maxZ; fz >= 14; fz--) {
+          var sc = Math.pow(2, coords.z - fz);
+          var tx = Math.floor(coords.x / sc), ty = Math.floor(coords.y / sc);
+          try {
+            var r = await fetchTileWithRetry(fz, tx, ty);
+            if (r && r.data) { result = r; fetchZ = fz; scale = sc; tileX = tx; tileY = ty; offsetX = coords.x / sc - tx; offsetY = coords.y / sc - ty; break; }
+          } catch (e) {}
+        }
         if (!result || !result.data) { done(null, tile); return; }
 
         var vt = new VectorTile(new Pbf(new Uint8Array(result.data)));
@@ -1259,7 +1263,7 @@ function createCadastralLayer() {
         }
 
         done(null, tile);
-      }).catch(function(err) {
+      })().catch(function(err) {
         console.error('Cadastral tile error:', err);
         done(null, tile);
       });
