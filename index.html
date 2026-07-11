@@ -1047,7 +1047,22 @@ function scheduleFudeLoad() {
 // ===== 登記所備付地図（公図）レイヤー =====
 let cadastralLayer = null;
 let cadastralActive = false;
-const cadastralPMTiles = new pmtiles.PMTiles('https://data.source.coop/smartmaps/amx-2024-04/MojMap_amx_2024.pmtiles');
+// 公図PMTiles: Cloudflare Workerでエッジキャッシュ配信（高速化）。失敗時はupstream直参照にフォールバック
+const CADASTRAL_PMTILES_URL = HAZARD_PROXY + '/cadastral';
+const cadastralPMTiles = new pmtiles.PMTiles(CADASTRAL_PMTILES_URL);
+
+// ── タイル取得キャッシュ＆データ格納ズームのヒント（高速化）──
+const _cadTileCache = new Map(); // "z/x/y" → result | null
+let cadastralZoomHint = null;     // 直近でデータが見つかったズーム（同一地域は同じズームに格納）
+async function getCadTile(z, x, y) {
+  const key = z + '/' + x + '/' + y;
+  if (_cadTileCache.has(key)) return _cadTileCache.get(key);
+  let val = null;
+  try { const r = await fetchTileWithRetry(z, x, y); val = (r && r.data) ? r : null; } catch (e) { val = null; }
+  if (_cadTileCache.size > 800) _cadTileCache.clear(); // 簡易上限
+  _cadTileCache.set(key, val);
+  return val;
+}
 
 // VectorTile / Pbf がESモジュール非同期ロードのため、
 // 準備完了を最大15秒ポーリングで待つ
@@ -1205,17 +1220,20 @@ function createCadastralLayer() {
       if (coords.z < 14) { done(null, tile); return tile; }
 
       // データのある最深ズームを探索（z16→14）。地域によりデータ格納ズームが異なり、
-      // 例) 都心部はz14のみ格納。z16固定だと未描画になるためフォールバックする。
+      // 例) 都心部はz14のみ格納。キャッシュ＋ズームヒントで取得回数を削減。
       (async function() {
         var result = null, fetchZ = null, scale = 1, tileX = 0, tileY = 0, offsetX = 0, offsetY = 0;
         var maxZ = Math.min(coords.z, 16);
-        for (var fz = maxZ; fz >= 14; fz--) {
+        // 探索順: 直近ヒットのズームを最優先→残りを深い順（同一地域は同じズームに格納されるため大幅に短縮）
+        var order = [];
+        if (cadastralZoomHint && cadastralZoomHint <= maxZ && cadastralZoomHint >= 14) order.push(cadastralZoomHint);
+        for (var fz2 = maxZ; fz2 >= 14; fz2--) if (fz2 !== cadastralZoomHint) order.push(fz2);
+        for (var oi = 0; oi < order.length; oi++) {
+          var fz = order[oi];
           var sc = Math.pow(2, coords.z - fz);
           var tx = Math.floor(coords.x / sc), ty = Math.floor(coords.y / sc);
-          try {
-            var r = await fetchTileWithRetry(fz, tx, ty);
-            if (r && r.data) { result = r; fetchZ = fz; scale = sc; tileX = tx; tileY = ty; offsetX = coords.x / sc - tx; offsetY = coords.y / sc - ty; break; }
-          } catch (e) {}
+          var r = await getCadTile(fz, tx, ty);
+          if (r && r.data) { result = r; fetchZ = fz; scale = sc; tileX = tx; tileY = ty; offsetX = coords.x / sc - tx; offsetY = coords.y / sc - ty; cadastralZoomHint = fz; break; }
         }
         if (!result || !result.data) { done(null, tile); return; }
 
@@ -1277,32 +1295,39 @@ function createCadastralLayer() {
         }
         ctx.setLineDash([]); // リセット
 
-        // 地番ラベル描画（z15+）：14条=赤、旧公図=グレー
+        // 地番ラベル描画（z15+）：ズーム倍率でフォントサイズを変え、見やすく
         if (coords.z >= 15) {
-          ctx.font = '700 11px "Hiragino Sans", "Meiryo", sans-serif';
-          ctx.strokeStyle = 'rgba(255,255,255,0.9)';
-          ctx.lineWidth = 3;
+          // z15:10px → z16:13 → z17:16 → z18:19 → z19:22 →（上限24）
+          var fontPx = Math.max(10, Math.min(24, (coords.z - 15) * 3 + 10));
+          ctx.font = '700 ' + fontPx + 'px "Hiragino Sans", "Meiryo", sans-serif';
+          ctx.strokeStyle = 'rgba(255,255,255,0.92)';
+          ctx.lineWidth = Math.max(2.5, fontPx / 4); // 白フチもフォントに比例
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
 
           for (var i = 0; i < fudeLayer.length; i++) {
             var feat = fudeLayer.feature(i);
             var label = feat.properties['地番'];
-            if (!label) continue;
-            if (cadastralMin300 && (feat.type !== 3 || featAreaM2(feat, fetchZ, extent, areaCenterLat) < MIN300_M2)) continue;
-            ctx.fillStyle = isLegacyCadastral(feat) ? '#6b7280' : '#a22';
+            if (!label || feat.type !== 3) continue;
+            if (cadastralMin300 && featAreaM2(feat, fetchZ, extent, areaCenterLat) < MIN300_M2) continue;
             var geom = feat.loadGeometry();
-            var cx = 0, cy = 0, n = 0;
+            // 重心＋画面上の筆の大きさ（bbox）を計算
+            var cx = 0, cy = 0, n = 0, minx = 1e9, miny = 1e9, maxx = -1e9, maxy = -1e9;
             for (var r = 0; r < geom.length; r++) {
               for (var p = 0; p < geom[r].length; p++) {
-                cx += geom[r][p].x; cy += geom[r][p].y; n++;
+                var gx = geom[r][p].x, gy = geom[r][p].y;
+                cx += gx; cy += gy; n++;
+                if (gx < minx) minx = gx; if (gx > maxx) maxx = gx;
+                if (gy < miny) miny = gy; if (gy > maxy) maxy = gy;
               }
             }
             if (n === 0) continue;
-            cx = (cx / n) * scaleFactor - ox;
-            cy = (cy / n) * scaleFactor - oy;
-            cx += pxOffsetX;
-            cy += pxOffsetY;
+            // 筆が画面上で小さすぎる場合はラベル省略（文字が収まらず読みにくいため）
+            var wpx = (maxx - minx) * scaleFactor, hpx = (maxy - miny) * scaleFactor;
+            if (Math.min(wpx, hpx) < fontPx * 1.1) continue;
+            ctx.fillStyle = isLegacyCadastral(feat) ? '#6b7280' : '#a22';
+            cx = (cx / n) * scaleFactor - ox + pxOffsetX;
+            cy = (cy / n) * scaleFactor - oy + pxOffsetY;
             if (cx >= -20 && cx <= tileSize + 20 && cy >= -20 && cy <= tileSize + 20) {
               ctx.strokeText(label, cx, cy);
               ctx.fillText(label, cx, cy);
@@ -1326,6 +1351,8 @@ function createCadastralLayer() {
     minZoom: 14,
     maxZoom: 21,
     opacity: 1,
+    updateWhenZooming: false, // ズーム途中の再描画を抑制（負荷軽減）
+    keepBuffer: 3,            // 画面外タイルを保持しパン時の再取得を減らす
     attribution: '<a href="https://github.com/amx-project">AMX</a> | 法務省登記所備付地図'
   });
 }

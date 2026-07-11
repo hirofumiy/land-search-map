@@ -19,9 +19,43 @@ const TYPE_MAP = {
 // Google Maps 短縮URLの展開を許可するホスト（オープンリダイレクト/SSRF防止）
 const RESOLVE_ALLOWED_HOSTS = ['maps.app.goo.gl', 'goo.gl', 'g.co', 'maps.google.com'];
 
+const CADASTRAL_UPSTREAM = 'https://data.source.coop/smartmaps/amx-2024-04/MojMap_amx_2024.pmtiles';
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    // ── /cadastral : 公図PMTilesをRange対応でエッジキャッシュ配信（高速化）──
+    if (url.pathname === '/cadastral') {
+      const range = request.headers.get('Range') || '';
+      const cors = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'range,if-match',
+        'Access-Control-Expose-Headers': 'content-range,content-length,etag,accept-ranges',
+        'Accept-Ranges': 'bytes',
+      };
+      if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
+      const cache = caches.default;
+      // Range文字列をキャッシュキーに含める（部分レスポンス単位でキャッシュ）
+      const cacheKey = new Request(url.origin + '/cadastral?r=' + encodeURIComponent(range));
+      let hit = await cache.match(cacheKey);
+      if (hit) return hit;
+      let up;
+      try {
+        up = await fetch(CADASTRAL_UPSTREAM, { headers: range ? { Range: range } : {} });
+      } catch (e) {
+        return new Response('Upstream fetch failed', { status: 502, headers: cors });
+      }
+      const h = new Headers(up.headers);
+      h.set('Access-Control-Allow-Origin', '*');
+      h.set('Access-Control-Expose-Headers', 'content-range,content-length,etag,accept-ranges');
+      h.set('Accept-Ranges', 'bytes');
+      h.set('Cache-Control', 'public, max-age=604800'); // 7日エッジキャッシュ
+      h.delete('set-cookie');
+      const resp = new Response(up.body, { status: up.status, headers: h });
+      if (up.status === 200 || up.status === 206) ctx.waitUntil(cache.put(cacheKey, resp.clone()));
+      return resp;
+    }
 
     // ── /resolve?u=<短縮URL> : リダイレクト先の最終URLを返す ──
     if (url.pathname === '/resolve') {
