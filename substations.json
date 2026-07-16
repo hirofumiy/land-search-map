@@ -6,7 +6,7 @@
   "target_system": "2MW/8MWh grid-scale battery storage",
   "connection_voltage": "6kV (高圧)",
   "created": "2026-04-06",
-  "data_source_date": "2026年4月〜5月時点",
+  "data_source_date": "2026年6月〜7月時点（各社公式開示）",
   "data_source_detail": "関西電力・中部電力: CSVジオコーディング (Nominatim BBOX検証 + Google Maps API 二段階処理)",
   "last_updated": "2026-07-17",
   "update_schedule": "毎月1日・15日・30日",
@@ -26,25 +26,29 @@
     "last_updated": "2026-07-17",
     "data_source_date": "2026/6/22",
     "source": "予想潮流等一覧表（変電所）2026年6月2日公開再開版",
-    "rank_thresholds": "S>=20MW, A>=10, B>=5, C>=1, D<=0 (2026-06-10ひろ社長承認)"
+    "rank_thresholds": "S>=20MW, A>=10, B>=5, C>=1, D<=0 (2026-06-10ひろ社長承認)",
+    "status": "confirmed"
    },
    "中部電力パワーグリッド": {
     "last_updated": "2026-07-17",
     "data_source_date": "2026年7月13日更新",
     "source": "変電所空容量・予想潮流一覧表CSV（本店+6エリア）",
-    "rank_thresholds": "S>=20MW, A>=10, B>=5, C>=1, D<=0 (2026-06-10ひろ社長承認)"
+    "rank_thresholds": "S>=20MW, A>=10, B>=5, C>=1, D<=0 (2026-06-10ひろ社長承認)",
+    "status": "confirmed"
    },
    "関西電力送配電": {
     "last_updated": "2026-07-17",
     "data_source_date": "2026年7月14日更新",
     "source": "変圧器空容量一覧CSV（154kV未満・以上）",
-    "rank_thresholds": "S>=20MW, A>=10, B>=5, C>=1, D<=0 (2026-06-10ひろ社長承認)"
+    "rank_thresholds": "S>=20MW, A>=10, B>=5, C>=1, D<=0 (2026-06-10ひろ社長承認)",
+    "status": "confirmed"
    },
    "東北電力ネットワーク": {
     "last_updated": "2026-07-17",
     "data_source_date": "2026年7月3日作成",
     "source": "予想潮流等に関する情報 変圧器CSV（local01〜07）",
-    "rank_thresholds": "S>=20MW, A>=10, B>=5, C>=1, D<=0 (2026-06-10ひろ社長承認)"
+    "rank_thresholds": "S>=20MW, A>=10, B>=5, C>=1, D<=0 (2026-06-10ひろ社長承認)",
+    "status": "confirmed"
    },
    "北陸電力送配電": {
     "last_updated": "2026-04-16",
@@ -55,19 +59,22 @@
     "last_updated": "2026-07-17",
     "data_source_date": "2026年6月26日更新",
     "source": "予想潮流・空容量 変圧器CSV（基幹+5県）",
-    "rank_thresholds": "S>=20MW, A>=10, B>=5, C>=1, D<=0 (2026-06-10ひろ社長承認)"
+    "rank_thresholds": "S>=20MW, A>=10, B>=5, C>=1, D<=0 (2026-06-10ひろ社長承認)",
+    "status": "confirmed"
    },
    "北海道電力ネットワーク": {
     "last_updated": "2026-07-17",
     "data_source_date": "2026年6月30日更新（基幹・ローカル系統）",
     "source": "混雑状況マップ・予想潮流等一覧表 変圧器CSV（local01〜07）",
-    "rank_thresholds": "S>=20MW, A>=10, B>=5, C>=1, D<=0 (2026-06-10ひろ社長承認)"
+    "rank_thresholds": "S>=20MW, A>=10, B>=5, C>=1, D<=0 (2026-06-10ひろ社長承認)",
+    "status": "confirmed"
    },
    "九州電力送配電": {
     "last_updated": "2026-07-17",
     "data_source_date": "2026年6月26日更新",
     "source": "予想潮流等 変圧器CSV（30地区）",
-    "rank_thresholds": "S>=20MW, A>=10, B>=5, C>=1, D<=0 (2026-06-10ひろ社長承認)"
+    "rank_thresholds": "S>=20MW, A>=10, B>=5, C>=1, D<=0 (2026-06-10ひろ社長承認)",
+    "status": "confirmed"
    }
   },
   "upper_grid_added": {

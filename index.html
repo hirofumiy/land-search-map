@@ -2032,8 +2032,9 @@ function renderSubstations() {
     // 電力会社別の更新日を取得
     const companyUpdate = substationsData.metadata && substationsData.metadata.company_data_updates
       ? substationsData.metadata.company_data_updates[p.company] : null;
+    const updateBadge = companyUpdate && companyUpdate.status === 'confirmed' ? ' (公式)' : ' (推定)';
     const updateDateStr = companyUpdate
-      ? companyUpdate.last_updated + (companyUpdate.status === 'confirmed' ? ' (公式)' : ' (推定)')
+      ? (companyUpdate.data_source_date || companyUpdate.last_updated) + updateBadge
       : '不明';
     const rankBadge = hasCapacityData
       ? `<span class="rank-badge rank-${rank}">${rank}</span>`
