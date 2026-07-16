@@ -471,8 +471,8 @@ body.rotate-bypassed #app { visibility: visible !important; }
           <p id="data-date" style="font-size:9px; color:#60a5fa; margin-top:2px; line-height:1.3; white-space:pre-line;">📊 空き容量データ: 読込中...</p>
         </div>
         <div id="user-info-bar" style="text-align:right; flex-shrink:0;">
-          <div id="user-display-name" style="font-size:11px; color:#94a3b8; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></div>
-          <div id="trial-remaining" style="font-size:10px; color:#fbbf24; margin-top:2px;"></div>
+          <div id="user-display-name" style="font-size:11px; color:#94a3b8; max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></div>
+          <div id="trial-remaining" style="display:none; margin-top:3px; padding:3px 9px; border-radius:999px; font-size:11.5px; font-weight:700; background:rgba(251,191,36,0.18); border:1px solid rgba(251,191,36,0.5); color:#fbbf24; white-space:nowrap;"></div>
           <div style="display:flex; gap:4px; margin-top:4px;">
             <a href="manual.html" target="_blank" style="flex:1; display:block; padding:3px 8px; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.35); color:#6ee7b7; border-radius:4px; font-size:10px; cursor:pointer; text-decoration:none; text-align:center;" title="使い方マニュアル">📖 マニュアル</a>
             <a href="news.html" style="flex:1; display:block; padding:3px 8px; background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.35); color:#93c5fd; border-radius:4px; font-size:10px; cursor:pointer; text-decoration:none; text-align:center;">🔔 おしらせ</a>
@@ -2871,22 +2871,42 @@ async function loadData() {
   if (trialEl && (demoUser.plan === 'trial' || !demoUser.plan)) {
     const expiresAt = new Date(demoUser.expires_at);
     const now = new Date();
-    const diffH = Math.max(0, Math.round((expiresAt - now) / (1000 * 60 * 60)));
+    const diffMs = expiresAt - now;
+    const diffH = Math.max(0, Math.round(diffMs / (1000 * 60 * 60)));
+    trialEl.style.display = 'inline-block';
     if (diffH > 24) {
       const diffD = Math.ceil(diffH / 24);
-      trialEl.textContent = `⏳ 試用 残り${diffD}日`;
+      trialEl.textContent = `⏳ 試用期間 残り${diffD}日`;
     } else if (diffH > 0) {
-      trialEl.textContent = `⏳ 試用 残り${diffH}時間`;
+      trialEl.textContent = `⏳ 試用期間 残り${diffH}時間`;
+      trialEl.style.color = '#fb923c';
+      trialEl.style.borderColor = 'rgba(251,146,60,0.6)';
     } else {
       trialEl.textContent = '⚠ 試用期間終了';
-      trialEl.style.color = '#ef4444';
+      trialEl.style.color = '#fca5a5';
+      trialEl.style.background = 'rgba(239,68,68,0.18)';
+      trialEl.style.borderColor = 'rgba(239,68,68,0.5)';
     }
   } else if (demoUser.plan && demoUser.plan !== 'trial') {
     if (trialEl) {
-      trialEl.textContent = `✓ ${demoUser.plan === 'premium' ? 'プレミアム' : 'ベーシック'}`;
-      trialEl.style.color = '#34d399';
+      trialEl.style.display = 'inline-block';
+      trialEl.textContent = `✓ ${demoUser.plan === 'enterprise' ? 'Enterprise' : demoUser.plan === 'standard' ? 'Standard' : demoUser.plan}`;
+      trialEl.style.color = '#6ee7b7';
+      trialEl.style.background = 'rgba(16,185,129,0.15)';
+      trialEl.style.borderColor = 'rgba(16,185,129,0.45)';
     }
   }
+
+  // ピンメモを旧・共有キーからユーザー別キーへ一度だけ移行
+  try {
+    const legacy = localStorage.getItem('bl_pins');
+    if (legacy && legacy !== '[]') {
+      const k = pinKey();
+      if (k !== 'bl_pins' && !localStorage.getItem(k)) localStorage.setItem(k, legacy);
+      localStorage.removeItem('bl_pins'); // 共有キーは廃止（以後はユーザー別）
+      if (typeof renderPinList === 'function') renderPinList();
+    }
+  } catch (e) {}
 })();
 
 async function doLogout() {
@@ -3401,7 +3421,15 @@ document.getElementById('svc-modal-overlay').addEventListener('click', function(
 });
 
 // ===== ピンメモ機能 =====
-const PIN_KEY = 'bl_pins';
+// ピンメモはログインユーザーごとに分離（同一ブラウザで別アカウントでも混ざらない）
+function pinKey() {
+  try {
+    const u = window.__currentUser;
+    const uid = u && u.demoUser && (u.demoUser.id || u.demoUser.email);
+    if (uid) return 'bl_pins_' + uid;
+  } catch (e) {}
+  return 'bl_pins_guest'; // 開発/未ログイン用
+}
 let __ctxLatLng = null;  // 右クリックした座標
 let __nearestLine = null; // 最寄変電所の線
 
@@ -3416,12 +3444,12 @@ function haversineKm(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
-// ── ピン一覧のロード・セーブ ──
+// ── ピン一覧のロード・セーブ（ユーザー別） ──
 function loadPins() {
-  try { return JSON.parse(localStorage.getItem(PIN_KEY) || '[]'); } catch { return []; }
+  try { return JSON.parse(localStorage.getItem(pinKey()) || '[]'); } catch { return []; }
 }
 function savePins(pins) {
-  localStorage.setItem(PIN_KEY, JSON.stringify(pins));
+  localStorage.setItem(pinKey(), JSON.stringify(pins));
 }
 
 // ── パネルのピン一覧を再描画 ──
