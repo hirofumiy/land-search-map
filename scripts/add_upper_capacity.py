@@ -23,12 +23,12 @@ CSVROOT = Path("/Users/hirofumiy/Documents/Claude/substation-ocr-test/data/csv")
 
 # 会社 → (CSVグロブ, 変電所名列を含むヘッダ判定)
 COMPANIES = {
-    "東北電力ネットワーク":   ["tohoku/*_tr_*.csv"],
-    "北海道電力ネットワーク": ["hokkaido/**/*Tr*.csv", "hokkaido/**/*_tr_*.csv"],
-    "九州電力送配電":         ["kyushu/**/変圧器CSV/*.csv"],
-    "中国電力ネットワーク":   ["chugoku/**/*_tr_*.csv", "chugoku/**/*_Tr_*.csv"],
-    "関西電力送配電":         ["kansai/154kv_less_trans.csv", "kansai/154kv_more_trans.csv"],
-    "中部電力パワーグリッド": ["chubu/**/*変電所*.csv"],
+    "東北電力ネットワーク":   ["tohoku_new/*_tr_*.csv"],
+    "北海道電力ネットワーク": ["hokkaido_flat/*.csv"],
+    "九州電力送配電":         ["kyushu_flat/*.csv"],
+    "中国電力ネットワーク":   ["chugoku_flat/*.csv"],
+    "関西電力送配電":         ["kansai_new/154kv_less_trans.csv", "kansai_new/154kv_more_trans.csv"],
+    "中部電力パワーグリッド": ["chubu_flat/*.csv"],
 }
 
 

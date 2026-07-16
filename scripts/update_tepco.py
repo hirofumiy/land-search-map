@@ -21,7 +21,7 @@ from pathlib import Path
 
 SUBSTATIONS = Path(__file__).resolve().parent.parent / "substations.json"
 COMPANY = "東京電力パワーグリッド"
-DATA_DATE = "2026/4/30"
+DATA_DATE = "2026/6/22"
 
 def rank_from_mw(mw):
     if mw is None: return None
