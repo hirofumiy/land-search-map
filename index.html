@@ -2040,7 +2040,7 @@ function renderSubstations() {
   substationMarkers.forEach(m => map.removeLayer(m));
   substationMarkers = [];
   if (!substationsData) return;
-  let count = 0;
+  let count = 0, subSkipped = 0;
   substationsData.features.forEach(f => {
     const p = f.properties;
     const effectiveRank = p.estimated_cost_rank || p.rank;
@@ -2050,8 +2050,10 @@ function renderSubstations() {
     // rank=NはRANKS配列にないので、フィルタではDと同様に扱う（D選択中なら表示）
     const filterRank = hasCapacityData ? rank : 'D';
     if (!selectedCompanies.has(p.company) || !selectedRanks.has(filterRank)) return;
+    const sll = validCoords(f);
+    if (!sll) { subSkipped++; return; }   // 座標欠損はスキップ（以降の描画を止めない）
     count++;
-    const coords = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+    const coords = [sll[1], sll[0]];
     const availMW = p.available_capacity_mw != null ? p.available_capacity_mw : (p.available_mw || null);
     const availStr = availMW != null ? `${availMW} MW` : 'データなし';
     const voltage = p.voltage || (p.voltage_kv ? p.voltage_kv+'kV' : '');
@@ -2089,6 +2091,19 @@ function renderSubstations() {
     substationMarkers.push(marker);
   });
   document.getElementById('stat-substations').textContent = count;
+  if (subSkipped) console.warn('[変電所] 座標欠損のため地図に表示できない変電所: ' + subSkipped + '件');
+}
+
+// 座標の健全性チェック。1件でも壊れたデータがあると描画ループ全体が例外で止まり、
+// それ以降の物件・変電所が一切表示されなくなるため、必ずこれを通してからマーカー化する。
+// 戻り値: [lng, lat] または null（描画不能）
+function validCoords(f) {
+  const c = f && f.geometry && f.geometry.coordinates;
+  if (!Array.isArray(c) || c.length < 2) return null;
+  const lng = c[0], lat = c[1];
+  if (typeof lng !== 'number' || typeof lat !== 'number') return null;
+  if (!isFinite(lng) || !isFinite(lat)) return null;
+  return [lng, lat];
 }
 
 // ===== Render Properties =====
@@ -2096,11 +2111,13 @@ function renderProperties() {
   propertyMarkers.forEach(m => map.removeLayer(m));
   propertyMarkers = [];
   if (!propertiesData) return;
-  let saleCount = 0, jiageCount = 0;
+  let saleCount = 0, jiageCount = 0, skipped = 0;
   propertiesData.features.forEach(f => {
     const p = f.properties;
+    const ll = validCoords(f);
+    if (!ll) { skipped++; return; }   // 座標欠損はスキップ（以降の描画を止めない）
     if (p.status === 'sale') saleCount++; else jiageCount++;
-    const coords = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+    const coords = [ll[1], ll[0]];
     const priceStr = p.price_man ? p.price_man.toLocaleString() + '万円' : '価格未定';
     const urlLink = p.url ? `<div class="popup-row"><a href="${p.url}" target="_blank">物件ページを開く</a></div>` : '';
     const agentInfo = p.agent ? `<div class="popup-row"><b>不動産会社:</b> ${p.agent}</div>` : '';
@@ -2123,6 +2140,7 @@ function renderProperties() {
   });
   document.getElementById('stat-sale').textContent = saleCount;
   document.getElementById('stat-jiage').textContent = jiageCount;
+  if (skipped) console.warn('[物件] 座標欠損のため地図に表示できない物件: ' + skipped + '件');
 }
 
 // ===== Panel: Substation List =====
@@ -2736,11 +2754,13 @@ async function renderPropertiesWithHazardFilter() {
   propertyMarkers.forEach(m => map.removeLayer(m));
   propertyMarkers = [];
   if (!propertiesData) return;
-  let saleCount = 0, jiageCount = 0;
+  let saleCount = 0, jiageCount = 0, skipped = 0;
 
   for (const f of propertiesData.features) {
     const p = f.properties;
-    const [lng, lat] = f.geometry.coordinates;
+    const ll = validCoords(f);
+    if (!ll) { skipped++; continue; }   // 座標欠損はスキップ（以降の描画を止めない）
+    const lng = ll[0], lat = ll[1];
 
     if (hazardFilterEnabled) {
       const check = await checkPropertyHazard(lat, lng);
@@ -2771,6 +2791,7 @@ async function renderPropertiesWithHazardFilter() {
   }
   document.getElementById('stat-sale').textContent = saleCount;
   document.getElementById('stat-jiage').textContent = jiageCount;
+  if (skipped) console.warn('[物件] 座標欠損のため地図に表示できない物件: ' + skipped + '件');
 }
 
 // ===== Data Loading =====
