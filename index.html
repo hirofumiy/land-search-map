@@ -1049,7 +1049,17 @@ let cadastralLayer = null;
 let cadastralActive = false;
 // 公図PMTiles: Cloudflare Workerでエッジキャッシュ配信（高速化）。失敗時はupstream直参照にフォールバック
 const CADASTRAL_PMTILES_URL = HAZARD_PROXY + '/cadastral';
+// フォールバック先（法務省登記所備付地図 PMTiles 本体）。CORS `*`・Range対応。
+// Worker（エッジキャッシュ）が落ちる/遅い/CORS不通のときに公図が全く出なくなるのを防ぐ。
+const CADASTRAL_UPSTREAM_URL = 'https://data.source.coop/smartmaps/amx-2024-04/MojMap_amx_2024.pmtiles';
 const cadastralPMTiles = new pmtiles.PMTiles(CADASTRAL_PMTILES_URL);
+let _cadFallbackPM = null;    // upstream直参照インスタンス（遅延生成）
+let _cadUseFallback = false;  // 一度切り替えたら以降は継続利用
+function cadastralSource() {
+  if (!_cadUseFallback) return cadastralPMTiles;
+  if (!_cadFallbackPM) _cadFallbackPM = new pmtiles.PMTiles(CADASTRAL_UPSTREAM_URL);
+  return _cadFallbackPM;
+}
 
 // ── タイル取得キャッシュ＆データ格納ズームのヒント（高速化）──
 const _cadTileCache = new Map(); // "z/x/y" → result | null
@@ -1058,9 +1068,15 @@ async function getCadTile(z, x, y) {
   const key = z + '/' + x + '/' + y;
   if (_cadTileCache.has(key)) return _cadTileCache.get(key);
   let val = null;
-  try { const r = await fetchTileWithRetry(z, x, y); val = (r && r.data) ? r : null; } catch (e) { val = null; }
+  try {
+    const r = await fetchTileWithRetry(z, x, y);
+    val = (r && r.data) ? r : null;
+  } catch (e) {
+    // 通信失敗はキャッシュしない（キャッシュすると復旧後も「データなし」が固定化する）
+    return null;
+  }
   if (_cadTileCache.size > 800) _cadTileCache.clear(); // 簡易上限
-  _cadTileCache.set(key, val);
+  _cadTileCache.set(key, val);   // ここに来るのは「取得成功」＝実データ or 当該タイル無し
   return val;
 }
 
@@ -1081,15 +1097,29 @@ function waitForLibs() {
   });
 }
 
-// PMTiles タイル取得（最大3回リトライ）
+// ハングしたリクエストで公図が永久に出ないのを防ぐ（PMTiles内部fetchはabortできないためrace）
+function withTimeout(promise, ms, label) {
+  let t;
+  return Promise.race([
+    promise.finally(() => clearTimeout(t)),
+    new Promise((_, rej) => { t = setTimeout(() => rej(new Error(label + ' timeout ' + ms + 'ms')), ms); })
+  ]);
+}
+
+// PMTiles タイル取得（最大3回リトライ ＋ Worker失敗時はupstream直参照へフォールバック）
 async function fetchTileWithRetry(z, x, y, maxRetries = 3) {
   let lastErr;
   for (let i = 0; i < maxRetries; i++) {
     try {
-      const result = await cadastralPMTiles.getZxy(z, x, y);
-      return result;
+      return await withTimeout(cadastralSource().getZxy(z, x, y), 12000, '公図タイル取得');
     } catch (e) {
       lastErr = e;
+      // Worker経由で失敗 → upstream直に切り替えて即再試行（待機なし）
+      if (!_cadUseFallback) {
+        _cadUseFallback = true;
+        console.warn('[公図] Worker経由に失敗したためupstream直参照へ切り替えます', e);
+        continue;
+      }
       if (i < maxRetries - 1) await new Promise(r => setTimeout(r, Math.pow(2, i) * 500));
     }
   }
