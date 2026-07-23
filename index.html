@@ -716,6 +716,23 @@ body.rotate-bypassed #app { visibility: visible !important; }
             <div style="font-size:10px;color:#94a3b8;line-height:1.5;"><b style="color:#fde68a;">空き容量0でも接続申込が可能な場合があります。</b><br>ノンファーム型接続制度の普及により、多くの変電所で空き容量が「0」または「－」と表示されていますが、系統混雑時に出力制御を受ける条件で接続できます。本マップの空き容量データはノンファーム接続枠を考慮していません。</div>
           </div>
         </div>
+        <!-- 物件ピンの表示/非表示 -->
+        <div style="margin-top:10px; padding-top:8px; border-top:1px solid #334155;">
+          <div class="section-title" style="margin-bottom:6px;">物件ピンの表示</div>
+          <div class="hazard-toggle" id="prop-sale-toggle">
+            <div class="hazard-dot" style="background:#22c55e;"></div>
+            <span style="flex:1;">🏠 売出物件</span>
+            <label class="hazard-switch"><input type="checkbox" id="prop-sale-cb" checked><span class="slider"></span></label>
+          </div>
+          <div class="hazard-toggle" id="prop-jiage-toggle">
+            <div class="hazard-dot" style="background:#f59e0b;"></div>
+            <span style="flex:1;">🎯 地上げ対象</span>
+            <label class="hazard-switch"><input type="checkbox" id="prop-jiage-cb" checked><span class="slider"></span></label>
+          </div>
+          <div style="font-size:9px; color:#64748b; margin-top:3px; padding-left:4px;">
+            変電所ピンだけを見たいときはどちらもOFFにしてください
+          </div>
+        </div>
       </div>
 
       <!-- Stats -->
@@ -2094,6 +2111,13 @@ function renderSubstations() {
   if (subSkipped) console.warn('[変電所] 座標欠損のため地図に表示できない変電所: ' + subSkipped + '件');
 }
 
+// ===== 物件ピンの表示/非表示 =====
+// 売出物件・地上げ対象それぞれのピンを地図に出すか（リストと件数は従来どおり全件表示）
+let showSalePins = true, showJiagePins = true;
+function isPinVisible(status) {
+  return status === 'sale' ? showSalePins : showJiagePins;
+}
+
 // 座標の健全性チェック。1件でも壊れたデータがあると描画ループ全体が例外で止まり、
 // それ以降の物件・変電所が一切表示されなくなるため、必ずこれを通してからマーカー化する。
 // 戻り値: [lng, lat] または null（描画不能）
@@ -2117,6 +2141,7 @@ function renderProperties() {
     const ll = validCoords(f);
     if (!ll) { skipped++; return; }   // 座標欠損はスキップ（以降の描画を止めない）
     if (p.status === 'sale') saleCount++; else jiageCount++;
+    if (!isPinVisible(p.status)) return;   // ピン非表示（件数・リストには残す）
     const coords = [ll[1], ll[0]];
     const priceStr = p.price_man ? p.price_man.toLocaleString() + '万円' : '価格未定';
     const urlLink = p.url ? `<div class="popup-row"><a href="${p.url}" target="_blank">物件ページを開く</a></div>` : '';
@@ -2188,7 +2213,8 @@ function renderSubstationList() {
 function renderPropertyList(status, containerId) {
   const el = document.getElementById(containerId);
   if (!propertiesData) { el.innerHTML = '<div style="font-size:12px;color:#64748b;">データなし</div>'; return; }
-  const items = propertiesData.features.filter(f => f.properties.status === status);
+  // 座標欠損データが混ざると以下のmapで例外になりリスト全体が空になるため、ここで除外する
+  const items = propertiesData.features.filter(f => f.properties.status === status && validCoords(f));
   if (items.length === 0) {
     el.innerHTML = `<div style="font-size:12px;color:#64748b;padding:8px 0;">${status==='sale' ? 'まだ売出物件が登録されていません。' : '地上げ対象エリアが登録されていません。'}<br>land-candidates.json にデータを追加してください。</div>`;
     return;
@@ -2269,6 +2295,24 @@ function applyFilters() {
   renderPropertyList('sale', 'sale-list');
   renderPropertyList('jiage', 'jiage-list');
 }
+
+// 物件ピンの表示/非表示トグル（設定は次回以降も保持）
+(function initPropertyPinToggles() {
+  const bind = (id, key, setter) => {
+    const cb = document.getElementById(id);
+    if (!cb) return;
+    const saved = localStorage.getItem(key);
+    if (saved !== null) cb.checked = (saved === '1');
+    setter(cb.checked);
+    cb.addEventListener('change', () => {
+      setter(cb.checked);
+      localStorage.setItem(key, cb.checked ? '1' : '0');
+      renderProperties();
+    });
+  };
+  bind('prop-sale-cb',  'bl_show_sale_pins',  v => { showSalePins = v; });
+  bind('prop-jiage-cb', 'bl_show_jiage_pins', v => { showJiagePins = v; });
+})();
 
 // ===== Search =====
 // ── 住所検索ピン ──
@@ -2761,6 +2805,10 @@ async function renderPropertiesWithHazardFilter() {
     const ll = validCoords(f);
     if (!ll) { skipped++; continue; }   // 座標欠損はスキップ（以降の描画を止めない）
     const lng = ll[0], lat = ll[1];
+    if (!isPinVisible(p.status)) {      // ピン非表示（件数には残す）
+      if (p.status === 'sale') saleCount++; else jiageCount++;
+      continue;
+    }
 
     if (hazardFilterEnabled) {
       const check = await checkPropertyHazard(lat, lng);
