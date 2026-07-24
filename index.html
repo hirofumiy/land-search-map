@@ -582,6 +582,33 @@ body.rotate-bypassed #app { visibility: visible !important; }
             <label class="hazard-switch"><input type="checkbox" data-hazard="tsunami"><span class="slider"></span></label>
           </div>
         </div>
+        <!-- 地形分類（液状化しやすい地形の参考） -->
+        <div style="margin-top:8px; padding-top:8px; border-top:1px solid #334155;">
+          <div class="section-title" style="margin-bottom:6px;">液状化の参考（地形分類）</div>
+          <div class="hazard-toggle" data-landform="landcondition">
+            <div class="hazard-dot" style="background:#8b5cf6;"></div>
+            <span style="flex:1;">土地条件図（平野部）</span>
+            <label class="hazard-switch"><input type="checkbox" data-landform="landcondition"><span class="slider"></span></label>
+          </div>
+          <div class="hazard-toggle" data-landform="chisui">
+            <div class="hazard-dot" style="background:#06b6d4;"></div>
+            <span style="flex:1;">治水地形分類図（河川流域）</span>
+            <label class="hazard-switch"><input type="checkbox" data-landform="chisui"><span class="slider"></span></label>
+          </div>
+          <div id="landform-zoom-hint" style="display:none; margin-top:4px; padding:5px 7px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.35); border-radius:4px; font-size:9px; color:#fbbf24;">
+            ズームが足りません。<b>Lv10以上</b>に拡大すると表示されます。
+          </div>
+          <div style="margin-top:5px;padding:7px 9px;background:#1a1200;border-radius:5px;border-left:3px solid #f59e0b;">
+            <div style="font-size:10px;color:#fbbf24;font-weight:600;margin-bottom:3px;">⚠️ これは「液状化危険度」ではありません</div>
+            <div style="font-size:10px;color:#94a3b8;line-height:1.5;">
+              国が全国一律で公開する液状化マップは存在しません。ここでは液状化の主因である<b style="color:#fde68a;">地形</b>を表示しています。
+              <b style="color:#fde68a;">旧河道・後背湿地・埋立地・干拓地・砂州</b>などは液状化しやすい地形です。<br>
+              <span style="color:#f87171;">正式な判断は必ず自治体の液状化ハザードマップと地盤調査でご確認ください。</span><br>
+              ※Lv10以上で表示 ／ 山間部など未整備地域は表示されません<br>
+              出典: 国土地理院（数値地図25000（土地条件）／治水地形分類図）
+            </div>
+          </div>
+        </div>
         <div id="powerline-hint" class="powerline-hint" style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
           <span style="font-size:12px; font-weight:600; color:#e2e8f0;">⚡ 現在 Lv<span id="zoom-level">6</span> ／ Lv12以上で送電線（推定）表示</span>
           <label class="hazard-switch" title="送電線の表示/非表示">
@@ -935,6 +962,30 @@ const hazardLayers = {
   tsunami:   makeHazardLayer(`${HAZARD_PROXY}/tsunami/{z}/{x}/{y}.png`, 0.8),
 };
 const hazardActive = { flood: false, sediment: false, landslide: false, jisuberi: false, tsunami: false };
+
+// ===== 地形分類（液状化しやすい地形の参考情報）=====
+// ※国が全国一律で配信する「液状化危険度」タイルは存在しないため、
+//   液状化の主因である地形（旧河道・後背湿地・埋立地・干拓地など）を示す
+//   国土地理院タイルを重ねて「液状化しやすい地形か」の参考に用いる。
+//   出典表記が必要（基本測量成果）。未整備地域では表示されない。
+// 地理院タイルは <img> 直読みでよくCORS不要のため、Workerプロキシは経由しない。
+const GSI_TILE = 'https://cyberjapandata.gsi.go.jp/xyz';
+function makeLandformLayer(path, opacity, minZ, maxNativeZ) {
+  return L.tileLayer(`${GSI_TILE}/${path}/{z}/{x}/{y}.png`, {
+    opacity,
+    pane: 'hazardPane',
+    minZoom: minZ, maxNativeZoom: maxNativeZ, maxZoom: 21,
+    // 未整備地域は404が普通に返るためリトライしない（無駄な再取得を避ける）
+    attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院</a>',
+  });
+}
+const landformLayers = {
+  // 数値地図25000（土地条件）: 平野部中心・z10〜16
+  landcondition: makeLandformLayer('lcm25k_2012', 0.6, 10, 16),
+  // 治水地形分類図: 主要河川流域・z11〜16（土地条件図の未整備地域を補完）
+  chisui:        makeLandformLayer('lcmfc2', 0.6, 11, 16),
+};
+const landformActive = { landcondition: false, chisui: false };
 
 // ===== 農地区画（筆ポリゴン）レイヤー =====
 let fudePolyLayer = null;
@@ -2073,7 +2124,7 @@ function renderSubstations() {
     const coords = [sll[1], sll[0]];
     const availMW = p.available_capacity_mw != null ? p.available_capacity_mw : (p.available_mw || null);
     const availStr = availMW != null ? `${availMW} MW` : 'データなし';
-    const voltage = p.voltage || (p.voltage_kv ? p.voltage_kv+'kV' : '');
+    const voltage = fmtVoltage(p.voltage) || (p.voltage_kv ? p.voltage_kv+'kV' : '');
     const costMin = p.estimated_cost_yen_min ? formatYen(p.estimated_cost_yen_min) : '';
     const costMax = p.estimated_cost_yen_max ? formatYen(p.estimated_cost_yen_max) : '';
     const costStr = hasCapacityData ? (p.estimated_cost || (costMin && costMax ? `${costMin}〜${costMax}` : '不明')) : 'データなし';
@@ -2116,6 +2167,14 @@ function renderSubstations() {
 let showSalePins = true, showJiagePins = true;
 function isPinVisible(status) {
   return status === 'sale' ? showSalePins : showJiagePins;
+}
+
+// voltageは社によって '66kV'(文字列) と 66.0(数値) が混在するため必ず文字列に正規化する。
+// 数値のまま .includes() を呼ぶと TypeError になり、地図移動のたびに送電線描画が落ちる。
+function fmtVoltage(v) {
+  if (v === null || v === undefined || v === '') return '';
+  if (typeof v === 'number') return (Number.isInteger(v) ? v : Number(v.toFixed(1))) + 'kV';
+  return String(v);
 }
 
 // 座標の健全性チェック。1件でも壊れたデータがあると描画ループ全体が例外で止まり、
@@ -2527,6 +2586,35 @@ document.querySelectorAll('.hazard-switch input[type="checkbox"]').forEach(cb =>
   });
 });
 
+// ===== 地形分類（液状化の参考）トグル =====
+// 設定はlocalStorageに保存し、次回以降も維持する
+document.querySelectorAll('.hazard-switch input[data-landform]').forEach(cb => {
+  const key = cb.dataset.landform;
+  const row = cb.closest('.hazard-toggle');
+  const apply = (on) => {
+    landformActive[key] = on;
+    cb.checked = on;
+    if (row) row.classList.toggle('active', on);
+    if (on) landformLayers[key].addTo(map);
+    else map.removeLayer(landformLayers[key]);
+  };
+  if (localStorage.getItem('bl_landform_' + key) === '1') apply(true);
+  cb.addEventListener('change', function() {
+    apply(this.checked);
+    localStorage.setItem('bl_landform_' + key, this.checked ? '1' : '0');
+    updateLandformZoomHint();
+  });
+});
+
+// 表示可能ズーム未満のときに注意を出す（土地条件図Lv10〜/治水Lv11〜）
+function updateLandformZoomHint() {
+  const el = document.getElementById('landform-zoom-hint');
+  if (!el) return;
+  const anyOn = landformActive.landcondition || landformActive.chisui;
+  el.style.display = (anyOn && map.getZoom() < 10) ? 'block' : 'none';
+}
+map.on('zoomend', updateLandformZoomHint);
+
 // ===== Power Lines (approximate grid connections) =====
 function updateZoomDisplay() {
   const z = map.getZoom();
@@ -2564,7 +2652,7 @@ function buildPowerLines() {
       const dist = ptA.distanceTo(ptB);
       if (dist > 30000) continue; // 30km以内
 
-      const voltage = a.properties.voltage || '66kV';
+      const voltage = fmtVoltage(a.properties.voltage) || '66kV';
       const is110 = voltage.includes('110') || voltage.includes('154') || voltage.includes('220');
       const color = is110 ? '#ef4444' : '#f59e0b';
       const weight = is110 ? 3 : 2;
