@@ -644,16 +644,18 @@ body.rotate-bypassed #app { visibility: visible !important; }
           <!-- 公図ズレ補正コントロール -->
           <div id="cadastral-offset" style="display:none; margin-top:6px; padding:6px; background:rgba(255,152,0,0.08); border:1px solid rgba(255,152,0,0.3); border-radius:4px;">
             <div style="font-size:10px; color:#fbbf24; font-weight:600; margin-bottom:4px;">🔧 公図ズレ補正（旧公図向け）</div>
-            <div style="font-size:9px; color:#94a3b8; margin-bottom:4px;">航空写真と公図がズレている場合に調整</div>
-            <div style="display:flex; align-items:center; gap:6px; margin-bottom:3px;">
+            <div style="font-size:9px; color:#94a3b8; margin-bottom:4px;">航空写真と公図がズレている場合に調整（スライダーは±100m、数値入力欄は±1000mまで）</div>
+            <div style="display:flex; align-items:center; gap:5px; margin-bottom:3px;">
               <span style="font-size:9px; color:#cbd5e1; width:35px;">東西:</span>
-              <input type="range" id="offset-x" min="-30" max="30" step="0.5" value="0" style="flex:1; height:4px;">
-              <span id="offset-x-val" style="font-size:9px; color:#fbbf24; width:40px; text-align:right;">0.0m</span>
+              <input type="range" id="offset-x" min="-100" max="100" step="0.5" value="0" style="flex:1; height:4px;">
+              <input type="number" id="offset-x-num" min="-1000" max="1000" step="0.5" value="0" style="width:52px; font-size:9px; padding:1px 3px; background:#0f172a; color:#fbbf24; border:1px solid #475569; border-radius:3px; text-align:right;">
+              <span style="font-size:9px; color:#94a3b8;">m</span>
             </div>
-            <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
+            <div style="display:flex; align-items:center; gap:5px; margin-bottom:5px;">
               <span style="font-size:9px; color:#cbd5e1; width:35px;">南北:</span>
-              <input type="range" id="offset-y" min="-30" max="30" step="0.5" value="0" style="flex:1; height:4px;">
-              <span id="offset-y-val" style="font-size:9px; color:#fbbf24; width:40px; text-align:right;">0.0m</span>
+              <input type="range" id="offset-y" min="-100" max="100" step="0.5" value="0" style="flex:1; height:4px;">
+              <input type="number" id="offset-y-num" min="-1000" max="1000" step="0.5" value="0" style="width:52px; font-size:9px; padding:1px 3px; background:#0f172a; color:#fbbf24; border:1px solid #475569; border-radius:3px; text-align:right;">
+              <span style="font-size:9px; color:#94a3b8;">m</span>
             </div>
             <div style="display:flex; gap:4px;">
               <button id="offset-save" style="flex:1; font-size:9px; padding:3px; background:#059669; color:white; border:none; border-radius:3px; cursor:pointer;">この地域で保存</button>
@@ -1645,11 +1647,15 @@ map.on('moveend zoomend', function() {
 });
 
 // オフセット UI 連動
+// スライダーは±100mまで。数値入力欄は±1000mまで（大きくズレる旧公図向け）。
+const OFFSET_SLIDER_MAX = 100;
+function clampSlider(v) { return Math.max(-OFFSET_SLIDER_MAX, Math.min(OFFSET_SLIDER_MAX, v)); }
 function applyOffsetToUI() {
-  document.getElementById('offset-x').value = cadastralOffset.x;
-  document.getElementById('offset-y').value = cadastralOffset.y;
-  document.getElementById('offset-x-val').textContent = cadastralOffset.x.toFixed(1) + 'm';
-  document.getElementById('offset-y-val').textContent = cadastralOffset.y.toFixed(1) + 'm';
+  ['x', 'y'].forEach(axis => {
+    const v = cadastralOffset[axis];
+    document.getElementById('offset-' + axis).value = clampSlider(v);
+    document.getElementById('offset-' + axis + '-num').value = v;
+  });
 }
 function redrawCadastral() {
   if (cadastralLayer && cadastralActive) {
@@ -1658,15 +1664,24 @@ function redrawCadastral() {
     cadastralLayer.addTo(map);
   }
 }
-document.getElementById('offset-x').addEventListener('input', function() {
-  cadastralOffset.x = parseFloat(this.value);
-  document.getElementById('offset-x-val').textContent = cadastralOffset.x.toFixed(1) + 'm';
-  redrawCadastral();
-});
-document.getElementById('offset-y').addEventListener('input', function() {
-  cadastralOffset.y = parseFloat(this.value);
-  document.getElementById('offset-y-val').textContent = cadastralOffset.y.toFixed(1) + 'm';
-  redrawCadastral();
+// スライダー操作 → 数値欄に反映、数値欄への直接入力 → スライダーに反映（±100超はスライダー端に張り付き）
+['x', 'y'].forEach(axis => {
+  const slider = document.getElementById('offset-' + axis);
+  const numbox = document.getElementById('offset-' + axis + '-num');
+  slider.addEventListener('input', function() {
+    const v = parseFloat(this.value);
+    cadastralOffset[axis] = v;
+    numbox.value = v;
+    redrawCadastral();
+  });
+  numbox.addEventListener('input', function() {
+    let v = parseFloat(this.value);
+    if (isNaN(v)) return;              // 入力途中（"-" のみ等）は無視
+    v = Math.max(-1000, Math.min(1000, v));
+    cadastralOffset[axis] = v;
+    slider.value = clampSlider(v);
+    redrawCadastral();
+  });
 });
 document.getElementById('offset-save').addEventListener('click', function() {
   const c = map.getCenter();
